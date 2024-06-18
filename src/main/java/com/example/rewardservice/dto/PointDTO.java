@@ -16,6 +16,6 @@ public class PointDTO {
 
     private UUID id;
     private String userId;
-    private int currentPoint;
+    private int totalPoint;
     private LocalDateTime lastUpdateDate;
 }

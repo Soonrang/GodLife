@@ -20,15 +20,15 @@ public class Point{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "index")
+    @Column(name = "idx")
     private int index;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "current_point", nullable = false)
-    private long currentPoint;
+    @Column(name = "current_point")
+    private long totalPoint;
 
-    @Column(name = "last_update_date", nullable = false)
+    @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
 }

@@ -26,10 +26,10 @@ public class PointLog {
     @JoinColumn(name = "user_id", nullable = false)
     private Point point;
 
-    @Column(name = "transaction_type", nullable = false)
+    @Column(name = "transaction_type")
     private String transactionType;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount")
     private long amount;
 
     @Column(name = "reason")
