@@ -1,7 +1,9 @@
 package com.example.rewardservice.service;
 
-import com.example.rewardservice.domain.Point;
-import com.example.rewardservice.domain.PointLog;
+import com.example.rewardservice.domain.Point.Point;
+import com.example.rewardservice.domain.Point.PointLog;
+import com.example.rewardservice.dto.Point.PointDTO;
+import com.example.rewardservice.dto.Point.PointLogDTO;
 import com.example.rewardservice.repository.PointLogRepository;
 import com.example.rewardservice.repository.PointRepository;
 import jakarta.transaction.Transactional;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,17 +22,18 @@ public class PointService {
     private final PointLogRepository pointLogRepository;
 
     @Transactional
-    public Point createPoint(String userId, long initialPoints) {
+    public PointDTO createPoint(String userId, long initialPoints) {
         Point point = new Point();
         point.setUserId(userId);
         point.setTotalPoint(initialPoints);
         point.setLastUpdateDate(LocalDateTime.now());
 
-        return pointRepository.save(point);
+        point = pointRepository.save(point);
+        return new PointDTO(point.getId(), point.getUserId(), point.getTotalPoint(), point.getLastUpdateDate());
     }
 
     @Transactional
-    public PointLog earnPoints(UUID pointId, long earnedPoints, String reason) {
+    public PointLogDTO earnPoints(UUID pointId, long earnedPoints, String transactionType) {
         Point point = pointRepository.findById(pointId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid point ID"));
         point.setTotalPoint(point.getTotalPoint() + earnedPoints);
@@ -37,48 +41,43 @@ public class PointService {
 
         PointLog pointLog = new PointLog();
         pointLog.setPoint(point);
-        pointLog.setTransactionType("적립");
-        pointLog.setReason(reason);
-        pointLog.setAmount(earnedPoints);
+        pointLog.setTransactionType(transactionType);
+        pointLog.setPointChange(earnedPoints);
         pointLog.setCreatedAt(LocalDateTime.now());
 
         pointRepository.save(point);
-        return pointLogRepository.save(pointLog);
+        pointLog = pointLogRepository.save(pointLog);
+
+        return new PointLogDTO(pointLog.getId(), point.getId(), pointLog.getTransactionType(), pointLog.getPointChange(), pointLog.getDescription(), pointLog.getCreatedAt());
     }
 
     @Transactional
-    public PointLog usePoints(UUID pointId, long points, String reason) {
+    public PointLogDTO usePoints(UUID pointId, long usedpoints, String description) {
         Point point = pointRepository.findById(pointId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid point ID"));
-        if (point.getTotalPoint() < points) {
+        if (point.getTotalPoint() < usedpoints) {
             throw new IllegalArgumentException("Insufficient points");
         }
-        point.setTotalPoint(point.getTotalPoint() - points);
+        point.setTotalPoint(point.getTotalPoint() - usedpoints);
         point.setLastUpdateDate(LocalDateTime.now());
 
         PointLog pointLog = new PointLog();
         pointLog.setPoint(point);
         pointLog.setTransactionType("사용");
-        pointLog.setAmount(points);
-        pointLog.setReason(reason);
+        pointLog.setPointChange(usedpoints);
+        pointLog.setDescription(description);
         pointLog.setCreatedAt(LocalDateTime.now());
 
         pointRepository.save(point);
-        return pointLogRepository.save(pointLog);
+        pointLog = pointLogRepository.save(pointLog);
+
+        return new PointLogDTO(pointLog.getId(), point.getId(), pointLog.getTransactionType(), pointLog.getPointChange(), pointLog.getDescription(), pointLog.getCreatedAt());
     }
 
-    public List<PointLog> getAllPointLogs() {
-        return pointLogRepository.findAll();
-    }
-
-    public long getTotalPoints(UUID pointId) {
-        Point point = pointRepository.findById(pointId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid point ID"));
-        return point.getTotalPoint();
-    }
-
-    public Point getPointById(UUID pointId) {
-        return pointRepository.findById(pointId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid point ID"));
+    public List<PointLogDTO> getPointLogsByUserId(UUID userId) {
+        List<PointLog> pointLogs = pointLogRepository.findByUserId(userId);
+        return pointLogs.stream()
+                .map(log -> new PointLogDTO(log.getId(), log.getPoint().getId(), log.getTransactionType(), log.getPointChange(), log.getDescription(), log.getCreatedAt()))
+                .collect(Collectors.toList());
     }
 }

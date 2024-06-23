@@ -1,5 +1,6 @@
-package com.example.rewardservice.domain;
+package com.example.rewardservice.domain.Point;
 
+import com.example.rewardservice.domain.Point.Point;
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.*;
@@ -29,11 +30,11 @@ public class PointLog {
     @Column(name = "transaction_type")
     private String transactionType;
 
-    @Column(name = "amount")
-    private long amount;
+    @Column(name = "point_change")
+    private long pointChange;
 
-    @Column(name = "reason")
-    private String reason;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

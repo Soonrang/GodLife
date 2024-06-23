@@ -1,21 +1,20 @@
-package com.example.rewardservice.dto;
+package com.example.rewardservice.dto.Point;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class PointDTO {
-
     private UUID id;
     private String userId;
-    private int totalPoint;
+    private long totalPoint;
     private LocalDateTime lastUpdateDate;
 }
