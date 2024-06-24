@@ -1,6 +1,5 @@
 package com.example.rewardservice.domain.User;
 
-import com.example.rewardservice.domain.Event.Event;
 import com.example.rewardservice.domain.Point.Point;
 import jakarta.persistence.*;
 import lombok.*;

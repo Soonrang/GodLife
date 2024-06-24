@@ -21,6 +21,7 @@ public class PointService {
     private final PointRepository pointRepository;
     private final PointLogRepository pointLogRepository;
 
+    //임시로 유저 포인트를 생성
     @Transactional
     public PointDTO createPoint(String userId, long initialPoints) {
         Point point = new Point();
@@ -32,6 +33,7 @@ public class PointService {
         return new PointDTO(point.getId(), point.getUserId(), point.getTotalPoint(), point.getLastUpdateDate());
     }
 
+    //포인트 획득
     @Transactional
     public PointLogDTO earnPoints(UUID pointId, long earnedPoints, String transactionType) {
         Point point = pointRepository.findById(pointId)
@@ -51,20 +53,21 @@ public class PointService {
         return new PointLogDTO(pointLog.getId(), point.getId(), pointLog.getTransactionType(), pointLog.getPointChange(), pointLog.getDescription(), pointLog.getCreatedAt());
     }
 
+    //포인트 사용
     @Transactional
-    public PointLogDTO usePoints(UUID pointId, long usedpoints, String description) {
+    public PointLogDTO usePoints(UUID pointId, long points, String description) {
         Point point = pointRepository.findById(pointId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid point ID"));
-        if (point.getTotalPoint() < usedpoints) {
+        if (point.getTotalPoint() < points) {
             throw new IllegalArgumentException("Insufficient points");
         }
-        point.setTotalPoint(point.getTotalPoint() - usedpoints);
+        point.setTotalPoint(point.getTotalPoint() - points);
         point.setLastUpdateDate(LocalDateTime.now());
 
         PointLog pointLog = new PointLog();
         pointLog.setPoint(point);
         pointLog.setTransactionType("사용");
-        pointLog.setPointChange(usedpoints);
+        pointLog.setPointChange(points);
         pointLog.setDescription(description);
         pointLog.setCreatedAt(LocalDateTime.now());
 
@@ -74,6 +77,7 @@ public class PointService {
         return new PointLogDTO(pointLog.getId(), point.getId(), pointLog.getTransactionType(), pointLog.getPointChange(), pointLog.getDescription(), pointLog.getCreatedAt());
     }
 
+    //특정 유저로 포인트로그 목록 조회
     public List<PointLogDTO> getPointLogsByUserId(UUID userId) {
         List<PointLog> pointLogs = pointLogRepository.findByUserId(userId);
         return pointLogs.stream()

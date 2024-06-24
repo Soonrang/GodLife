@@ -1,6 +1,5 @@
 package com.example.rewardservice.service;
 
-import com.example.rewardservice.domain.Event.Event;
 import com.example.rewardservice.domain.Point.Point;
 import com.example.rewardservice.domain.User.UserEventParticipation;
 import com.example.rewardservice.dto.Point.PointLogDTO;
