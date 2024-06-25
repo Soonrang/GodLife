@@ -20,8 +20,18 @@ public class Event {
     private UUID id;
 
     private String name;
+    private String eventType;
+    private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private LocalDateTime createdAt;
     private LocalDateTime announcementDate;
+    private String eventState;
+    private int reward;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
 }
