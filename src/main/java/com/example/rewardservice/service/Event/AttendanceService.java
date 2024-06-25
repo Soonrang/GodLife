@@ -12,7 +12,6 @@ import com.example.rewardservice.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
@@ -33,23 +32,19 @@ public class AttendanceService {
     @Autowired
     private PointLogRepository pointLogRepository;
 
-    public AttendanceDTO checkIn(AttendanceDTO attendanceDTO) {
+    public String checkIn(AttendanceDTO attendanceDTO) {
         UUID eventId = attendanceDTO.getEventId();
         String userId = attendanceDTO.getUserId();
 
         Optional<Event> eventOptional = eventRepository.findById(eventId);
         if(eventOptional.isEmpty()) {
-            return AttendanceDTO.builder().
-                    message("Event not found").rewardPoints(0).build();
+            return "Event not found";
         }
         Event event = eventOptional.get();
 
         LocalDateTime now  = LocalDateTime.now();
-        if (now.isBefore(event.getStartDate() || now.isAfter(event.getEndDate())) {
-            return AttendanceDTO.builder()
-                    .message("Event not active")
-                    .rewardPoints(0)
-                    .build();
+        if (now.isBefore(event.getStartDate()) || now.isAfter(event.getEndDate())) {
+            return "Event not active";
         }
 
         LocalDateTime todayStart = now.toLocalDate().atStartOfDay();
@@ -94,10 +89,6 @@ public class AttendanceService {
                 .build();
         pointLogRepository.save(pointLog);
 
-        return AttendanceDTO.builder()
-                .message("Checked in successfully")
-                .rewardPoints(rewardPoints)
-                .build();
-    }
+        return "Checked in successfully";
     }
 }

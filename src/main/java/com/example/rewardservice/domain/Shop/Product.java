@@ -44,4 +44,10 @@ public class Product {
 
     @Column(name="product_last_update")
     private LocalDateTime lastUpdateDate;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
 }

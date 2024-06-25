@@ -29,4 +29,7 @@ public class Point{
 
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
+
+
+
 }
