@@ -1,6 +1,5 @@
-package com.example.rewardservice.dto.Point;
+package com.example.rewardservice.dto.User;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PointDTO {
+public class UserDTO {
     private UUID id;
     private String userId;
     private long totalPoint;

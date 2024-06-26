@@ -1,15 +1,15 @@
 package com.example.rewardservice.service.Event;
 
 import com.example.rewardservice.domain.Event.Event;
-import com.example.rewardservice.domain.Point.Point;
+import com.example.rewardservice.domain.User.User;
 import com.example.rewardservice.domain.Point.PointLog;
 import com.example.rewardservice.domain.User.AttendanceLog;
 import com.example.rewardservice.dto.Event.AttendanceDTO;
 import com.example.rewardservice.repository.AttendanceLogRepository;
 import com.example.rewardservice.repository.EventRepository;
 import com.example.rewardservice.repository.PointLogRepository;
-import com.example.rewardservice.repository.PointRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.rewardservice.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,50 +18,51 @@ import java.util.Random;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AttendanceService {
 
-    @Autowired
-    private AttendanceLogRepository attendanceLogRepository;
+    private final AttendanceLogRepository attendanceLogRepository;
+    private final EventRepository eventRepository;
+    private final  UserRepository userRepository;
+    private final  PointLogRepository pointLogRepository;
 
-    @Autowired
-    private EventRepository eventRepository;
+    public AttendanceDTO checkIn(String userId, String eventId) {
+        UUID eventUUID = UUID.fromString(eventId);
 
-    @Autowired
-    private PointRepository pointRepository;
-
-    @Autowired
-    private PointLogRepository pointLogRepository;
-
-    public String checkIn(AttendanceDTO attendanceDTO) {
-        UUID eventId = attendanceDTO.getEventId();
-        String userId = attendanceDTO.getUserId();
-
-        Optional<Event> eventOptional = eventRepository.findById(eventId);
-        if(eventOptional.isEmpty()) {
-            return "Event not found";
+        Optional<Event> eventOpt = eventRepository.findById(eventUUID);
+        if(eventOpt.isEmpty()) {
+            return AttendanceDTO.builder()
+                    .message("Event not found")
+                    .rewardPoints(0)
+                    .build();
         }
-        Event event = eventOptional.get();
+        Event event = eventOpt.get();
 
         LocalDateTime now  = LocalDateTime.now();
         if (now.isBefore(event.getStartDate()) || now.isAfter(event.getEndDate())) {
-            return "Event not active";
+            return AttendanceDTO.builder()
+                    .message("Event not active")
+                    .rewardPoints(0)
+                    .build();
         }
 
         LocalDateTime todayStart = now.toLocalDate().atStartOfDay();
         LocalDateTime todayEnd = todayStart.plusDays(1);
 
-        boolean alreadyCheckedIn = attendanceLogRepository.existsByUserIdAndEventIdAndAttendanceDateBetween(userId, eventId, todayStart, todayEnd);
+        boolean alreadyCheckedIn = attendanceLogRepository.existsByUserIdAndEventIdAndAttendanceDateBetween(userId, eventUUID, todayStart, todayEnd);
         if (alreadyCheckedIn) {
-            return "Already checked in today";
-
+            return AttendanceDTO.builder()
+                    .message("Already checked in today")
+                    .rewardPoints(0)
+                    .build();
     }
         AttendanceLog log = AttendanceLog.builder()
                 .userId(userId)
-                .eventId(eventId)
+                .eventId(eventUUID)
                 .build();
         attendanceLogRepository.save(log);
 
-        Point point =pointRepository.findByUserId(userId).orElseGet(()-> Point.builder()
+        User user = userRepository.findByUserId(userId).orElseGet(()-> User.builder()
                 .id(UUID.randomUUID())
                 .index(0)
                 .userId(userId)
@@ -70,18 +71,18 @@ public class AttendanceService {
                 .build());
 
         long rewardPoints = 10;
-        long daysParticipated = attendanceLogRepository.countByUserIdAndEventId(userId, eventId);
+        long daysParticipated = attendanceLogRepository.countByUserIdAndEventId(userId, eventUUID);
 
         if(daysParticipated%10==0) {
             Random random = new Random();
             rewardPoints = 100 + random.nextInt(901);
     }
-        point.setTotalPoint(point.getTotalPoint() + rewardPoints);
-        point.setLastUpdateDate(now);
-        pointRepository.save(point);
+        user.setTotalPoint(user.getTotalPoint() + rewardPoints);
+        user.setLastUpdateDate(now);
+        userRepository.save(user);
 
         PointLog pointLog = PointLog.builder()
-                .point(point)
+                .user(user)
                 .transactionType("ATTENDANCE")
                 .pointChange(rewardPoints)
                 .description("Attendance reward")
@@ -89,6 +90,9 @@ public class AttendanceService {
                 .build();
         pointLogRepository.save(pointLog);
 
-        return "Checked in successfully";
+        return AttendanceDTO.builder()
+                .message("Checked in successfully")
+                .rewardPoints(rewardPoints)
+                .build();
     }
 }

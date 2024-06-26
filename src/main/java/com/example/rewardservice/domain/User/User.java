@@ -1,4 +1,4 @@
-package com.example.rewardservice.domain.Point;
+package com.example.rewardservice.domain.User;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Point{
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

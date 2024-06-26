@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventService {
 
-    @Autowired
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
     public EventDTO createEvent(EventDTO eventDTO) {
         Event event = Event.builder()
@@ -113,8 +112,12 @@ public class EventService {
         }
     }
 
-    public void deleteEvent(UUID id) {
-        eventRepository.deleteById(id);
+    public boolean deleteEvent(UUID id) {
+       if(eventRepository.existsById(id)) {
+           eventRepository.deleteById(id);
+           return true;
+       }
+        return false;
     }
 
 

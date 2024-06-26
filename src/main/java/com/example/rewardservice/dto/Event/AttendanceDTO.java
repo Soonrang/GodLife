@@ -10,8 +10,6 @@ import java.util.UUID;
 @Setter
 @Builder
 public class AttendanceDTO {
-    private String userId;
-    private UUID eventId;
     private String message;
     private long rewardPoints;
 }

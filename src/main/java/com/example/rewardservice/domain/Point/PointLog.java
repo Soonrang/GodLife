@@ -1,6 +1,6 @@
 package com.example.rewardservice.domain.Point;
 
-import com.example.rewardservice.domain.Point.Point;
+import com.example.rewardservice.domain.User.User;
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.*;
@@ -23,7 +23,7 @@ public class PointLog {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Point point;
+    private User user;
 
     @Column(name = "transaction_type")
     private String transactionType;

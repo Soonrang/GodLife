@@ -1,7 +1,5 @@
 package com.example.rewardservice.domain.User;
 
-import com.example.rewardservice.domain.Event.Event;
-import com.example.rewardservice.domain.Point.Point;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class AttendanceLog  {
-
+    //유저 출석 로그
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
