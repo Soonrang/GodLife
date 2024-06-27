@@ -1,5 +1,6 @@
 package com.example.rewardservice.domain.Event;
 
+import com.example.rewardservice.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Event {
+public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,14 +25,9 @@ public class Event {
     private String description;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private LocalDateTime createdAt;
     private LocalDateTime announcementDate;
     private String eventState;
     private int reward;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
 
 }

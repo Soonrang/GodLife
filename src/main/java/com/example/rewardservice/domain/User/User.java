@@ -30,6 +30,19 @@ public class User {
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
 
+    public void earnPoints(long points) {
+        this.totalPoint += points;
+        this.lastUpdateDate = LocalDateTime.now();
+    }
+
+    public void usePoints(long points) {
+        if(this.totalPoint < points) {
+            throw new IllegalArgumentException("insufficient points");
+        }
+        this.totalPoint -= points;
+        this.lastUpdateDate = LocalDateTime.now();
+    }
+
 
 
 }

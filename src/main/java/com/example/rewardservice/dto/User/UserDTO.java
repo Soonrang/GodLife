@@ -12,7 +12,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class UserDTO {
-    private UUID id;
     private String userId;
     private long totalPoint;
     private LocalDateTime lastUpdateDate;

@@ -1,5 +1,6 @@
 package com.example.rewardservice.domain.Shop;
 
+import com.example.rewardservice.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,16 +39,5 @@ public class Product {
 
     @Column(name= "product_description")
     private String description;
-
-    @Column(name= "product_created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name="product_last_update")
-    private LocalDateTime lastUpdateDate;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
 
 }

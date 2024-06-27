@@ -1,5 +1,6 @@
 package com.example.rewardservice.domain.User;
 
+import com.example.rewardservice.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AttendanceLog  {
+public class AttendanceLog extends BaseEntity {
     //유저 출석 로그
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,13 +24,4 @@ public class AttendanceLog  {
 
     @Column(name = "event_id")
     private UUID eventId;
-
-    @Column(name = "attendance_date")
-    private LocalDateTime attendanceDate;
-
-    @PrePersist
-    protected void onCreate() {
-        attendanceDate = LocalDateTime.now();
-    }
-
 }

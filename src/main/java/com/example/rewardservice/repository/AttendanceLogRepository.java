@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface AttendanceLogRepository extends JpaRepository<AttendanceLog, UUID> {
     boolean existsByUserIdAndEventIdAndAttendanceDateBetween(String userId, UUID eventID, LocalDateTime start, LocalDateTime end);
     long countByUserIdAndEventId(String userId, UUID eventId);
+
 }

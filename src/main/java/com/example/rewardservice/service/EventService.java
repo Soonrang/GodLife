@@ -19,66 +19,20 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public EventDTO createEvent(EventDTO eventDTO) {
-        Event event = Event.builder()
-                .name(eventDTO.getName())
-                .eventType(eventDTO.getEventType())
-                .description(eventDTO.getDescription())
-                .startDate(eventDTO.getStartDate())
-                .endDate(eventDTO.getEndDate())
-                .announcementDate(eventDTO.getAnnouncementDate())
-                .eventState(eventDTO.getEventState())
-                .reward(eventDTO.getReward())
-                .build();
-
+        Event event = dtoToEntity(eventDTO);
         eventRepository.save(event);
-        return EventDTO.builder()
-                .id(event.getId())
-                .name(event.getName())
-                .eventType(event.getEventType())
-                .description(event.getDescription())
-                .startDate(event.getStartDate())
-                .endDate(event.getEndDate())
-                .createdAt(event.getCreatedAt())
-                .announcementDate(event.getAnnouncementDate())
-                .eventState(event.getEventState())
-                .reward(event.getReward())
-                .build();
+        return entityToDto(event);
     }
 
     public List<EventDTO> getAllEvents() {
-        return eventRepository.findAll().stream().map(event -> EventDTO.builder()
-                .id(event.getId())
-                .name(event.getName())
-                .eventType(event.getEventType())
-                .description(event.getDescription())
-                .startDate(event.getStartDate())
-                .endDate(event.getEndDate())
-                .createdAt(event.getCreatedAt())
-                .announcementDate(event.getAnnouncementDate())
-                .eventState(event.getEventState())
-                .reward(event.getReward())
-                .build()).collect(Collectors.toList());
+        return eventRepository.findAll().stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 
     public EventDTO getEventById(UUID id) {
         Optional<Event> event = eventRepository.findById(id);
-        if (event.isPresent()) {
-            Event e = event.get();
-            return EventDTO.builder()
-                    .id(e.getId())
-                    .name(e.getName())
-                    .eventType(e.getEventType())
-                    .description(e.getDescription())
-                    .startDate(e.getStartDate())
-                    .endDate(e.getEndDate())
-                    .createdAt(e.getCreatedAt())
-                    .announcementDate(e.getAnnouncementDate())
-                    .eventState(e.getEventState())
-                    .reward(e.getReward())
-                    .build();
-        } else {
-            return null;
-        }
+        return event.map(this::entityToDto).orElse(null);
     }
 
     public EventDTO updateEvent(UUID id, EventDTO eventDTO) {
@@ -95,18 +49,7 @@ public class EventService {
             event.setReward(eventDTO.getReward());
 
             eventRepository.save(event);
-            return EventDTO.builder()
-                    .id(event.getId())
-                    .name(event.getName())
-                    .eventType(event.getEventType())
-                    .description(event.getDescription())
-                    .startDate(event.getStartDate())
-                    .endDate(event.getEndDate())
-                    .createdAt(event.getCreatedAt())
-                    .announcementDate(event.getAnnouncementDate())
-                    .eventState(event.getEventState())
-                    .reward(event.getReward())
-                    .build();
+            return entityToDto(event);
         } else {
             return null;
         }
@@ -120,7 +63,34 @@ public class EventService {
         return false;
     }
 
+    private Event dtoToEntity(EventDTO eventDTO) {
+        return Event.builder()
+                .name(eventDTO.getName())
+                .eventType(eventDTO.getEventType())
+                .description(eventDTO.getDescription())
+                .startDate(eventDTO.getStartDate())
+                .endDate(eventDTO.getEndDate())
+                .announcementDate(eventDTO.getAnnouncementDate())
+                .eventState(eventDTO.getEventState())
+                .reward(eventDTO.getReward())
+                .build();
+    }
 
+    private EventDTO entityToDto(Event event) {
+        return EventDTO.builder()
+                .id(event.getId())
+                .name(event.getName())
+                .eventType(event.getEventType())
+                .description(event.getDescription())
+                .startDate(event.getStartDate())
+                .endDate(event.getEndDate())
+                .createdAt(event.getCreatedAt())
+                .announcementDate(event.getAnnouncementDate())
+                .eventState(event.getEventState())
+                .reward(event.getReward())
+                .build();
+    }
+}
 
 
 }

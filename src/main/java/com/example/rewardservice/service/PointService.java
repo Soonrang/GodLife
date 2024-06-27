@@ -18,8 +18,55 @@ public class PointService {
     private final UserRepository userRepository;
     private final PointLogRepository pointLogRepository;
 
+    @Transactional
+    public PointLogDTO earnPoints(UUID userId, long earnedPoints, String transactionType) {
+    User user = userRepository.findById(userId)
+            .orElseThrow(()->new IllegalArgumentException("Invalid userId"));
+    user.earnPoints(earnedPoints);
 
-    //포인트 획득
+    PointLog pointLog = dtoToEntity(user, earnedPoints,transactionType, null);
+    userRepository.save(user);
+    pointLog = pointLogRepository.save(pointLog);
+
+    return entityToDto(pointLog);
+    }
+
+    @Transactional
+    public PointLogDTO  usePoints(UUID userId, long points, String description) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new IllegalArgumentException("Invalid userId"));
+        user.usePoints(points);
+
+        PointLog pointLog = dtoToEntity(user, -points, "사용", description);
+        userRepository.save(user);
+        pointLog = pointLogRepository.save(pointLog);
+        return entityToDto(pointLog);
+    }
+
+    private PointLog dtoToEntity(User user, long pointChange, String transactionType, String description) {
+        PointLog pointLog = new PointLog();
+        pointLog.setUser(user);
+        pointLog.setTransactionType(transactionType);
+        pointLog.setPointChange(pointChange);
+        pointLog.setDescription(description);
+        return pointLog;
+    }
+
+    private PointLogDTO entityToDto(PointLog pointLog) {
+        return new PointLogDTO(
+                pointLog.getId(),
+                pointLog.getUser().getId(),
+                pointLog.getTransactionType(),
+                pointLog.getPointChange(),
+                pointLog.getDescription(),
+                pointLog.getCreatedAt()
+        );
+}
+
+
+
+
+   /* //포인트 획득
     @Transactional
     public PointLogDTO earnPoints(UUID userId, long earnedPoints, String transactionType) {
         User user = userRepository.findById(userId)
@@ -31,7 +78,6 @@ public class PointService {
         pointLog.setUser(user);
         pointLog.setTransactionType(transactionType);
         pointLog.setPointChange(earnedPoints);
-        pointLog.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
         pointLog = pointLogRepository.save(pointLog);
@@ -55,11 +101,13 @@ public class PointService {
         pointLog.setTransactionType("사용");
         pointLog.setPointChange(points);
         pointLog.setDescription(description);
-        pointLog.setCreatedAt(LocalDateTime.now());
 
         userRepository.save(user);
         pointLog = pointLogRepository.save(pointLog);
 
         return new PointLogDTO(pointLog.getId(), user.getId(), pointLog.getTransactionType(), pointLog.getPointChange(), pointLog.getDescription(), pointLog.getCreatedAt());
     }
-}
+*/
+
+
+

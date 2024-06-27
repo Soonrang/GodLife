@@ -1,5 +1,6 @@
 package com.example.rewardservice.domain.Point;
 
+import com.example.rewardservice.domain.BaseEntity;
 import com.example.rewardservice.domain.User.User;
 import jakarta.persistence.Entity;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PointLog {
+public class PointLog extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -34,6 +35,4 @@ public class PointLog {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 }
