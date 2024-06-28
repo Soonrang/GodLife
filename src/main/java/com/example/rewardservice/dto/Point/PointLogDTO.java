@@ -1,21 +1,21 @@
 package com.example.rewardservice.dto.Point;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jdk.jshell.Snippet;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PointLogDTO {
     private UUID id;
-    private UUID pointId;
+    private UUID userId;
     private String transactionType;
     private long pointChange;
     private String description;
     private LocalDateTime createdAt;
+
+
 }

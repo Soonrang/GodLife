@@ -19,27 +19,27 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PointLogRepository pointLogRepository;
 
     //임시로 유저 포인트를 생성
     @Transactional
     public UserDTO createUser(String userId, long initialPoints) {
-        User user = new User();
-        user.setUserId(userId);
-        user.setTotalPoint(initialPoints);
-        user.setLastUpdateDate(LocalDateTime.now());
+        User user = User.builder()
+                .userId(userId)
+                .totalPoint(initialPoints)
+                .lastUpdateDate(LocalDateTime.now())
+                .build();
 
         user = userRepository.save(user);
-        return new UserDTO(user.getId(), user.getUserId(), user.getTotalPoint(), user.getLastUpdateDate());
+        return entityToDto(user);
     }
 
-
-
-    //특정 유저로 포인트로그 목록 조회
-    public List<PointLogDTO> getPointLogsByUserId(UUID userId) {
-        List<PointLog> pointLogs = pointLogRepository.findByUserId(userId);
-        return pointLogs.stream()
-                .map(log -> new PointLogDTO(log.getId(), log.getUser().getId(), log.getTransactionType(), log.getPointChange(), log.getDescription(), log.getCreatedAt()))
-                .collect(Collectors.toList());
+    private UserDTO entityToDto(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .userId(user.getUserId())
+                .totalPoint(user.getTotalPoint())
+                .lastUpdateDate(user.getLastUpdateDate())
+                .build();
     }
+
 }

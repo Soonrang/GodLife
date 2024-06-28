@@ -36,23 +36,22 @@ public class EventService {
     }
 
     public EventDTO updateEvent(UUID id, EventDTO eventDTO) {
-        Optional<Event> eventOpt = eventRepository.findById(id);
-        if(eventOpt.isPresent()) {
-            Event event = eventOpt.get();
-            event.setName(eventDTO.getName());
-            event.setEventType(eventDTO.getEventType());
-            event.setDescription(eventDTO.getDescription());
-            event.setStartDate(eventDTO.getStartDate());
-            event.setEndDate(eventDTO.getEndDate());
-            event.setAnnouncementDate(eventDTO.getAnnouncementDate());
-            event.setEventState(eventDTO.getEventState());
-            event.setReward(eventDTO.getReward());
+        return eventRepository.findById(id)
+                .map(event -> {
+                    event.updateEvent(
+                            eventDTO.getName(),
+                            eventDTO.getEventType(),
+                            eventDTO.getDescription(),
+                            eventDTO.getStartDate(),
+                            eventDTO.getEndDate(),
+                            eventDTO.getEventState(),
+                            eventDTO.getReward()
+                    );
+                    eventRepository.save(event);
+                    return entityToDto(event);
+                })
+                .orElse(null);
 
-            eventRepository.save(event);
-            return entityToDto(event);
-        } else {
-            return null;
-        }
     }
 
     public boolean deleteEvent(UUID id) {
@@ -90,7 +89,4 @@ public class EventService {
                 .reward(event.getReward())
                 .build();
     }
-}
-
-
 }

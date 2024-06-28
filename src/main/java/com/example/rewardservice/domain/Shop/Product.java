@@ -1,11 +1,11 @@
 package com.example.rewardservice.domain.Shop;
 
 import com.example.rewardservice.domain.BaseEntity;
+import com.example.rewardservice.domain.User.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,11 +25,12 @@ public class Product extends BaseEntity {
     private String category;
 
     //회사 계정을 따로 만들어 연결
-    @Column(name = "product_company")
-    private String company;
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private User company;
 
     @Column(name = "product_name")
-    private String name;
+    private String productName;
 
     @Column(name = "product_price")
     private BigDecimal price;

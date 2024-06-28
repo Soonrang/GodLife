@@ -30,4 +30,13 @@ public class Event extends BaseEntity {
     private int reward;
 
 
+    public void updateEvent(String name, String eventType, String description, LocalDateTime startDate, LocalDateTime endDate, String eventState, int reward) {
+        this.name = name;
+        this.eventType = eventType;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.eventState = eventState;
+        this.reward = reward;
+    }
 }

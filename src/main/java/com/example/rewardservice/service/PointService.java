@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -20,8 +19,7 @@ public class PointService {
 
     @Transactional
     public PointLogDTO earnPoints(UUID userId, long earnedPoints, String transactionType) {
-    User user = userRepository.findById(userId)
-            .orElseThrow(()->new IllegalArgumentException("Invalid userId"));
+    User user = findUserById(userId);
     user.earnPoints(earnedPoints);
 
     PointLog pointLog = dtoToEntity(user, earnedPoints,transactionType, null);
@@ -33,8 +31,7 @@ public class PointService {
 
     @Transactional
     public PointLogDTO  usePoints(UUID userId, long points, String description) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()->new IllegalArgumentException("Invalid userId"));
+        User user = findUserById(userId);
         user.usePoints(points);
 
         PointLog pointLog = dtoToEntity(user, -points, "사용", description);
@@ -43,71 +40,34 @@ public class PointService {
         return entityToDto(pointLog);
     }
 
-    private PointLog dtoToEntity(User user, long pointChange, String transactionType, String description) {
-        PointLog pointLog = new PointLog();
-        pointLog.setUser(user);
-        pointLog.setTransactionType(transactionType);
-        pointLog.setPointChange(pointChange);
-        pointLog.setDescription(description);
-        return pointLog;
+    private User findUserById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(()->new IllegalArgumentException("Invalid userId"));
     }
 
-    private PointLogDTO entityToDto(PointLog pointLog) {
-        return new PointLogDTO(
-                pointLog.getId(),
-                pointLog.getUser().getId(),
-                pointLog.getTransactionType(),
-                pointLog.getPointChange(),
-                pointLog.getDescription(),
-                pointLog.getCreatedAt()
-        );
+   private PointLog dtoToEntity(User user,long pointChange, String transactionType, String description) {
+        return PointLog.builder()
+                .user(user)
+                .transactionType(transactionType)
+                .pointChange(pointChange)
+                .description(description)
+                .build();
+   }
+
+   private PointLogDTO entityToDto(PointLog pointLog) {
+        return PointLogDTO.builder()
+                .id(pointLog.getId())
+                .userId(pointLog.getUser().getId())
+                .transactionType(pointLog.getTransactionType())
+                .pointChange(pointLog.getPointChange())
+                .description(pointLog.getDescription())
+                .createdAt(pointLog.getCreatedAt())
+                .build();
+   }
 }
 
 
 
-
-   /* //포인트 획득
-    @Transactional
-    public PointLogDTO earnPoints(UUID userId, long earnedPoints, String transactionType) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid userID"));
-        user.setTotalPoint(user.getTotalPoint() + earnedPoints);
-        user.setLastUpdateDate(LocalDateTime.now());
-
-        PointLog pointLog = new PointLog();
-        pointLog.setUser(user);
-        pointLog.setTransactionType(transactionType);
-        pointLog.setPointChange(earnedPoints);
-
-        userRepository.save(user);
-        pointLog = pointLogRepository.save(pointLog);
-
-        return new PointLogDTO(pointLog.getId(), user.getId(), pointLog.getTransactionType(), pointLog.getPointChange(), pointLog.getDescription(), pointLog.getCreatedAt());
-    }
-
-    //포인트 사용
-    @Transactional
-    public PointLogDTO usePoints(UUID userId, long points, String description) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        if (user.getTotalPoint() < points) {
-            throw new IllegalArgumentException("Insufficient points");
-        }
-        user.setTotalPoint(user.getTotalPoint() - points);
-        user.setLastUpdateDate(LocalDateTime.now());
-
-        PointLog pointLog = new PointLog();
-        pointLog.setUser(user);
-        pointLog.setTransactionType("사용");
-        pointLog.setPointChange(points);
-        pointLog.setDescription(description);
-
-        userRepository.save(user);
-        pointLog = pointLogRepository.save(pointLog);
-
-        return new PointLogDTO(pointLog.getId(), user.getId(), pointLog.getTransactionType(), pointLog.getPointChange(), pointLog.getDescription(), pointLog.getCreatedAt());
-    }
-*/
 
 
 
