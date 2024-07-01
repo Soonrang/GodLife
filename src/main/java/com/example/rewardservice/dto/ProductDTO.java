@@ -1,6 +1,7 @@
 package com.example.rewardservice.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,12 +12,14 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProductDTO {
     private UUID id;
     private String category;
-    private String companyName;
+    private UUID companyId;
     private String productName;
     private BigDecimal price;
     private List<ProductImageDTO> productImages;
     private String description;
+    private String createdAt;
 }

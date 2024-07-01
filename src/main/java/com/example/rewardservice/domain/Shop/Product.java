@@ -2,6 +2,7 @@ package com.example.rewardservice.domain.Shop;
 
 import com.example.rewardservice.domain.BaseEntity;
 import com.example.rewardservice.domain.User.User;
+import com.example.rewardservice.dto.ProductDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,5 +41,16 @@ public class Product extends BaseEntity {
 
     @Column(name= "product_description")
     private String description;
+
+
+    public void updateProduct(ProductDTO productDTO, User company, List<ProductImage> productImages) {
+        this.category = productDTO.getCategory();
+        this.company = company;
+        this.productName = productDTO.getProductName();
+        this.price = productDTO.getPrice();
+        this.description = productDTO.getDescription();
+        this.productImages.clear();
+        this.productImages.addAll(productImages);
+    }
 
 }
