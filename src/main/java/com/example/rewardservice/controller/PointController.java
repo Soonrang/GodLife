@@ -1,9 +1,8 @@
 package com.example.rewardservice.controller;
 
-import com.example.rewardservice.dto.User.UserDTO;
+import com.example.rewardservice.domain.Point.PointLog;
 import com.example.rewardservice.dto.Point.PointLogDTO;
 import com.example.rewardservice.service.PointService;
-import com.example.rewardservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,4 +28,9 @@ public class PointController {
         return ResponseEntity.ok(pointLog);
     }
 
+    @GetMapping("/{userId}/logs")
+    public ResponseEntity<List<PointLogDTO>> getPointLogsByUserId(@PathVariable UUID userId){
+        List<PointLogDTO> pointLogs = pointService.getPointLogsByUserId(userId);
+        return ResponseEntity.ok(pointLogs);
+    }
 }

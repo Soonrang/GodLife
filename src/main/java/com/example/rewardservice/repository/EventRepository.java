@@ -8,6 +8,5 @@ import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
 
-    List<Event> findAllByCreatedAtAsc();
-    List<Event> findAllByCreatedAtDesc();
+    List<Event> findAllByOrderByCreatedAtDesc();
 }

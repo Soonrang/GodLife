@@ -33,6 +33,13 @@ public class UserService {
         return entityToDto(user);
     }
 
+    @Transactional
+    public UserDTO viewUser(UUID id) {
+        userRepository.findByUserId(id);
+
+    }
+
+
     private UserDTO entityToDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())

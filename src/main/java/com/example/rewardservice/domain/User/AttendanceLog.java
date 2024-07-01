@@ -24,4 +24,8 @@ public class AttendanceLog extends BaseEntity {
 
     @Column(name = "event_id")
     private UUID eventId;
+
+    @Column(name="attendance_date")
+    private LocalDateTime attendanceDate;
+
 }

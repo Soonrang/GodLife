@@ -23,9 +23,7 @@ public class UserController {
         return ResponseEntity.ok(point);
     }
 
-    @GetMapping("/logs/{userId}")
-    public ResponseEntity<List<PointLogDTO>> getPointLogsByUserId(@PathVariable UUID userId) {
-        List<PointLogDTO> pointLogs = userService.getPointLogsByUserId(userId);
-        return ResponseEntity.ok(pointLogs);
-    }
+    @GetMapping
+    public ResponseEntity<UserDTO> viewUser(@RequestParam UUID id, @RequestParam)
+
 }

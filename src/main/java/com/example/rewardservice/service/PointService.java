@@ -9,7 +9,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,15 @@ public class PointService {
         userRepository.save(user);
         pointLog = pointLogRepository.save(pointLog);
         return entityToDto(pointLog);
+    }
+
+    @Transactional
+    public List<PointLogDTO> getPointLogsByUserId(UUID userId) {
+        findUserById(userId);
+        List<PointLog> pointLogs = pointLogRepository.findByUserId(userId);
+        return pointLogs.stream()
+                .map(this::entityToDto)
+                .collect(Collectors.toList());
     }
 
     private User findUserById(UUID userId) {

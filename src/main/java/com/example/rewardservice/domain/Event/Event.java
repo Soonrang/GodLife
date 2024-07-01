@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Event extends BaseEntity {
+public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,6 +28,7 @@ public class Event extends BaseEntity {
     private LocalDateTime announcementDate;
     private String eventState;
     private int reward;
+    private LocalDateTime createdAt;
 
 
     public void updateEvent(String name, String eventType, String description, LocalDateTime startDate, LocalDateTime endDate, String eventState, int reward) {
@@ -38,5 +39,10 @@ public class Event extends BaseEntity {
         this.endDate = endDate;
         this.eventState = eventState;
         this.reward = reward;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
     }
 }
