@@ -1,20 +1,16 @@
-package com.example.rewardservice.service.Event;
+package com.example.rewardservice.service;
 
-import com.example.rewardservice.domain.Event.Event;
+import com.example.rewardservice.domain.Event;
 import com.example.rewardservice.domain.User.User;
-import com.example.rewardservice.domain.Point.PointLog;
 import com.example.rewardservice.domain.User.AttendanceLog;
 import com.example.rewardservice.dto.Event.AttendanceDTO;
 import com.example.rewardservice.repository.AttendanceLogRepository;
 import com.example.rewardservice.repository.EventRepository;
-import com.example.rewardservice.repository.PointLogRepository;
 import com.example.rewardservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 
@@ -27,29 +23,29 @@ public class AttendanceService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
 
-    public AttendanceDTO checkIn(String userId, String eventId) {
+    public AttendanceDTO checkIn(UUID userId, UUID eventId) {
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new IllegalArgumentException("Invalid user ID");
         }
 
-        Event event = eventRepository.findById(UUID.fromString(eventId))
+        Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid event ID"));
 
         LocalDateTime now = LocalDateTime.now();
         boolean alreadyCheckedIn = attendanceLogRepository.existsByUserIdAndEventIdAndCreatedAtBetween(
-                userId, UUID.fromString(eventId),
+                userId, eventId,
                 now.toLocalDate().atStartOfDay(),
                 now.toLocalDate().atTime(23, 59, 59)
         );
 
         if (alreadyCheckedIn) {
-            throw new IllegalStateException("User already checked in today");
+            throw new IllegalStateException("오늘은 이미 출석체크를 했습니다.");
         }
 
         AttendanceLog attendanceLog = AttendanceLog.builder()
                 .userId(userId)
-                .eventId(UUID.fromString(eventId))
+                .eventId(eventId)
                 .build();
 
         attendanceLogRepository.save(attendanceLog);

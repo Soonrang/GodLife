@@ -1,7 +1,6 @@
 package com.example.rewardservice.controller;
 
-import com.example.rewardservice.domain.Point.PointLog;
-import com.example.rewardservice.dto.Point.PointLogDTO;
+import com.example.rewardservice.dto.PointLogDTO;
 import com.example.rewardservice.service.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

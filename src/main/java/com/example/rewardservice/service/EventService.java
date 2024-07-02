@@ -1,10 +1,9 @@
 package com.example.rewardservice.service;
 
-import com.example.rewardservice.domain.Event.Event;
+import com.example.rewardservice.domain.Event;
 import com.example.rewardservice.dto.Event.EventDTO;
 import com.example.rewardservice.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

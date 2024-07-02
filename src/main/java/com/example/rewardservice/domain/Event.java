@@ -1,6 +1,5 @@
-package com.example.rewardservice.domain.Event;
+package com.example.rewardservice.domain;
 
-import com.example.rewardservice.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;

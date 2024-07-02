@@ -1,13 +1,11 @@
 package com.example.rewardservice.controller;
 
-import com.example.rewardservice.dto.Point.PointLogDTO;
 import com.example.rewardservice.dto.User.UserDTO;
 import com.example.rewardservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +22,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserDTO> viewUser(@RequestParam UUID id, @RequestParam)
+    public ResponseEntity<UserDTO> viewUser(@RequestParam UUID id){
+        UserDTO user = userService.viewUser(id);
+        if(user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
+    }
 
 }

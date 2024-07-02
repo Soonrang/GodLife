@@ -1,6 +1,6 @@
 package com.example.rewardservice.repository;
 
-import com.example.rewardservice.domain.Event.Event;
+import com.example.rewardservice.domain.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

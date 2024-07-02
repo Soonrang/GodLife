@@ -1,8 +1,8 @@
 package com.example.rewardservice.service;
 
-import com.example.rewardservice.domain.Point.PointLog;
+import com.example.rewardservice.domain.PointLog;
 import com.example.rewardservice.domain.User.User;
-import com.example.rewardservice.dto.Point.PointLogDTO;
+import com.example.rewardservice.dto.PointLogDTO;
 import com.example.rewardservice.repository.PointLogRepository;
 import com.example.rewardservice.repository.UserRepository;
 import jakarta.transaction.Transactional;

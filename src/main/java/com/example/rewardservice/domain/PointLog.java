@@ -1,13 +1,11 @@
-package com.example.rewardservice.domain.Point;
+package com.example.rewardservice.domain;
 
-import com.example.rewardservice.domain.BaseEntity;
 import com.example.rewardservice.domain.User.User;
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity

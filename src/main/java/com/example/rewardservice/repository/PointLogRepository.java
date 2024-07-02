@@ -1,6 +1,6 @@
 package com.example.rewardservice.repository;
 
-import com.example.rewardservice.domain.Point.PointLog;
+import com.example.rewardservice.domain.PointLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

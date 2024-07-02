@@ -1,5 +1,4 @@
-package com.example.rewardservice.dto.Point;
-import jdk.jshell.Snippet;
+package com.example.rewardservice.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;

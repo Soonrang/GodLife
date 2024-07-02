@@ -10,6 +10,6 @@ public interface AttendanceLogRepository extends JpaRepository<AttendanceLog, UU
 //    boolean existsByUserIdAndEventIdAndAttendanceDateBetween(String userId, UUID eventID, LocalDateTime start, LocalDateTime end);
 //    long countByUserIdAndEventId(String userId, UUID eventId);
 
-    boolean existsByUserIdAndEventIdAndCreatedAtBetween(String userId, UUID eventId, LocalDateTime startDate, LocalDateTime endDate);
+    boolean existsByUserIdAndEventIdAndCreatedAtBetween(UUID userId, UUID eventId, LocalDateTime startDate, LocalDateTime endDate);
 
 }
