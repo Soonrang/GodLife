@@ -1,5 +1,6 @@
 package com.example.rewardservice.user.domain;
 
+import com.example.rewardservice.authentication.infrastructure.Oauth2Type;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EnumType;
