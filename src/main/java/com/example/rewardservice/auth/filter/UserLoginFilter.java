@@ -32,26 +32,46 @@ public class UserLoginFilter extends AbstractAuthenticationProcessingFilter {
             log.info("GET METHOD NOT SUPPORT");
             return null;
         }
-
         Map<String, String> jsonData = parseRequestJSON(request);
         log.info(jsonData);
 
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(
-                        jsonData.get("userId"),
-                        jsonData.get("userPassword"));
+                jsonData.get("userId"),
+                jsonData.get("userPassword"));
 
         return getAuthenticationManager().authenticate(authenticationToken);
     }
 
     private Map<String, String> parseRequestJSON(HttpServletRequest request) {
-        try(Reader reader= new InputStreamReader(request.getInputStream())){
+        try(Reader reader = new InputStreamReader(request.getInputStream())) {
 
             Gson gson = new Gson();
             return gson.fromJson(reader, Map.class);
-        }catch (Exception e){
-            log.error(e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
         return null;
+
+//        Map<String, String> jsonData = parseRequestJSON(request);
+//        log.info(jsonData);
+//
+//        UsernamePasswordAuthenticationToken authenticationToken
+//                = new UsernamePasswordAuthenticationToken(
+//                        jsonData.get("userId"),
+//                        jsonData.get("userPassword"));
+//
+//        return getAuthenticationManager().authenticate(authenticationToken);
+//    }
+//
+//    private Map<String, String> parseRequestJSON(HttpServletRequest request) {
+//        try(Reader reader= new InputStreamReader(request.getInputStream())){
+//
+//            Gson gson = new Gson();
+//            return gson.fromJson(reader, Map.class);
+//        }catch (Exception e){
+//            log.error(e.getMessage());
+//        }
+//        return null;
     }
 }
