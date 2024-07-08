@@ -1,13 +1,14 @@
 package com.example.rewardservice.auth.config;
 
+import com.example.rewardservice.auth.filter.RefreshTokenFilter;
 import com.example.rewardservice.auth.filter.TokenCheckFilter;
 import com.example.rewardservice.auth.filter.UserLoginFilter;
 import com.example.rewardservice.auth.handler.UserLoginSuccessHandler;
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.service.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @Log4j2
@@ -49,7 +51,7 @@ public class CustomSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         log.info("------configure-----");
-        AuthenticationManagerBuilder  authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
 
         authenticationManagerBuilder
                 .userDetailsService(userDetailService)
@@ -72,15 +74,19 @@ public class CustomSecurityConfig {
 
         //refreshToken 호출 처리
         http.addFilterBefore(
-                tokenCheckFilter(jwtUtil, UserDetailService),
-                UsernamePasswordAuthenticationFilter.class
-        );
-        //http.csrf().disable();
+                new RefreshTokenFilter("/refreshToken", jwtUtil),
+                TokenCheckFilter.class);
+
+        http.csrf().disable();
 
         http.sessionManagement(httpSecuritySessionManagementConfigurer -> {
             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         });
 
         return http.build();
+    }
+
+    private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, UserDetailService userDetailService){
+        return new TokenCheckFilter(jwtUtil, userDetailService);
     }
 }
