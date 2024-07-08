@@ -1,6 +1,5 @@
 package com.example.rewardservice.auth.util;
 
-
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -35,7 +34,7 @@ public class JWTUtil {
         //테스트 시 짧은 유효기간
         int time = (60*24)*days; // 테스트는 분단위, 나중에 60*24(일)단위 변경
 
-        String jwtSrt =  Jwts.builder()
+        String jwtStr = Jwts.builder()
                 .setHeader(headers)
                 .setClaims(payloads)
                 .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
@@ -43,7 +42,7 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS256, key.getBytes())
                 .compact();
 
-        return jwtSrt;
+        return jwtStr;
     }
 
     public Map<String, Object> validateToken(String token)throws JwtException {
