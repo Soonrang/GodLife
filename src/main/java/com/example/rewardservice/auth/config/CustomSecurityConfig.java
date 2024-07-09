@@ -16,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,7 +33,7 @@ import java.util.Arrays;
 @Log4j2
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class CustomSecurityConfig {
+public class CustomSecurityConfig{
 
     private final UserDetailService userDetailService;
     private final JWTUtil jwtUtil;
@@ -66,7 +65,7 @@ public class CustomSecurityConfig {
 
         http.authenticationManager(authenticationManager);
 
-        UserLoginFilter userLoginFilter = new UserLoginFilter("/generateToken");
+        UserLoginFilter userLoginFilter = new UserLoginFilter("/generate");
         userLoginFilter.setAuthenticationManager(authenticationManager);
 
 
@@ -111,5 +110,6 @@ public class CustomSecurityConfig {
 
         return source;
     }
+
 
 }
