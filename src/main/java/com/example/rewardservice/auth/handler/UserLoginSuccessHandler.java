@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.Map;
 
@@ -37,7 +36,11 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
         Gson gson = new Gson();
         Map<String, String> keyMap = Map.of(
                 "accessToken", accessToken,
-                "resfreshToken", refreshToken);
+                "refreshToken", refreshToken);
+
+        log.info("Access Token: " + accessToken); // 로그 추가
+        log.info("Refresh Token: " + refreshToken); // 로그 추가
+
         String jsonStr = gson.toJson(keyMap);
         response.getWriter().println(jsonStr);
     }

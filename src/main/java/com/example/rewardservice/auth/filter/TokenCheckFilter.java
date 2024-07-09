@@ -31,7 +31,8 @@ public class TokenCheckFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
-        if(!path.startsWith("/api/")){
+        // 로그인과 회원가입 요청시 필터 통과
+        if (path.equals("/user/login") || path.equals("/user/register")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -44,7 +45,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
             Map<String, Object> payload = validateAccessToken(request);
 
-            //mid
+            //userId
             String userId = (String)payload.get("userId");
 
             log.info("userId: " + userId);

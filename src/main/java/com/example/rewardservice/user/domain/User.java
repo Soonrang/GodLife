@@ -9,6 +9,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.example.rewardservice.user.domain.MemberState.ACTIVE;
 import static jakarta.persistence.EnumType.STRING;
 
 @Entity
@@ -32,11 +33,11 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "user_total_point")
-    private long totalPoint;
-
     @Column(name = "user_email")
     private String userEmail;
+
+    @Column(name = "user_total_point")
+    private long totalPoint;
 
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
@@ -55,6 +56,8 @@ public class User {
         this.userName = userName;
         this.totalPoint = totalPoint;
         this.lastUpdateDate = LocalDateTime.now();
+        this.memberState = ACTIVE;
+        this.userSocial = false;
     }
 
 

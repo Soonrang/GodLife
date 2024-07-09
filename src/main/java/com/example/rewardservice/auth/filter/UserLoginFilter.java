@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -53,25 +52,5 @@ public class UserLoginFilter extends AbstractAuthenticationProcessingFilter {
         }
         return null;
 
-//        Map<String, String> jsonData = parseRequestJSON(request);
-//        log.info(jsonData);
-//
-//        UsernamePasswordAuthenticationToken authenticationToken
-//                = new UsernamePasswordAuthenticationToken(
-//                        jsonData.get("userId"),
-//                        jsonData.get("userPassword"));
-//
-//        return getAuthenticationManager().authenticate(authenticationToken);
-//    }
-//
-//    private Map<String, String> parseRequestJSON(HttpServletRequest request) {
-//        try(Reader reader= new InputStreamReader(request.getInputStream())){
-//
-//            Gson gson = new Gson();
-//            return gson.fromJson(reader, Map.class);
-//        }catch (Exception e){
-//            log.error(e.getMessage());
-//        }
-//        return null;
     }
 }

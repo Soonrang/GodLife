@@ -17,15 +17,17 @@ public class UserDTO implements UserDetails {
     private String userId;
     private String userPassword;
     private String userName;
+    private String userEmail;
     private long totalPoint;
     private LocalDateTime lastUpdateDate;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDTO(UUID id, String userId, String userPassword, String userName, long totalPoint, LocalDateTime lastUpdateDate, Collection<? extends GrantedAuthority> authorities) {
+    public UserDTO(UUID id, String userId, String userPassword, String userName,String userEmail, long totalPoint, LocalDateTime lastUpdateDate, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.userId = userId;
         this.userPassword = userPassword;
         this.userName = userName;
+        this.userEmail = userEmail;
         this.totalPoint = totalPoint;
         this.lastUpdateDate = lastUpdateDate;
         this.authorities = authorities;
