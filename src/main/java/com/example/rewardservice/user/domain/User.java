@@ -9,6 +9,8 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static jakarta.persistence.EnumType.STRING;
+
 @Entity
 @Getter
 @Setter
@@ -33,8 +35,28 @@ public class User {
     @Column(name = "user_total_point")
     private long totalPoint;
 
+    @Column(name = "user_email")
+    private String userEmail;
+
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
+
+    @Enumerated(value = STRING)
+    private MemberState memberState;
+
+    @Column(name = "user_social")
+    private boolean userSocial;
+
+
+
+    public User(final String userId, final String userPassword, final String userName, final long totalPoint) {
+        this.userId = userId;
+        this.userPassword = userPassword;
+        this.userName = userName;
+        this.totalPoint = totalPoint;
+        this.lastUpdateDate = LocalDateTime.now();
+    }
+
 
     public void earnPoints(long points) {
         this.totalPoint += points;

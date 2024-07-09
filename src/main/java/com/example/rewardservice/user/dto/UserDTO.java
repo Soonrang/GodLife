@@ -34,6 +34,7 @@ public class UserDTO implements UserDetails {
     public UserDTO() {
     }
 
+
     public UserDTO(User user, Collection<GrantedAuthority> authorities) {
         this.id = user.getId();
         this.userId = user.getUserId();
