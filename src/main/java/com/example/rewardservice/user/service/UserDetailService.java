@@ -36,6 +36,7 @@ public class UserDetailService implements UserDetailsService {
                 user.getUserId(),
                 user.getUserPassword(),
                 user.getUserName(),
+                user.getUserEmail(),
                 user.getTotalPoint(),
                 user.getLastUpdateDate(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
