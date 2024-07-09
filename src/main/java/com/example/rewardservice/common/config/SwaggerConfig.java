@@ -1,4 +1,4 @@
-package com.example.rewardservice.config;
+package com.example.rewardservice.common.config;
 
 
 import io.swagger.v3.oas.models.Components;
