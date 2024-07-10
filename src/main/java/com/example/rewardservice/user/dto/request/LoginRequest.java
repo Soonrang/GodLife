@@ -1,4 +1,4 @@
-package com.example.rewardservice.user.dto;
+package com.example.rewardservice.user.dto.request;
 
 import lombok.Data;
 

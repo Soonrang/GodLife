@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -14,19 +15,25 @@ import java.util.UUID;
 @ToString
 public class UserDTO implements UserDetails {
     private UUID id;
+    private String emailId;
     private String password;
     private String name;
-    private String email;
+    private String nickName;
     private long totalPoint;
+    private String profileImageUrl;
     private LocalDateTime lastUpdateDate;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDTO(UUID id,String userPassword, String userName,String userEmail, long totalPoint, LocalDateTime lastUpdateDate, Collection<? extends GrantedAuthority> authorities) {
+    public UserDTO(UUID id,String userEmail,String userPassword, String userName,
+                   String userNickname, long userTotalPoint,
+                   String profileImageUrl, LocalDateTime lastUpdateDate, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
+        this.emailId = userEmail;
         this.password = userPassword;
         this.name = userName;
-        this.email = userEmail;
-        this.totalPoint = totalPoint;
+        this.nickName = userNickname;
+        this.totalPoint = userTotalPoint;
+        this.profileImageUrl = profileImageUrl;
         this.lastUpdateDate = lastUpdateDate;
         this.authorities = authorities;
     }
@@ -37,13 +44,17 @@ public class UserDTO implements UserDetails {
 
     public UserDTO(User user, Collection<GrantedAuthority> authorities) {
         this.id = user.getId();
-        //this.userId = user.getUserId();
+        this.emailId = user.getEmailId();
         this.password = user.getPassword();
         this.name = user.getName();
+        this.nickName = user.getNickName();
         this.totalPoint = user.getTotalPoint();
+        this.profileImageUrl = user.getProfileImageUrl();
         this.lastUpdateDate = user.getLastUpdateDate();
         this.authorities = authorities;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,7 +68,7 @@ public class UserDTO implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return emailId;
     }
 
     @Override
