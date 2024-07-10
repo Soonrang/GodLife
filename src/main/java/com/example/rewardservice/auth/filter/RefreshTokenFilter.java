@@ -1,6 +1,6 @@
 package com.example.rewardservice.auth.filter;
 
-import com.example.rewardservice.auth.Exception.RefreshTokenException;
+import com.example.rewardservice.auth.exception.RefreshTokenException;
 import com.example.rewardservice.auth.util.JWTUtil;
 import com.google.gson.Gson;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -19,7 +19,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
