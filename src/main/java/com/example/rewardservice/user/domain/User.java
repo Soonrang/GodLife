@@ -1,5 +1,6 @@
 package com.example.rewardservice.user.domain;
 
+import com.example.rewardservice.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -19,14 +20,11 @@ import static jakarta.persistence.EnumType.STRING;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-//    @Column(name = "user_id")
-//    private String userId;
 
     @Column(name = "user_password")
     private String password;
@@ -41,8 +39,14 @@ public class User {
     @Column(name = "user_total_point")
     private long totalPoint;
 
-    @Column(name = "last_update_date")
-    private LocalDateTime lastUpdateDate;
+    @Column(name = "profile_image_url", nullable = false)
+    private String profileImageUrl;
+
+    @Column(name = "user_gender")
+    private String gender;
+
+    @Column(name = "user_Nick_Name")
+    private String nickName;
 
     @Enumerated(value = STRING)
     private MemberState memberState;
@@ -50,14 +54,22 @@ public class User {
     @Column(name = "user_social")
     private boolean userSocial;
 
+    @Column(name = "last_update_date")
+    private LocalDateTime lastUpdateDate;
+
+    @Column(name = "last_modified_date")
+    private LocalDateTime modifiedDate;
 
 
-    public User(final String userId, final String userPassword, final String userName, final long totalPoint) {
-        //this.userId = userId;
+    public User(final String email, final String userPassword, final String userName, final long totalPoint, final String profileImageUrl,
+        final String gender, final String nickName ) {
+        this.email = email;
         this.password = userPassword;
         this.name = userName;
         this.totalPoint = totalPoint;
-        this.lastUpdateDate = LocalDateTime.now();
+        this.profileImageUrl = profileImageUrl;
+        this.gender = gender;
+        this.nickName = nickName;
         this.memberState = ACTIVE;
         this.userSocial = false;
     }
