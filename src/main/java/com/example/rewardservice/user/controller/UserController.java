@@ -1,9 +1,9 @@
 package com.example.rewardservice.user.controller;
 
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.dto.LoginRequest;
-import com.example.rewardservice.user.dto.LoginResponse;
-import com.example.rewardservice.user.dto.RegisterRequest;
+import com.example.rewardservice.user.dto.request.LoginRequest;
+import com.example.rewardservice.user.dto.response.LoginResponse;
+import com.example.rewardservice.user.dto.request.RegisterRequest;
 import com.example.rewardservice.user.service.APIUserDetailService;
 import com.example.rewardservice.user.service.UserManagementService;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +30,8 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
-        userManagementService.registerUser(registerRequest.getEmail(), registerRequest.getPassword(), registerRequest.getName());
+        userManagementService.registerUser(registerRequest.getEmail(), registerRequest.getPassword(), registerRequest.getName(),
+                registerRequest.getNickName(), registerRequest.getProfileUrl());
         return ResponseEntity.ok("User registered successfully");
     }
 
@@ -68,5 +66,10 @@ public class UserController {
     public ResponseEntity<?> logoutUser() {
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @DeleteMapping("/account")
+    public ResponseEntity<?> deleteUser() {
+        return null;
     }
 }

@@ -1,6 +1,6 @@
 package com.example.rewardservice.auth.filter;
 
-import com.example.rewardservice.auth.exception.AccessTokenException;
+import com.example.rewardservice.auth.TokenException.AccessTokenException;
 import com.example.rewardservice.auth.util.JWTUtil;
 import com.example.rewardservice.user.service.APIUserDetailService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -45,9 +45,9 @@ public class TokenCheckFilter extends OncePerRequestFilter {
             Map<String, Object> payload = validateAccessToken(request);
 
             //userId
-            String email = (String)payload.get("email");
+            String email = (String)payload.get("emailId");
 
-            log.info("email: " + email);
+            log.info("emailId: " + email);
 
             UserDetails userDetails = APIUserDetailService.loadUserByUsername(email);
 

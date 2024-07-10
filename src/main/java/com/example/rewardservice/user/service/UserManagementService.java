@@ -19,12 +19,15 @@ public class UserManagementService {
 
     private static final long INITIAL_POINT = 0;
 
-    public User registerUser(String email, String password, String userName) {
+    public User registerUser(String email, String password, String userName,
+                             String nickname, String profileImageUrl) {
         User user = User.builder()
+                .emailId(email)
                 .password(passwordEncoder.encode(password))
                 .name(userName)
-                .email(email)
+                .nickName(nickname)
                 .totalPoint(INITIAL_POINT)
+                .profileImageUrl(profileImageUrl)
                 .lastUpdateDate(LocalDateTime.now())
                 .userSocial(false)
                 .memberState(MemberState.ACTIVE)
@@ -34,12 +37,12 @@ public class UserManagementService {
     }
 
     public Optional<User> findByUserId(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailId(email);
     }
 
 
     public boolean emailExists(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailId(email);
     }
 
 
