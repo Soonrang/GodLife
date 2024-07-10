@@ -1,6 +1,6 @@
 package com.example.rewardservice.auth.filter;
 
-import com.example.rewardservice.auth.Exception.AccessTokenException;
+import com.example.rewardservice.auth.exception.AccessTokenException;
 import com.example.rewardservice.auth.util.JWTUtil;
 import com.example.rewardservice.user.service.APIUserDetailService;
 import io.jsonwebtoken.ExpiredJwtException;
