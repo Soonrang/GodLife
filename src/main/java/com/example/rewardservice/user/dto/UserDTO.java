@@ -14,20 +14,18 @@ import java.util.UUID;
 @ToString
 public class UserDTO implements UserDetails {
     private UUID id;
-    private String userId;
-    private String userPassword;
-    private String userName;
-    private String userEmail;
+    private String password;
+    private String name;
+    private String email;
     private long totalPoint;
     private LocalDateTime lastUpdateDate;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDTO(UUID id, String userId, String userPassword, String userName,String userEmail, long totalPoint, LocalDateTime lastUpdateDate, Collection<? extends GrantedAuthority> authorities) {
+    public UserDTO(UUID id,String userPassword, String userName,String userEmail, long totalPoint, LocalDateTime lastUpdateDate, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.userId = userId;
-        this.userPassword = userPassword;
-        this.userName = userName;
-        this.userEmail = userEmail;
+        this.password = userPassword;
+        this.name = userName;
+        this.email = userEmail;
         this.totalPoint = totalPoint;
         this.lastUpdateDate = lastUpdateDate;
         this.authorities = authorities;
@@ -39,9 +37,9 @@ public class UserDTO implements UserDetails {
 
     public UserDTO(User user, Collection<GrantedAuthority> authorities) {
         this.id = user.getId();
-        this.userId = user.getUserId();
-        this.userPassword = user.getUserPassword();
-        this.userName = user.getUserName();
+        //this.userId = user.getUserId();
+        this.password = user.getPassword();
+        this.name = user.getName();
         this.totalPoint = user.getTotalPoint();
         this.lastUpdateDate = user.getLastUpdateDate();
         this.authorities = authorities;
@@ -54,12 +52,12 @@ public class UserDTO implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userPassword;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return userId;
+        return email;
     }
 
     @Override

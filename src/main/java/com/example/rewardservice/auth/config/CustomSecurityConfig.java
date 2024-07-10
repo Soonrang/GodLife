@@ -1,11 +1,10 @@
 package com.example.rewardservice.auth.config;
 
-import com.example.rewardservice.auth.filter.RefreshTokenFilter;
 import com.example.rewardservice.auth.filter.TokenCheckFilter;
 import com.example.rewardservice.auth.filter.UserLoginFilter;
 import com.example.rewardservice.auth.handler.UserLoginSuccessHandler;
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.service.UserDetailService;
+import com.example.rewardservice.user.service.APIUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -35,7 +34,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class CustomSecurityConfig{
 
-    private final UserDetailService userDetailService;
+    private final APIUserDetailService APIUserDetailService;
     private final JWTUtil jwtUtil;
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -55,29 +54,20 @@ public class CustomSecurityConfig{
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         log.info("------configure-----");
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-
-        authenticationManagerBuilder
-                .userDetailsService(userDetailService)
-                .passwordEncoder(passwordEncoder());
-
-        AuthenticationManager authenticationManager =
-                authenticationManagerBuilder.build();
-
+        authenticationManagerBuilder.userDetailsService(APIUserDetailService).passwordEncoder(passwordEncoder());
+        AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
         http.authenticationManager(authenticationManager);
 
-        UserLoginFilter userLoginFilter = new UserLoginFilter("/generate");
+        UserLoginFilter userLoginFilter = new UserLoginFilter("/api/login");
         userLoginFilter.setAuthenticationManager(authenticationManager);
-
 
         UserLoginSuccessHandler successHandler = new UserLoginSuccessHandler(jwtUtil);
         userLoginFilter.setAuthenticationSuccessHandler(successHandler);
 
         http.addFilterBefore(userLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
-
-        //refreshToken 호출 처리
         http.addFilterBefore(
-                tokenCheckFilter(jwtUtil, userDetailService), UsernamePasswordAuthenticationFilter.class);
+                tokenCheckFilter(jwtUtil, APIUserDetailService), UsernamePasswordAuthenticationFilter.class);
 
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
@@ -89,11 +79,16 @@ public class CustomSecurityConfig{
             httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
         });
 
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/api/check-email", "/api/register", "/api/login", "/api/logout").permitAll()
+                .anyRequest().authenticated()
+        );
+
         return http.build();
     }
 
-    private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, UserDetailService userDetailService){
-        return new TokenCheckFilter(jwtUtil, userDetailService);
+    private TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, APIUserDetailService APIUserDetailService){
+        return new TokenCheckFilter(jwtUtil, APIUserDetailService);
     }
 
 

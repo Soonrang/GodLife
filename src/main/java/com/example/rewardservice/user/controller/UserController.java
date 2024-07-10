@@ -1,15 +1,13 @@
 package com.example.rewardservice.user.controller;
 
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.dto.LoginRequest;
 import com.example.rewardservice.user.dto.LoginResponse;
 import com.example.rewardservice.user.dto.RegisterRequest;
-import com.example.rewardservice.user.service.UserDetailService;
-import com.example.rewardservice.user.service.UserService;
+import com.example.rewardservice.user.service.APIUserDetailService;
+import com.example.rewardservice.user.service.UserManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,36 +20,48 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserManagementService userManagementService;
     private final JWTUtil jwtUtil;
-    private final UserDetailService userDetailService;
+    private final APIUserDetailService APIUserDetailService;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
-        userService.registerUser(registerRequest.getUserId(), registerRequest.getUserPassword(), registerRequest.getUserName(), registerRequest.getEmail());
+        userManagementService.registerUser(registerRequest.getEmail(), registerRequest.getPassword(), registerRequest.getName());
         return ResponseEntity.ok("User registered successfully");
+    }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<?> checkEmail(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        boolean exists = userManagementService.emailExists(email);
+        return ResponseEntity.ok(Map.of("email", exists));
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-        UserDetails userDetails = userDetailService.loadUserByUsername(loginRequest.getUserId());
-        if (userDetails == null || !passwordEncoder.matches(loginRequest.getUserPassword(), userDetails.getPassword())) {
+        UserDetails userDetails = APIUserDetailService.loadUserByUsername(loginRequest.getEmail());
+        if (userDetails == null || !passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 토큰 생성 및 응답은 UserLoginSuccessHandler에서 처리함
-        return ResponseEntity.ok().build();
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", userDetails.getUsername());
+        claims.put("name", userDetails.getUsername());
+
+        String accessToken = jwtUtil.generateToken(claims, 1); // 1 day expiration
+        String refreshToken = jwtUtil.generateToken(claims, 30); // 30 days expiration
+
+        return ResponseEntity.ok(new LoginResponse(accessToken, refreshToken));
     }
 
     @PostMapping("/logout")

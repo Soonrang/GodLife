@@ -25,7 +25,7 @@ public class UserLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
-        log.info("로그인필터----------------");
+        log.info("----------------로그인필터----------------");
 
         if(request.getMethod().equalsIgnoreCase("GET")) {
             log.info("GET METHOD NOT SUPPORT");
@@ -34,10 +34,9 @@ public class UserLoginFilter extends AbstractAuthenticationProcessingFilter {
         Map<String, String> jsonData = parseRequestJSON(request);
         log.info(jsonData);
 
-        UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(
-                jsonData.get("userId"),
-                jsonData.get("userPassword"));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                jsonData.get("email"),
+                jsonData.get("password"));
 
         return getAuthenticationManager().authenticate(authenticationToken);
     }

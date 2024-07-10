@@ -1,6 +1,7 @@
 package com.example.rewardservice.auth.handler;
 
 import com.example.rewardservice.auth.util.JWTUtil;
+import com.example.rewardservice.user.dto.UserDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
@@ -24,24 +26,16 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         log.info("로그인 성공 핸들러");
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        log.info(authentication);
-        log.info(authentication.getName());
+        String email = authentication.getName();
+        log.info("Authentication Name: " + email);
 
-        Map<String, Object> claim = Map.of("userId",authentication.getName());
+        Map<String, Object> claims = Map.of("email", email);
+        String accessToken = jwtUtil.generateToken(claims, 1);  // 1일
+        String refreshToken = jwtUtil.generateToken(claims, 30);  // 30일
 
-        String accessToken = jwtUtil.generateToken(claim,1);
-        String refreshToken = jwtUtil.generateToken(claim, 30);
-
+        response.setContentType("application/json;charset=UTF-8");
         Gson gson = new Gson();
-        Map<String, String> keyMap = Map.of(
-                "accessToken", accessToken,
-                "refreshToken", refreshToken);
-
-        log.info("Access Token: " + accessToken); // 로그 추가
-        log.info("Refresh Token: " + refreshToken); // 로그 추가
-
-        String jsonStr = gson.toJson(keyMap);
-        response.getWriter().println(jsonStr);
+        String jsonResponse = gson.toJson(Map.of("accessToken", accessToken, "refreshToken", refreshToken));
+        response.getWriter().write(jsonResponse);
     }
 }
