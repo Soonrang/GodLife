@@ -3,6 +3,7 @@ package com.example.rewardservice.user.service;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,18 +13,17 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserManagementService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     private static final long INITIAL_POINT = 0;
 
-    public User registerUser(String userId, String password, String userName,String userEmail) {
+    public User registerUser(String email, String password, String userName) {
         User user = User.builder()
-                .userId(userId)
-                .userPassword(passwordEncoder.encode(password))
-                .userName(userName)
-                .userEmail(userEmail)
+                .password(passwordEncoder.encode(password))
+                .name(userName)
+                .email(email)
                 .totalPoint(INITIAL_POINT)
                 .lastUpdateDate(LocalDateTime.now())
                 .userSocial(false)
@@ -33,13 +33,15 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> findByUserId(String userId) {
-        return userRepository.findByUserId(userId);
+    public Optional<User> findByUserId(String email) {
+        return userRepository.findByEmail(email);
     }
 
-    public Optional<User> findByEmailAndSocial(String email, boolean social) {
-        return userRepository.findByUserEmailAndUserSocial(email, social);
+
+    public boolean emailExists(String email) {
+        return userRepository.existsByEmail(email);
     }
+
 
     public User save(User user) {
         return userRepository.save(user);

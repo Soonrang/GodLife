@@ -2,7 +2,7 @@ package com.example.rewardservice.auth.filter;
 
 import com.example.rewardservice.auth.Exception.AccessTokenException;
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.service.UserDetailService;
+import com.example.rewardservice.user.service.APIUserDetailService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -11,7 +11,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,14 +24,14 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TokenCheckFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
-    private final UserDetailService userDetailService;
+    private final APIUserDetailService APIUserDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
         // 로그인과 회원가입 요청시 필터 통과
-        if (path.equals("/user/login") || path.equals("/user/register")) {
+        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -46,11 +45,11 @@ public class TokenCheckFilter extends OncePerRequestFilter {
             Map<String, Object> payload = validateAccessToken(request);
 
             //userId
-            String userId = (String)payload.get("userId");
+            String email = (String)payload.get("email");
 
-            log.info("userId: " + userId);
+            log.info("email: " + email);
 
-            UserDetails userDetails = userDetailService.loadUserByUsername(userId);
+            UserDetails userDetails = APIUserDetailService.loadUserByUsername(email);
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(

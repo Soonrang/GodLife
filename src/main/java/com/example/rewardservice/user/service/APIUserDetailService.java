@@ -17,26 +17,25 @@ import java.util.Optional;
 @Service
 @Log4j2
 @RequiredArgsConstructor
-public class UserDetailService implements UserDetailsService {
+public class APIUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<User> result = userRepository.findByUserId(userId); // userId를 기준으로 검색
-
+        Optional<User> result = userRepository.findByEmail(email); // email를 기준으로 검색
+        log.info("Load User By Email: " + email);
         User user = result.orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다."));
 
-        log.info("UserDetailService user: " + user);
+        log.info("UserDetailService user: " + user.toString());
 
         // UserDTO 객체 생성
         UserDTO userDTO = new UserDTO(
                 user.getId(),
-                user.getUserId(),
-                user.getUserPassword(),
-                user.getUserName(),
-                user.getUserEmail(),
+                user.getPassword(),
+                user.getName(),
+                user.getEmail(),
                 user.getTotalPoint(),
                 user.getLastUpdateDate(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
