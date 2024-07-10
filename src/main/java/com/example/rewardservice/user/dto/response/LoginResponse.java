@@ -1,4 +1,4 @@
-package com.example.rewardservice.user.dto;
+package com.example.rewardservice.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

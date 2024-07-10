@@ -29,7 +29,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
         String email = authentication.getName();
         log.info("Authentication Name: " + email);
 
-        Map<String, Object> claims = Map.of("email", email);
+        Map<String, Object> claims = Map.of("emailId", email);
         String accessToken = jwtUtil.generateToken(claims, 1);  // 1일
         String refreshToken = jwtUtil.generateToken(claims, 30);  // 30일
 

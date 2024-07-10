@@ -26,27 +26,24 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @NotNull
+    @Column(name = "user_email_id")
+    private String emailId;
+
     @Column(name = "user_password")
     private String password;
 
     @Column(name = "user_name")
     private String name;
 
-    @NotNull
-    @Column(name = "user_email")
-    private String email;
+    @Column(name = "user_Nick_Name")
+    private String nickName;
 
     @Column(name = "user_total_point")
     private long totalPoint;
 
     @Column(name = "profile_image_url", nullable = false)
     private String profileImageUrl;
-
-    @Column(name = "user_gender")
-    private String gender;
-
-    @Column(name = "user_Nick_Name")
-    private String nickName;
 
     @Enumerated(value = STRING)
     private MemberState memberState;
@@ -61,19 +58,19 @@ public class User extends BaseEntity {
     private LocalDateTime modifiedDate;
 
 
-    public User(final String email, final String userPassword, final String userName, final long totalPoint, final String profileImageUrl,
-        final String gender, final String nickName ) {
-        this.email = email;
+    public User(final String email, final String userPassword,
+                final String userName, final long totalPoint, final String profileImageUrl, final String nickName ) {
+        this.emailId = email;
         this.password = userPassword;
         this.name = userName;
         this.totalPoint = totalPoint;
         this.profileImageUrl = profileImageUrl;
-        this.gender = gender;
         this.nickName = nickName;
         this.memberState = ACTIVE;
         this.userSocial = false;
+        this.lastUpdateDate = LocalDateTime.now();
+        this.modifiedDate = LocalDateTime.now();
     }
-
 
     public void earnPoints(long points) {
         this.totalPoint += points;

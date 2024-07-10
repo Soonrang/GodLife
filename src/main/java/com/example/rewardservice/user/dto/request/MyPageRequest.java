@@ -1,4 +1,4 @@
-package com.example.rewardservice.user.dto;
+package com.example.rewardservice.user.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
