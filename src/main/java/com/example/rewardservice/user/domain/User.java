@@ -1,6 +1,7 @@
 package com.example.rewardservice.user.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
@@ -24,17 +25,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "user_id")
-    private String userId;
+//    @Column(name = "user_id")
+//    private String userId;
 
     @Column(name = "user_password")
-    private String userPassword;
+    private String password;
 
     @Column(name = "user_name")
-    private String userName;
+    private String name;
 
+    @NotNull
     @Column(name = "user_email")
-    private String userEmail;
+    private String email;
 
     @Column(name = "user_total_point")
     private long totalPoint;
@@ -51,9 +53,9 @@ public class User {
 
 
     public User(final String userId, final String userPassword, final String userName, final long totalPoint) {
-        this.userId = userId;
-        this.userPassword = userPassword;
-        this.userName = userName;
+        //this.userId = userId;
+        this.password = userPassword;
+        this.name = userName;
         this.totalPoint = totalPoint;
         this.lastUpdateDate = LocalDateTime.now();
         this.memberState = ACTIVE;
@@ -75,7 +77,7 @@ public class User {
     }
 
     public void changePassword(String upw) {
-        this.userPassword = upw;
+        this.password = upw;
     }
 
 
