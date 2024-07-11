@@ -35,7 +35,7 @@ public class UserLoginFilter extends AbstractAuthenticationProcessingFilter {
         log.info(jsonData);
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                jsonData.get("emailId"),
+                jsonData.get("email"),
                 jsonData.get("password"));
 
         return getAuthenticationManager().authenticate(authenticationToken);
