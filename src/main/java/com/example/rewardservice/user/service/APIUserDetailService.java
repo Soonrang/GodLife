@@ -24,7 +24,7 @@ public class APIUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<User> result = userRepository.findByEmailId(email); // email를 기준으로 검색
+        Optional<User> result = userRepository.findByEmail(email); // email를 기준으로 검색
         log.info("Load User By Email: " + email);
         User user = result.orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다."));
 
@@ -33,10 +33,10 @@ public class APIUserDetailService implements UserDetailsService {
         // UserDTO 객체 생성
         UserDTO userDTO = new UserDTO(
                 user.getId(),
-                user.getEmailId(),
+                user.getEmail(),
                 user.getPassword(),
                 user.getName(),
-                user.getNickName(),
+                user.getNickname(),
                 user.getTotalPoint(),
                 user.getProfileImageUrl(),
                 user.getLastUpdateDate(),

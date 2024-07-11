@@ -12,6 +12,6 @@ public class WriterResponse {
     private final String profileImageUrl;
 
     public static WriterResponse of(final User user) {
-        return new WriterResponse(user.getNickName(), user.getProfileImageUrl());
+        return new WriterResponse(user.getNickname(), user.getProfileImageUrl());
     }
 }

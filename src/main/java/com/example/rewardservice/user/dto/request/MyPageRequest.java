@@ -11,8 +11,15 @@ public class MyPageRequest {
 
     @NotBlank(message = "닉네임은 공백이 될 수 없습니다.")
     @Size(max=15, message = "닉네임은 15자를 초과할 수 없습니다.")
-    private final String nickname;
+    private String nickname;
 
     @NotBlank(message = "프로필 사진은 필수입니다.")
-    private final String profileImageUrl;
+    private String profileImageUrl;
+
+    @NotBlank(message = "이름 공백이 될 수 없습니다.")
+    @Size(max=15, message = "닉네임은 15자를 초과할 수 없습니다.")
+    private String name;
+
+    @NotBlank(message = "비밀번호는 공백이 될 수 없습니다.")
+    private String password;
 }
