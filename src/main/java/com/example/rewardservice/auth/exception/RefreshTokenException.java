@@ -1,4 +1,4 @@
-package com.example.rewardservice.auth.tokenException;
+package com.example.rewardservice.auth.exception;
 
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletResponse;

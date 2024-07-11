@@ -15,7 +15,7 @@ import java.util.UUID;
 @ToString
 public class UserDTO implements UserDetails {
     private UUID id;
-    private String emailId;
+    private String email;
     private String password;
     private String name;
     private String nickName;
@@ -28,7 +28,7 @@ public class UserDTO implements UserDetails {
                    String userNickname, long userTotalPoint,
                    String profileImageUrl, LocalDateTime lastUpdateDate, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.emailId = userEmail;
+        this.email = userEmail;
         this.password = userPassword;
         this.name = userName;
         this.nickName = userNickname;
@@ -44,7 +44,7 @@ public class UserDTO implements UserDetails {
 
     public UserDTO(User user, Collection<GrantedAuthority> authorities) {
         this.id = user.getId();
-        this.emailId = user.getEmail();
+        this.email = user.getEmail();
         this.password = user.getPassword();
         this.name = user.getName();
         this.nickName = user.getNickname();
@@ -68,7 +68,7 @@ public class UserDTO implements UserDetails {
 
     @Override
     public String getUsername() {
-        return emailId;
+        return email;
     }
 
     @Override

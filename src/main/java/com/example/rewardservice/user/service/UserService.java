@@ -1,5 +1,7 @@
 package com.example.rewardservice.user.service;
 
+import com.example.rewardservice.Image.dto.StoreImageDto;
+import com.example.rewardservice.Image.service.ImageFileService;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.repository.UserRepository;
@@ -7,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -16,11 +19,23 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final ImageFileService imageFileService;
     private static final long INITIAL_POINT = 0;
 
+
+    //RegisterRequest으로 수정 필요
     public User registerUser(String email, String password, String userName,
-                             String nickname, String profileImageUrl) {
+                             String nickname, MultipartFile profileImage) {
+
+//        String imageUrl = null;
+//        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+//            StoreImageDto storeImageDto = imageFileService.storeImageFile(profileImageUrl);
+//            imageUrl = storeImageDto.getStoreName();
+//        }
+
+        StoreImageDto storeImageDto = imageFileService.storeImageFile(profileImage);
+        String profileImageUrl = storeImageDto.getStoreName();
+
         User user = User.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
@@ -51,10 +66,14 @@ public class UserService {
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
     }
-    public boolean nickNameExists(String nickName) {return userRepository.existsByNickname(nickName);}
+
+    public boolean nickNameExists(String nickName) {
+        return userRepository.existsByNickname(nickName);
+    }
+
 
     @Transactional
-    public User updateUserInfo(String email, String newPassword, String newProfileImageUrl,
+    public User updateUserInfo(String email, String newPassword, MultipartFile newProfileImage,
                                String newNickName, String newName) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isEmpty()) {
@@ -65,8 +84,9 @@ public class UserService {
         if (newPassword != null) {
             user.changePassword(newPassword);
         }
-        if (newProfileImageUrl != null) {
-            user.setProfileImageUrl(newProfileImageUrl);
+        if (newProfileImage != null && !newProfileImage.isEmpty()) {
+            StoreImageDto storeImageDto = imageFileService.storeImageFile(newProfileImage);
+            user.setProfileImageUrl(storeImageDto.getStoreName());
         }
         if (newNickName != null) {
             user.setNickname(newNickName);
