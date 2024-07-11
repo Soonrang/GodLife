@@ -44,10 +44,10 @@ public class UserDTO implements UserDetails {
 
     public UserDTO(User user, Collection<GrantedAuthority> authorities) {
         this.id = user.getId();
-        this.emailId = user.getEmailId();
+        this.emailId = user.getEmail();
         this.password = user.getPassword();
         this.name = user.getName();
-        this.nickName = user.getNickName();
+        this.nickName = user.getNickname();
         this.totalPoint = user.getTotalPoint();
         this.profileImageUrl = user.getProfileImageUrl();
         this.lastUpdateDate = user.getLastUpdateDate();

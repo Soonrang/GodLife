@@ -13,7 +13,7 @@ public class MyPageResponse {
     private final String profileImageUrl;
 
     public static MyPageResponse from(final User user) {
-        return new MyPageResponse(user.getNickName(), user.getProfileImageUrl());
+        return new MyPageResponse(user.getNickname(), user.getProfileImageUrl());
     }
 
 }

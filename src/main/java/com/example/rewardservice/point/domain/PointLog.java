@@ -17,6 +17,7 @@ public class PointLog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    //user와 userpoint
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User user;
@@ -29,4 +30,5 @@ public class PointLog extends BaseEntity {
 
     @Column(name = "description")
     private String description;
+
 }

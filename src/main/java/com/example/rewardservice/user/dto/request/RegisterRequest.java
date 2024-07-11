@@ -9,6 +9,6 @@ public class RegisterRequest {
     private String name;
     private String profileUrl;
     private String gender;
-    private String nickName;
+    private String nickname;
 
 }

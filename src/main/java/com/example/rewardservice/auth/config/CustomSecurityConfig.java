@@ -80,7 +80,7 @@ public class CustomSecurityConfig{
         });
 
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/check-email", "/api/register", "/api/login", "/api/logout").permitAll()
+                .requestMatchers("/api/check-email", "/api/register", "/api/login", "/api/logout","/api/check-nickname").permitAll()
                 .anyRequest().authenticated()
         );
 
