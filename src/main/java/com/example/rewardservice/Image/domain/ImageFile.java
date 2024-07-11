@@ -1,67 +1,72 @@
 package com.example.rewardservice.Image.domain;
 
+import com.example.rewardservice.Image.dto.StoreImageDto;
+import com.example.rewardservice.Image.imageException.ImageException;
 import lombok.Getter;
-import org.aspectj.bridge.Message;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static org.springframework.util.StringUtils.getFilenameExtension;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 public class ImageFile {
 
     //파일 확장자 구분
     private static final String EXTENSION_DELIMITER = ".";
+    private static final List<String> WHITE_IMAGE_EXTENSION = List.of("jpg","jpeg","png");
 
-    private final MultipartFile file;
-    private final String hashedName;
+    @Value("${com.example.image.user.dir}")
+    private String imageStoreDir;
 
-    public ImageFile(final MultipartFile file) {
-        validateNullImage(file);
-        this.file = file;
-        this.hashedName = hashName(file);
-    }
+    public List<StoreImageDto> storeImageFiles(final List<MultipartFile> files) {
+        final List<StoreImageDto> storeImageDtos = new ArrayList<>();
 
-    private void validateNullImage(final MultipartFile file) {
-        if(file.isEmpty()) {
-            throw new RuntimeException();
+        for(MultipartFile file : files) {
+            if(file.isEmpty()) {
+                throw new ImageException("File is empty");
+            }
+            storeImageDtos.add(storeImageFile(file));
         }
+        return storeImageDtos;
     }
 
-    private String hashName(final MultipartFile image) {
-        final String name = image.getOriginalFilename();
-        final String filenameExtension = EXTENSION_DELIMITER + getFilenameExtension(name);
-        final String nameAndDate = name + LocalDateTime.now();
-
+    public StoreImageDto storeImageFile(final MultipartFile file) {
         try {
-            final MessageDigest hashAlgorithm = MessageDigest.getInstance("SHA=256");
-            final byte[] hashBytes = hashAlgorithm.digest(nameAndDate.getBytes(StandardCharsets.UTF_8));
-            return bytesToHex(hashBytes) + filenameExtension;
-        }catch (final NoSuchAlgorithmException e) {
-            throw new RuntimeException();
+            final String originalFilename = file.getOriginalFilename();
+            final String storeImageFilename = createStoreImageFileName(originalFilename);
+            final String fullPath = findFullPath(storeImageFilename);
+
+            file.transferTo(new File(fullPath));
+            return new StoreImageDto(originalFilename, storeImageFilename);
+        } catch (IOException e) {
+            throw new ImageException("이미지 저장에 실패했습니다.");
         }
     }
 
-    private String bytesToHex(final byte[] bytes) {
-        return IntStream.range(0, bytes.length) // 바이트 배열을 스트림으로 변환
-                .mapToObj(i -> String.format("%02x", bytes[i] & 0xff)) // 각 바이트를 16진수로 변환
-                .collect(Collectors.joining()); // 문자열로 연결
+    private String findFullPath(final String storeImageFilename) {
+        return imageStoreDir + storeImageFilename;
     }
 
-    public long getSize() {
-        return this.file.getSize();
+    private String createStoreImageFileName(final String originalFilename) {
+        final String extension = extractExtension(originalFilename);
+        validateImageFileExtension(extension);
+        final String uuid = UUID.randomUUID().toString();
+
+        return uuid + EXTENSION_DELIMITER + extension;
     }
 
-    public InputStream getInputStream() throws IOException {
-        return this.file.getInputStream();
+    private String extractExtension(final String originalFilename) {
+        int position = originalFilename.lastIndexOf(EXTENSION_DELIMITER);
+        return originalFilename.substring(position + 1);
+    }
+
+    private void validateImageFileExtension(final String extension) {
+    if(!WHITE_IMAGE_EXTENSION.contains(extension)) {
+        throw new ImageException("지원하지 않는 확장자입니다.: " + extension);
+    }
     }
 
 }

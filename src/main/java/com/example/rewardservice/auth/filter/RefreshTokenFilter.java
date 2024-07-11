@@ -1,6 +1,6 @@
 package com.example.rewardservice.auth.filter;
 
-import com.example.rewardservice.auth.TokenException.RefreshTokenException;
+import com.example.rewardservice.auth.tokenException.RefreshTokenException;
 import com.example.rewardservice.auth.util.JWTUtil;
 import com.google.gson.Gson;
 import io.jsonwebtoken.ExpiredJwtException;

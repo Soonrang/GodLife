@@ -28,7 +28,7 @@ public class User extends BaseEntity {
 
     @NotNull
     @Column(name = "user_email_id")
-    private String emailId;
+    private String email;
 
     @Column(name = "user_password")
     private String password;
@@ -37,7 +37,7 @@ public class User extends BaseEntity {
     private String name;
 
     @Column(name = "user_Nick_Name")
-    private String nickName;
+    private String nickname;
 
     @Column(name = "user_total_point")
     private long totalPoint;
@@ -59,13 +59,13 @@ public class User extends BaseEntity {
 
 
     public User(final String email, final String userPassword,
-                final String userName, final long totalPoint, final String profileImageUrl, final String nickName ) {
-        this.emailId = email;
+                final String userName, final long totalPoint, final String profileImageUrl, final String nickname ) {
+        this.email = email;
         this.password = userPassword;
         this.name = userName;
         this.totalPoint = totalPoint;
         this.profileImageUrl = profileImageUrl;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.memberState = ACTIVE;
         this.userSocial = false;
         this.lastUpdateDate = LocalDateTime.now();
@@ -89,6 +89,8 @@ public class User extends BaseEntity {
         this.password = upw;
     }
 
-
+    public User updateProfileImageUrl(String newProfileImageUrl) {
+        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newProfileImageUrl);
+    }
 
 }
