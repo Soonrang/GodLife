@@ -1,9 +1,10 @@
-package com.example.rewardservice.Image.domain;
+package com.example.rewardservice.Image.service;
 
 import com.example.rewardservice.Image.dto.StoreImageDto;
 import com.example.rewardservice.Image.imageException.ImageException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-public class ImageFile {
+@Service
+public class ImageFileService {
 
     //파일 확장자 구분
     private static final String EXTENSION_DELIMITER = ".";

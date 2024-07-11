@@ -1,16 +1,13 @@
 package com.example.rewardservice.auth.handler;
 
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.dto.UserDTO;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
@@ -29,7 +26,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
         String email = authentication.getName();
         log.info("Authentication Name: " + email);
 
-        Map<String, Object> claims = Map.of("emailId", email);
+        Map<String, Object> claims = Map.of("email", email);
         String accessToken = jwtUtil.generateToken(claims, 1);  // 1일
         String refreshToken = jwtUtil.generateToken(claims, 30);  // 30일
 

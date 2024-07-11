@@ -1,7 +1,9 @@
 package com.example.rewardservice.Image.dto;
 
 import com.example.rewardservice.Image.domain.ProfileImage;
+import lombok.Getter;
 
+@Getter
 public class StoreImageDto {
 
     private String uploadName;
