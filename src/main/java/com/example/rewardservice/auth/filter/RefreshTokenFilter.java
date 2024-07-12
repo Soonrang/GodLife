@@ -84,7 +84,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
         //이 상태까지 오면 AccessToken 무조건 생성
         String accessTokenValue = jwtUtil.generateToken(Map.of("email", email),1);
 
-        String refreshTokenValue = tokens.get("refresh_token");
+        String refreshTokenValue = tokens.get("refreshToken");
 
         //RefreshToken이 3일도 안남았을 경우
         if(gapTime < (1000*60 *60 *24*3)) {

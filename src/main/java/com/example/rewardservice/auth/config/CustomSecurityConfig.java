@@ -1,5 +1,6 @@
 package com.example.rewardservice.auth.config;
 
+import com.example.rewardservice.auth.filter.RefreshTokenFilter;
 import com.example.rewardservice.auth.filter.TokenCheckFilter;
 import com.example.rewardservice.auth.filter.UserLoginFilter;
 import com.example.rewardservice.auth.handler.UserLoginSuccessHandler;
@@ -53,21 +54,33 @@ public class CustomSecurityConfig{
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         log.info("------configure-----");
+
+        //AuthenticationManager설정
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(APIUserDetailService).passwordEncoder(passwordEncoder());
+
+        // Get AuthenticationManager
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
         http.authenticationManager(authenticationManager);
 
+        //APILoginFilter
         UserLoginFilter userLoginFilter = new UserLoginFilter("/api/login");
         userLoginFilter.setAuthenticationManager(authenticationManager);
 
+        //APILoginSuccessHandler
         UserLoginSuccessHandler successHandler = new UserLoginSuccessHandler(jwtUtil);
+
+        //SuccessHandler 세팅
         userLoginFilter.setAuthenticationSuccessHandler(successHandler);
 
+        //APILoginFilter의 위치 조정
         http.addFilterBefore(userLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterBefore(
                 tokenCheckFilter(jwtUtil, APIUserDetailService), UsernamePasswordAuthenticationFilter.class);
+
+        //refreshToken 호출
+        http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),TokenCheckFilter.class);
 
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
