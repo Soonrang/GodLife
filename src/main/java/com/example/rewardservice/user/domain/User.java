@@ -2,7 +2,6 @@ package com.example.rewardservice.user.domain;
 
 import com.example.rewardservice.common.BaseEntity;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
@@ -26,8 +25,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @NotNull
-    @Column(name = "user_email_id")
+    @Column(name = "user_email")
     private String email;
 
     @Column(name = "user_password")

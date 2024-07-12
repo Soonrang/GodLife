@@ -4,6 +4,7 @@ import com.example.rewardservice.Image.dto.StoreImageDto;
 import com.example.rewardservice.Image.service.ImageFileService;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
+import com.example.rewardservice.user.dto.response.MyPageResponse;
 import com.example.rewardservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +24,9 @@ public class UserService {
     private static final long INITIAL_POINT = 0;
 
 
-    //RegisterRequest으로 수정 필요
+    //RegisterRequest로 수정 필요
     public User registerUser(String email, String password, String userName,
                              String nickname, MultipartFile profileImage) {
-
-//        String imageUrl = null;
-//        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
-//            StoreImageDto storeImageDto = imageFileService.storeImageFile(profileImageUrl);
-//            imageUrl = storeImageDto.getStoreName();
-//        }
 
         StoreImageDto storeImageDto = imageFileService.storeImageFile(profileImage);
         String profileImageUrl = storeImageDto.getStoreName();
@@ -49,6 +44,12 @@ public class UserService {
                 .build();
 
         return userRepository.save(user);
+    }
+
+    public MyPageResponse getUserInfo(final String email) {
+        final User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new RuntimeException("아이디가 없음"));
+        return MyPageResponse.from(user);
     }
 
     @Transactional
