@@ -31,7 +31,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // 로그인과 회원가입 요청시 필터 통과
-        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email") || path.equals("/api/check-nickname")) {
+        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email") || path.equals("/api/check-nickname") || path.equals("/api/logout")) {
             filterChain.doFilter(request, response);
             return;
         }
