@@ -22,7 +22,7 @@ public class PointLog extends BaseEntity {
 
     //user와 userpoint
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JoinColumn(name = "user_email", nullable = false, updatable = false)
     private User user;
 
     @Column(name = "transaction_type")

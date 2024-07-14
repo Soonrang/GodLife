@@ -1,5 +1,7 @@
 package com.example.rewardservice.user.domain;
 
+import com.example.rewardservice.Event.domain.Event;
+import com.example.rewardservice.Participation.domain.Participation;
 import com.example.rewardservice.common.BaseEntity;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -8,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static com.example.rewardservice.user.domain.MemberState.ACTIVE;
@@ -41,7 +44,7 @@ public class User extends BaseEntity {
     private long totalPoint;
 
     @Column(name = "profile_image_url", nullable = false)
-    private String profileImageUrl;
+    private String ImageFile;
 
     @Enumerated(value = STRING)
     private MemberState memberState;
@@ -49,30 +52,29 @@ public class User extends BaseEntity {
     @Column(name = "user_social")
     private boolean userSocial;
 
-    @Column(name = "last_update_date")
-    private LocalDateTime lastUpdateDate;
+    /* //관리자 계정으로 업로드
+    @OneToMany(mappedBy = "user")
+    private List<Event> createdEvents;
+     */
 
-    @Column(name = "last_modified_date")
-    private LocalDateTime modifiedDate;
+    @OneToMany(mappedBy = "user")
+    private List<Participation> participations;
 
 
     public User(final String email, final String userPassword,
-                final String userName, final long totalPoint, final String profileImageUrl, final String nickname ) {
+                final String userName, final long totalPoint, final String ImageFile, final String nickname ) {
         this.email = email;
         this.password = userPassword;
         this.name = userName;
         this.totalPoint = totalPoint;
-        this.profileImageUrl = profileImageUrl;
+        this.ImageFile = ImageFile;
         this.nickname = nickname;
         this.memberState = ACTIVE;
         this.userSocial = false;
-        this.lastUpdateDate = LocalDateTime.now();
-        this.modifiedDate = LocalDateTime.now();
     }
 
     public void earnPoints(long points) {
         this.totalPoint += points;
-        this.lastUpdateDate = LocalDateTime.now();
     }
 
     public void usePoints(long points) {
@@ -80,15 +82,14 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException("insufficient points");
         }
         this.totalPoint -= points;
-        this.lastUpdateDate = LocalDateTime.now();
     }
 
     public void changePassword(String upw) {
         this.password = upw;
     }
 
-    public User updateProfileImageUrl(String newProfileImageUrl) {
-        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newProfileImageUrl);
+    public User updateImageFile(String newImageFile) {
+        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newImageFile);
     }
 
 }
