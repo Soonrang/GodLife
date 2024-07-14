@@ -2,7 +2,7 @@ package com.example.rewardservice.auth.filter;
 
 import com.example.rewardservice.auth.exception.AccessTokenException;
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.service.APIUserDetailService;
+import com.example.rewardservice.user.application.APIUserDetailService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -31,7 +31,10 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // 로그인과 회원가입 요청시 필터 통과
-        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email") || path.equals("/api/check-nickname") || path.equals("/api/logout")) {
+        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email")
+                || path.equals("/api/check-nickname") || path.equals("/api/logout")
+                || path.equals("/user/profileImage")) {
+
             filterChain.doFilter(request, response);
             return;
         }

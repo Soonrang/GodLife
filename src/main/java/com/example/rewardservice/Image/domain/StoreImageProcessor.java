@@ -1,6 +1,6 @@
 package com.example.rewardservice.Image.domain;
 
-import com.example.rewardservice.Image.dto.StoreImageDto;
+import com.example.rewardservice.Image.application.dto.StoreImageDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

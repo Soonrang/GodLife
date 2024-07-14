@@ -5,7 +5,7 @@ import com.example.rewardservice.auth.filter.TokenCheckFilter;
 import com.example.rewardservice.auth.filter.UserLoginFilter;
 import com.example.rewardservice.auth.handler.UserLoginSuccessHandler;
 import com.example.rewardservice.auth.util.JWTUtil;
-import com.example.rewardservice.user.service.APIUserDetailService;
+import com.example.rewardservice.user.application.APIUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -93,7 +93,7 @@ public class CustomSecurityConfig{
         });
 
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/check-email", "/api/register", "/api/login", "/api/logout","/api/check-nickname").permitAll()
+                .requestMatchers("/api/check-email", "/api/register", "/api/login", "/api/logout","/api/check-nickname","/user/profileImage").permitAll()
                 .anyRequest().authenticated()
         );
 
