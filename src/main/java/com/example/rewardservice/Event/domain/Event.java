@@ -1,6 +1,6 @@
 package com.example.rewardservice.Event.domain;
 
-import com.example.rewardservice.Participation.domain.Participation;
+import com.example.rewardservice.Point.domain.Point;
 import com.example.rewardservice.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,7 +52,7 @@ public abstract class Event {
     private int reward;
 
     @OneToMany(mappedBy = "event")
-    private List<Participation> participations;
+    private List<Point> points;
 
     public void updateEvent(String name,
                             String description,
