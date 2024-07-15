@@ -48,7 +48,7 @@ public class RouletteService {
         earnedPointRepository.save(earnedPoint);
     }
 
-    private boolean hasParticipatedToday(String userEmail, UUID eventId) {
+    public boolean hasParticipatedToday(String userEmail, UUID eventId) {
         User user = findUserByEmail(userEmail);
         Event event = findEventById(eventId);
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();

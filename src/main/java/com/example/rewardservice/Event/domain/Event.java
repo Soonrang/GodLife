@@ -44,15 +44,13 @@ public abstract class Event {
     @Column(name = "event_state")
     private String eventState;
 
-    @ManyToOne
-    @JoinColumn(name = "user_email", nullable = false, updatable = false)
-    private User user;
-
     @Column(name = "event_reward")
     private int reward;
 
     @OneToMany(mappedBy = "event")
     private List<Point> points;
+
+
 
     public void updateEvent(String name,
                             String description,

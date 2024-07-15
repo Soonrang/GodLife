@@ -64,7 +64,7 @@ public class CustomSecurityConfig{
         http.authenticationManager(authenticationManager);
 
         //APILoginFilter
-        UserLoginFilter userLoginFilter = new UserLoginFilter("/api/login");
+        UserLoginFilter userLoginFilter = new UserLoginFilter("/generate");
         userLoginFilter.setAuthenticationManager(authenticationManager);
 
         //APILoginSuccessHandler
@@ -95,7 +95,7 @@ public class CustomSecurityConfig{
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/check-email", "/api/register", "/api/login",
                         "/api/logout","/api/check-nickname",
-                        "/user/profileImage","/event/*").permitAll()
+                        "/user/profileImage","/event/**").permitAll()
                 .anyRequest().authenticated()
         );
 
