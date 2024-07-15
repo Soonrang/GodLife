@@ -8,6 +8,4 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("QUIZ")
 public class QuizEvent extends Event {
 
-
-
 }

@@ -1,8 +1,10 @@
 package com.example.rewardservice.Event.application;
 
+import com.example.rewardservice.Event.application.dto.request.EventRegisterRequest;
 import com.example.rewardservice.Event.application.dto.response.MonthlyAttendanceResponse;
 import com.example.rewardservice.Event.application.repository.EventRepository;
 import com.example.rewardservice.Event.domain.Event;
+import com.example.rewardservice.Event.domain.EventType.AttendanceEvent;
 import com.example.rewardservice.Point.EarnedPointRepository;
 import com.example.rewardservice.Point.domain.EarnedPoint;
 import com.example.rewardservice.user.domain.User;
@@ -30,6 +32,21 @@ public class AttendanceService {
     private static final List<Integer> BONUS_DAYS = List.of(10, 20, 30);
     private static final String ATTENDANCE_MESSAGE = "출석";
     private static final String BONUS_ATTENDANCE_MESSAGE = "출석 보너스";
+
+
+
+    // 이벤트 등록 메서드 추가
+    public Event registerEvent(EventRegisterRequest eventRegisterRequest){
+        AttendanceEvent attendanceEvent = new AttendanceEvent();
+        attendanceEvent.setName(eventRegisterRequest.getName());
+        attendanceEvent.setDescription(eventRegisterRequest.getDescription());
+        attendanceEvent.setCreatedAt(LocalDateTime.now());
+        attendanceEvent.setStartDate(eventRegisterRequest.getStartDate());
+        attendanceEvent.setEndDate(eventRegisterRequest.getEndDate());
+        attendanceEvent.setEventState(eventRegisterRequest.getEventState());
+
+        return eventRepository.save(attendanceEvent);
+    }
 
 
     //출석 이벤트 참여

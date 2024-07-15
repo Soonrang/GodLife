@@ -8,6 +8,4 @@ import jakarta.persistence.Entity;
 @DiscriminatorValue("ROULETTE")
 public class RouletteEvent extends Event {
 
-    private int maxPrize;
-
 }
