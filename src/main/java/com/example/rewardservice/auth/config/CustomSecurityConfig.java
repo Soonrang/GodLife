@@ -93,7 +93,9 @@ public class CustomSecurityConfig{
         });
 
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/check-email", "/api/register", "/api/login", "/api/logout","/api/check-nickname","/user/profileImage").permitAll()
+                .requestMatchers("/api/check-email", "/api/register", "/api/login",
+                        "/api/logout","/api/check-nickname",
+                        "/user/profileImage","/event/*").permitAll()
                 .anyRequest().authenticated()
         );
 

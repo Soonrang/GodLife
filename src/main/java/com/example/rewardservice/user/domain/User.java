@@ -1,7 +1,6 @@
 package com.example.rewardservice.user.domain;
 
-import com.example.rewardservice.Event.domain.Event;
-import com.example.rewardservice.Participation.domain.Participation;
+import com.example.rewardservice.Point.domain.Point;
 import com.example.rewardservice.common.BaseEntity;
 import jakarta.persistence.Entity;
 import lombok.Getter;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,8 +55,8 @@ public class User extends BaseEntity {
     private List<Event> createdEvents;
      */
 
-    @OneToMany(mappedBy = "user")
-    private List<Participation> participations;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Point> points;
 
 
     public User(final String email, final String userPassword,

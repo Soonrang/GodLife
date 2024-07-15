@@ -1,4 +1,4 @@
-package com.example.rewardservice.Event.application.dto;
+package com.example.rewardservice.Event.application.dto.response;
 
 import lombok.AllArgsConstructor;
 
