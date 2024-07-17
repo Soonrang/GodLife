@@ -1,5 +1,6 @@
 package com.example.rewardservice.auth.util;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -54,5 +55,10 @@ public class JWTUtil {
                 .parseClaimsJws(token) // 파싱 및 검증, 실패 시 에러
                 .getBody();
         return claim;
+    }
+
+    public String extractEmail(String token) {
+        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 }

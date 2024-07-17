@@ -22,8 +22,9 @@ public class UserInfoController {
     private final JwtTokenExtractor jwtTokenExtractor;
 
     @GetMapping
-    public ResponseEntity<MyPageResponse> getUserInfo() throws IOException {
+    public ResponseEntity<MyPageResponse> getUserInfo()  {
         String email = jwtTokenExtractor.getCurrentUserEmail();
+        log.info("***********************************************"+email);
         MyPageResponse userInfo = userService.getUserInfo(email);
         return ResponseEntity.ok(userInfo);
     }
