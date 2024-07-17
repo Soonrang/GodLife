@@ -1,6 +1,6 @@
 package com.example.rewardservice.user.domain;
 
-import com.example.rewardservice.Point.domain.Point;
+import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.common.BaseEntity;
 import jakarta.persistence.Entity;
 import lombok.Getter;
