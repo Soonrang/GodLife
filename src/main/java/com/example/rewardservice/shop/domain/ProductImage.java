@@ -1,9 +1,17 @@
 package com.example.rewardservice.shop.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

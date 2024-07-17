@@ -1,6 +1,5 @@
 package com.example.rewardservice.shop.domain;
 
-import com.example.rewardservice.shop.application.RegisterProductRequest;
 import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.user.domain.User;
 import jakarta.persistence.*;
@@ -22,8 +21,7 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "product_category")
-    private String category;
+    private Category category;
 
     //회사 계정을 따로 만들어 연결
     @ManyToOne
