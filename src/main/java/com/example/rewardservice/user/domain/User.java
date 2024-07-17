@@ -22,6 +22,7 @@ import static jakarta.persistence.EnumType.STRING;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

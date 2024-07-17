@@ -26,7 +26,6 @@ public class UserService {
     //RegisterRequest 수정 필요
     public User registerUser(RegisterRequest registerRequest) {
         StoreImageDto storeImageDto = imageFileService.storeImageFile(registerRequest.getImageFile());
-        String ImageFile = storeImageDto.getStoreName();
 
         User user = User.builder()
                 .email(registerRequest.getEmail())
@@ -34,7 +33,7 @@ public class UserService {
                 .name(registerRequest.getName())
                 .nickname(registerRequest.getNickname())
                 .totalPoint(INITIAL_POINT)
-                .ImageFile(ImageFile)
+                .ImageFile(storeImageDto.getStoreName())
                 .userSocial(false)
                 .memberState(MemberState.ACTIVE)
                 .build();

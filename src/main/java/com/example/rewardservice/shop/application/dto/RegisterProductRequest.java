@@ -1,4 +1,4 @@
-package com.example.rewardservice.shop.application;
+package com.example.rewardservice.shop.application.dto;
 
 import java.util.List;
 import java.util.UUID;
