@@ -1,7 +1,7 @@
 package com.example.rewardservice.user.application;
 
-import com.example.rewardservice.Image.application.dto.StoreImageDto;
-import com.example.rewardservice.Image.application.service.ImageFileService;
+import com.example.rewardservice.image.application.dto.StoreImageDto;
+import com.example.rewardservice.image.application.service.ImageFileService;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.application.dto.request.MyPageRequest;
@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -27,7 +25,6 @@ public class UserService {
 
     //RegisterRequest 수정 필요
     public User registerUser(RegisterRequest registerRequest) {
-
         StoreImageDto storeImageDto = imageFileService.storeImageFile(registerRequest.getImageFile());
         String ImageFile = storeImageDto.getStoreName();
 
@@ -45,7 +42,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public MyPageResponse getUserInfo(final String email) throws IOException {
+    public MyPageResponse getUserInfo(final String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("아이디 없음"));
         return MyPageResponse.from(user);

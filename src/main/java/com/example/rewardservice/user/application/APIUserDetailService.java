@@ -1,7 +1,7 @@
 package com.example.rewardservice.user.application;
 
 import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.application.dto.UserDto;
+import com.example.rewardservice.user.application.dto.APIUserDetailDto;
 import com.example.rewardservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,7 +31,7 @@ public class APIUserDetailService implements UserDetailsService {
         log.info("UserDetailService user: " + user.toString());
 
         // UserDTO 객체 생성
-        UserDto userDTO = new UserDto(
+        APIUserDetailDto APIUserDetailDTO = new APIUserDetailDto(
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
@@ -42,8 +42,8 @@ public class APIUserDetailService implements UserDetailsService {
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
 
-        log.info(userDTO);
+        log.info(APIUserDetailDTO);
 
-        return userDTO;
+        return APIUserDetailDTO;
     }
 }

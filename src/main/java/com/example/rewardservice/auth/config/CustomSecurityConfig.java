@@ -51,6 +51,7 @@ public class CustomSecurityConfig{
                         PathRequest.toStaticResources().atCommonLocations());
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         log.info("------configure-----");
@@ -64,11 +65,12 @@ public class CustomSecurityConfig{
         http.authenticationManager(authenticationManager);
 
         //APILoginFilter
-        UserLoginFilter userLoginFilter = new UserLoginFilter("/generate");
+        UserLoginFilter userLoginFilter = new UserLoginFilter("/api/login");
         userLoginFilter.setAuthenticationManager(authenticationManager);
 
         //APILoginSuccessHandler
         UserLoginSuccessHandler successHandler = new UserLoginSuccessHandler(jwtUtil);
+        //UserLoginSuccessHandler successHandler = new UserLoginSuccessHandler(jwtUtil,APIUserDetailService);
 
         //SuccessHandler 세팅
         userLoginFilter.setAuthenticationSuccessHandler(successHandler);
@@ -82,6 +84,7 @@ public class CustomSecurityConfig{
         //refreshToken 호출
         http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),TokenCheckFilter.class);
 
+
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
 
         http.sessionManagement(httpSecuritySessionManagementConfigurer -> {
@@ -94,10 +97,18 @@ public class CustomSecurityConfig{
 
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/check-email", "/api/register", "/api/login",
-                        "/api/logout","/api/check-nickname",
-                        "/user/profileImage","/event/**").permitAll()
+                        "/api/logout", "/api/check-nickname",
+                        "/user/profileImage", "/event/**", "/user/**","/images/**").permitAll()
                 .anyRequest().authenticated()
         );
+
+
+//        http.authorizeHttpRequests(authorize -> authorize.requestMatchers(
+//                        "/api/**",
+//                        "/user/**",
+//                        "/event/**").permitAll()
+//                .anyRequest().authenticated()
+//        );
 
         return http.build();
     }
