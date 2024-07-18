@@ -1,4 +1,4 @@
-package com.example.rewardservice.shop.domain.repository;
+package com.example.rewardservice.category;
 
 import com.example.rewardservice.shop.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
