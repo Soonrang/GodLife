@@ -1,4 +1,4 @@
-package com.example.rewardservice.shop.application.dto;
+package com.example.rewardservice.category;
 
 import com.example.rewardservice.shop.domain.Category;
 import lombok.Getter;

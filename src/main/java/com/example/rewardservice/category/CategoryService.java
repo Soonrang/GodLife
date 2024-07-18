@@ -1,8 +1,6 @@
-package com.example.rewardservice.shop.application.service;
+package com.example.rewardservice.category;
 
-import com.example.rewardservice.shop.application.dto.CategoryRequest;
 import com.example.rewardservice.shop.domain.Category;
-import com.example.rewardservice.shop.domain.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

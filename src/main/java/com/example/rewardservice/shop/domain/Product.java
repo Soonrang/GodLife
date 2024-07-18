@@ -21,11 +21,13 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     //회사 계정을 따로 만들어 연결
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "user_eamil", nullable = false)
     private User company;
 
     @Column(name = "product_name")
