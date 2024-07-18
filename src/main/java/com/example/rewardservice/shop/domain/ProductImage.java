@@ -23,4 +23,19 @@ public class ProductImage {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+    @Column(name = "upload_image_name")
+    private String uploadName;
+
+    public ProductImage(UUID uuid, String storeName, Product product) {
+        this.id = uuid;
+        this.imageUrl = storeName;
+        this.product = product;
+    }
+
+    public ProductImage(UUID uuid, String imageUrl){
+        this.id = uuid;
+        this.imageUrl = imageUrl;
+    }
+
 }

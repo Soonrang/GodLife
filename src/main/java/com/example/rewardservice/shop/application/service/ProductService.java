@@ -2,8 +2,12 @@ package com.example.rewardservice.shop.application.service;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
 import com.example.rewardservice.image.application.service.ImageFileService;
+import com.example.rewardservice.shop.application.ProductImageDto;
 import com.example.rewardservice.shop.application.request.RegisterProductRequest;
+import com.example.rewardservice.shop.application.request.UpdateProductRequest;
+import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.domain.Product;
+import com.example.rewardservice.shop.domain.ProductImage;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.repository.UserRepository;
@@ -11,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,14 +27,52 @@ public class ProductService {
     private final UserRepository userRepository;
 
 
-    public Product createProduct(RegisterProductRequest registerProductRequest) {
-        User company = userRepository.findByEmail(registerProductRequest.getCompanyEmail());
+    public Product createProduct(User company,RegisterProductRequest registerProductRequest) {
+        List<ProductImage> productImages = imageFileService.storeImageFiles(registerProductRequest.getProductImages()).stream()
+                .map(ProductImageDto::fromStoreImageDto)
+                .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), null))
+                .collect(Collectors.toList());
 
+        Product product = new Product(
+                UUID.randomUUID(),
+                registerProductRequest.getCategory(),
+                company,
+                company.getName(), // 회사 이름 저장
+                registerProductRequest.getProductName(),
+                registerProductRequest.getPrice(),
+                productImages,
+                registerProductRequest.getDescription()
+        );
 
+        productImages.forEach(productImage -> productImage.setProduct(product));
 
-        List<StoreImageDto>
-        StoreImageDto storeImageDto = imageFileService.storeImageFile(registerProductRequest.getProductImages())
+        Product savedProduct = productRepository.save(product);
+        return ProductInfoResponse.from(savedProduct);
     }
+
+    public Product getProductById(UUID productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(()-> new IllegalArgumentException("상품이 없습니다."));
+    }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    public Product getProductByCategory(String category) {
+        return productRepository.findByCategory(category)
+                .orElseThrow(()-> new IllegalArgumentException("카테고리가 없습니다."));
+    }
+
+    public Product updateProduct(UUID productId, UpdateProductRequest updateProductRequest){
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new IllegalArgumentException("상품아이디가 없습니다."));
+
+        User Company = userRepository.findByEmail(updateProductRequest.getCompanyName())
+
+
+    }
+
 
 
 
