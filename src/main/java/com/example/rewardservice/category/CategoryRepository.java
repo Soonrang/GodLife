@@ -1,6 +1,5 @@
 package com.example.rewardservice.category;
 
-import com.example.rewardservice.shop.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

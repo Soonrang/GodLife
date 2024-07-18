@@ -1,6 +1,5 @@
 package com.example.rewardservice.category;
 
-import com.example.rewardservice.shop.domain.Category;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

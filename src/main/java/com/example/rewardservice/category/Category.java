@@ -1,7 +1,6 @@
-package com.example.rewardservice.shop.domain;
+package com.example.rewardservice.category;
 
 import com.example.rewardservice.common.BaseEntity;
-import com.example.rewardservice.category.CategoryRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
