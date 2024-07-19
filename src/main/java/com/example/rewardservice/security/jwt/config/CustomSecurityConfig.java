@@ -1,10 +1,10 @@
-package com.example.rewardservice.auth.config;
+package com.example.rewardservice.security.jwt.config;
 
-import com.example.rewardservice.auth.filter.RefreshTokenFilter;
-import com.example.rewardservice.auth.filter.TokenCheckFilter;
-import com.example.rewardservice.auth.filter.UserLoginFilter;
-import com.example.rewardservice.auth.handler.UserLoginSuccessHandler;
-import com.example.rewardservice.auth.util.JWTUtil;
+import com.example.rewardservice.security.jwt.filter.RefreshTokenFilter;
+import com.example.rewardservice.security.jwt.filter.TokenCheckFilter;
+import com.example.rewardservice.security.jwt.filter.UserLoginFilter;
+import com.example.rewardservice.security.jwt.handler.UserLoginSuccessHandler;
+import com.example.rewardservice.security.jwt.util.JWTUtil;
 import com.example.rewardservice.user.application.APIUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

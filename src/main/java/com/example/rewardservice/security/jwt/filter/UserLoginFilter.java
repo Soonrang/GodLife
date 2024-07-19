@@ -1,4 +1,4 @@
-package com.example.rewardservice.auth.filter;
+package com.example.rewardservice.security.jwt.filter;
 
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;

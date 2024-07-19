@@ -27,7 +27,7 @@ public class ProductService {
     private final UserRepository userRepository;
 
 
-    public Product createProduct(User company,RegisterProductRequest registerProductRequest) {
+    public ProductInfoResponse createProduct(User company,RegisterProductRequest registerProductRequest) {
         List<ProductImage> productImages = imageFileService.storeImageFiles(registerProductRequest.getProductImages()).stream()
                 .map(ProductImageDto::fromStoreImageDto)
                 .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), null))
@@ -50,13 +50,16 @@ public class ProductService {
         return ProductInfoResponse.from(savedProduct);
     }
 
-    public Product getProductById(UUID productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(()-> new IllegalArgumentException("상품이 없습니다."));
+    public ProductInfoResponse getProductById(UUID productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        return ProductInfoResponse.from(product);
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductInfoResponse> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(ProductInfoResponse::from)
+                .collect(Collectors.toList());
     }
 
     public Product getProductByCategory(String category) {
@@ -64,13 +67,34 @@ public class ProductService {
                 .orElseThrow(()-> new IllegalArgumentException("카테고리가 없습니다."));
     }
 
-    public Product updateProduct(UUID productId, UpdateProductRequest updateProductRequest){
+    public ProductInfoResponse updateProduct(UUID productId, UpdateProductRequest updateProductRequest){
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new IllegalArgumentException("상품아이디가 없습니다."));
 
-        User Company = userRepository.findByEmail(updateProductRequest.getCompanyName())
+        List<ProductImage> newProductImages = imageFileService.storeImageFiles(updateProductRequest.getProductImages()).stream()
+                .map(ProductImageDto::fromStoreImageDto)
+                .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), product))
+                .collect(Collectors.toList());
+
+        product.updateProduct(
+                updateProductRequest.getCategory(),
+                updateProductRequest.getCompanyEmail(),
+                updateProductRequest.getProductName(),
+                updateProductRequest.getPrice(),
+                newProductImages,
+                updateProductRequest.getDescription()
+        );
+
+        Product updatedProduct = productRepository.save(product);
+        return ProductInfoResponse.from(updatedProduct);
+    }
 
 
+    public void deleteProduct(UUID productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()->new IllegalArgumentException("상품 아이디를 찾을 수 없습니다."));
+
+        productRepository.delete(product);
     }
 
 

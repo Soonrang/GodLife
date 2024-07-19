@@ -4,7 +4,7 @@ import com.example.rewardservice.event.application.AttendanceService;
 import com.example.rewardservice.event.application.RouletteService;
 import com.example.rewardservice.event.application.dto.request.EventRegisterRequest;
 import com.example.rewardservice.event.application.dto.response.MonthlyAttendanceResponse;
-import com.example.rewardservice.auth.JwtTokenExtractor;
+import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
