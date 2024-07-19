@@ -1,4 +1,4 @@
-package com.example.rewardservice.auth.util;
+package com.example.rewardservice.security.jwt.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

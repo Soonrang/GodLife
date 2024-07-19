@@ -1,6 +1,6 @@
 package com.example.rewardservice.user.presentation;
 
-import com.example.rewardservice.auth.JwtTokenExtractor;
+import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import com.example.rewardservice.user.application.dto.request.MyPageRequest;
 import com.example.rewardservice.user.application.dto.response.MyPageResponse;
 import com.example.rewardservice.user.application.UserService;

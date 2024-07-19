@@ -1,6 +1,6 @@
-package com.example.rewardservice.auth.handler;
+package com.example.rewardservice.security.jwt.handler;
 
-import com.example.rewardservice.auth.util.JWTUtil;
+import com.example.rewardservice.security.jwt.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
