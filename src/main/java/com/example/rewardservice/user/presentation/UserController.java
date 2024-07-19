@@ -1,6 +1,6 @@
 package com.example.rewardservice.user.presentation;
 
-import com.example.rewardservice.auth.util.JWTUtil;
+import com.example.rewardservice.security.jwt.util.JWTUtil;
 import com.example.rewardservice.user.application.dto.request.LoginRequest;
 import com.example.rewardservice.user.application.dto.request.RegisterRequest;
 import com.example.rewardservice.user.application.dto.response.LoginResponse;

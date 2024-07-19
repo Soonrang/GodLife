@@ -20,7 +20,7 @@ public class ProductInfoResponse {
     private List<ProductImageResponse> productImages;
     private String description;
 
-    public ProductInfoResponse from(Product product) {
+    public static ProductInfoResponse from(Product product) {
         return new ProductInfoResponse(
                 product.getId(),
                 product.getCategory(), // Assuming Category has a getName() method
