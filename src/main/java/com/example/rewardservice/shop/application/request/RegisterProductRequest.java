@@ -13,13 +13,10 @@ import java.util.UUID;
 @Getter
 @Setter
 public class RegisterProductRequest {
-    private UUID id;
     private String category;
-    private String companyEmail;
-    private String companyName;
     private String productName;
     private long price;
+    private int stock;
     private List<MultipartFile> productImages;
     private String description;
-    private String createdAt;
 }
