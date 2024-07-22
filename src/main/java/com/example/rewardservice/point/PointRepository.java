@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface EarnedPointRepository extends JpaRepository<EarnedPoint, UUID> {
+public interface PointRepository extends JpaRepository<EarnedPoint, UUID> {
     List<EarnedPoint> findByUserAndCreatedAtBetween(User user, LocalDateTime start, LocalDateTime end);
     List<EarnedPoint> findByUserAndEventAndCreatedAtBetween(User user, Event event, LocalDateTime start, LocalDateTime end);
 }
