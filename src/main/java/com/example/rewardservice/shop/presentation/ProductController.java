@@ -27,6 +27,12 @@ public class ProductController {
         return ResponseEntity.ok(createdProduct);
     }
 
+    @PostMapping("/product/purchase")
+    public ResponseEntity<Void> purchaseProduct(@AuthUser User user, @RequestParam UUID productId) {
+        productService.purchaseProduct(user.getEmail(), productId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{productId}")
     public ResponseEntity<ProductInfoResponse> getProductInfo(@PathVariable UUID productId) {
         ProductInfoResponse product = productService.getProductById(productId);

@@ -24,7 +24,7 @@ public class Product extends BaseEntity {
 
     //회사 계정을 따로 만들어 연결
     @ManyToOne
-    @JoinColumn(name = "user_eamil", nullable = false)
+    @JoinColumn(name = "user_email", nullable = false)
     private User company;
 
     @Column(name = "company_name")
@@ -36,6 +36,9 @@ public class Product extends BaseEntity {
     @Column(name = "product_price")
     private long price;
 
+    @Column(name = "product_stock")
+    private int stock;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImages;
 
@@ -44,18 +47,27 @@ public class Product extends BaseEntity {
 
 
     public void updateProduct(String category,
+                              User company,
                               String productName,
                               String companyName,
                               long price,
+                              int stock,
                               List<ProductImage> productImages,
                               String description){
         this.category = category;
+        this.company = company;
         this.productName = productName;
-        this.category = companyName;
+        this.companyName = companyName;
         this.price = price;
+        this.stock = stock;
         this.productImages = productImages;
         this.description = description;
     }
 
-
+    public void reduceStock(int quantity) {
+        if (this.stock < quantity) {
+            throw new RuntimeException("재고가 부족합니다.");
+        }
+        this.stock -= quantity;
+    }
 }

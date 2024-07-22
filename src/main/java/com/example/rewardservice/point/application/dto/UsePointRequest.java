@@ -12,5 +12,4 @@ public class UsePointRequest {
     UUID productId;
     long pointChange;
     String description;
-    String pointType;
 }
