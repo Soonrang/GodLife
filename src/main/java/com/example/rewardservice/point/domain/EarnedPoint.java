@@ -16,15 +16,15 @@ import lombok.Setter;
 @DiscriminatorValue("EARNED")
 public class EarnedPoint extends Point {
 
-    private static final String EARNED_REWARD = "적립";
-
     private String rewardType;
     private boolean isWinner;
     private int participationCount;
 
     @Builder
-    public EarnedPoint(Event event, User user, long pointChange, boolean isWinner, String rewardType, String description,int participationCount) {
-        super(event, user, pointChange, description,EARNED_REWARD);
+    public EarnedPoint(Event event, User user, long pointChange,
+                       boolean isWinner, String rewardType, String description,
+                       int participationCount, String pointType) {
+        super(event, user, pointChange, description,rewardType, pointType);
         this.rewardType = rewardType;
         this.isWinner = isWinner;
         this.participationCount = participationCount;

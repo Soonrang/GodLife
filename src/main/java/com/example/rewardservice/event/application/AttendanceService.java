@@ -6,6 +6,8 @@ import com.example.rewardservice.event.application.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.event.domain.EventType.AttendanceEvent;
 import com.example.rewardservice.point.PointRepository;
+import com.example.rewardservice.point.application.PointService;
+import com.example.rewardservice.point.application.dto.AddPointRequest;
 import com.example.rewardservice.point.domain.EarnedPoint;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.repository.UserRepository;
@@ -25,6 +27,7 @@ public class AttendanceService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
+    private final PointService pointService;
 
     private static final long ATTENDANCE_POINT = 50;
     private static final long BONUS_POINT = 100;
@@ -74,19 +77,17 @@ public class AttendanceService {
             description = EVENT_DESCRIPTION_BONUS_MESSAGE;
         }
 
-        EarnedPoint participation = EarnedPoint.builder()
-                .event(event)
-                .user(user)
-                .participationCount(monthlyCount)
-                .isWinner(false)
+        AddPointRequest addPointRequest = AddPointRequest.builder()
+                .userEmail(userEmail)
+                .eventId(eventId)
                 .pointChange(pointsToEarn)
                 .description(description)
+                .isWinner(false)
+                .participationCount(monthlyCount)
                 .build();
 
-        pointRepository.save(participation);
-
-        user.earnPoints(pointsToEarn);
-        userRepository.save(user);
+        //포인트 서비스에서 해당 내용을 저장, 적립은 포인트 서비스에서 구현합니다.
+        pointService.addEarnedPoint(addPointRequest);
     }
 
 

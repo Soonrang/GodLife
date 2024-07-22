@@ -1,6 +1,5 @@
 package com.example.rewardservice.shop.application.service;
 
-import com.example.rewardservice.image.application.dto.StoreImageDto;
 import com.example.rewardservice.image.application.service.ImageFileService;
 import com.example.rewardservice.shop.application.ProductImageDto;
 import com.example.rewardservice.shop.application.request.RegisterProductRequest;
