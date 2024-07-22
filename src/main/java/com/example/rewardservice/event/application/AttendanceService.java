@@ -5,7 +5,7 @@ import com.example.rewardservice.event.application.dto.response.MonthlyAttendanc
 import com.example.rewardservice.event.application.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.event.domain.EventType.AttendanceEvent;
-import com.example.rewardservice.point.EarnedPointRepository;
+import com.example.rewardservice.point.PointRepository;
 import com.example.rewardservice.point.domain.EarnedPoint;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.repository.UserRepository;
@@ -24,7 +24,7 @@ import java.util.UUID;
 public class AttendanceService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
-    private final EarnedPointRepository earnedPointRepository;
+    private final PointRepository pointRepository;
 
     private static final long ATTENDANCE_POINT = 50;
     private static final long BONUS_POINT = 100;
@@ -83,7 +83,7 @@ public class AttendanceService {
                 .description(description)
                 .build();
 
-        earnedPointRepository.save(participation);
+        pointRepository.save(participation);
 
         user.earnPoints(pointsToEarn);
         userRepository.save(user);
@@ -98,7 +98,7 @@ public class AttendanceService {
         LocalDateTime startOfMonth = event.getStartDate();
         LocalDateTime endOfMonth = event.getEndDate();
 
-        List<EarnedPoint> points = earnedPointRepository.findByUserAndEventAndCreatedAtBetween(
+        List<EarnedPoint> points = pointRepository.findByUserAndEventAndCreatedAtBetween(
                 user, event, startOfMonth, endOfMonth);
 
         int attendanceCount = points.size();
@@ -115,7 +115,7 @@ public class AttendanceService {
         LocalDateTime startOfMonth = LocalDate.now().atStartOfDay();
         LocalDateTime endOfMonth = LocalDate.now().plusDays(1).atStartOfDay();
 
-        List<EarnedPoint> points = earnedPointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfMonth, endOfMonth);
+        List<EarnedPoint> points = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfMonth, endOfMonth);
 
         return !points.isEmpty();
     }
@@ -128,7 +128,7 @@ public class AttendanceService {
         LocalDateTime startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
         LocalDateTime endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).atTime(23, 59, 59);
 
-        List<EarnedPoint> points = earnedPointRepository.findByUserAndEventAndCreatedAtBetween(
+        List<EarnedPoint> points = pointRepository.findByUserAndEventAndCreatedAtBetween(
                 user, event, startOfMonth, endOfMonth);
 
         return points.size();
