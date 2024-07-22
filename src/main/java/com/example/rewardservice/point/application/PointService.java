@@ -57,7 +57,7 @@ public class PointService {
     }
 
     @Transactional
-    public void userPoints(UsePointRequest usePointRequest) {
+    public void usedPoints(UsePointRequest usePointRequest) {
         User user = findUserByEmail(usePointRequest.getUserEmail());
         Product product = findProductById(usePointRequest.getProductId());
 
