@@ -2,7 +2,7 @@ package com.example.rewardservice.event.application;
 
 import com.example.rewardservice.event.application.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
-import com.example.rewardservice.point.EarnedPointRepository;
+import com.example.rewardservice.point.PointRepository;
 import com.example.rewardservice.point.domain.EarnedPoint;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.repository.UserRepository;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class RouletteService {
 
     private final UserRepository userRepository;
-    private final EarnedPointRepository earnedPointRepository;
+    private final PointRepository pointRepository;
     private final EventRepository eventRepository;
 
     private static final int MAX_DAILY_SPINS = 3;
@@ -45,7 +45,7 @@ public class RouletteService {
                 .description(ATTENDANCE_MESSAGE)
                 .build();
 
-        earnedPointRepository.save(earnedPoint);
+        pointRepository.save(earnedPoint);
     }
 
     public boolean hasParticipatedToday(String userEmail, UUID eventId) {
@@ -54,7 +54,7 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<EarnedPoint> earnedPoints = earnedPointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
+        List<EarnedPoint> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
         return earnedPoints.size() >= MAX_DAILY_SPINS;
     }
 
@@ -66,7 +66,7 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<EarnedPoint> earnedPoints = earnedPointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
+        List<EarnedPoint> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
 
         //돌릴 수 있는 룰렛 카운트
         return MAX_DAILY_SPINS - earnedPoints.size();
@@ -79,7 +79,7 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<EarnedPoint> points = earnedPointRepository.findByUserAndEventAndCreatedAtBetween(
+        List<EarnedPoint> points = pointRepository.findByUserAndEventAndCreatedAtBetween(
                 user, event, startOfDay, endOfDay);
 
         return points.size();

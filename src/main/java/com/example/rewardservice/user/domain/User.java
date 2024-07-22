@@ -2,6 +2,7 @@ package com.example.rewardservice.user.domain;
 
 import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.common.BaseEntity;
+import com.example.rewardservice.shop.domain.Product;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,6 +59,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Point> points;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products;
 
 
     public User(final String email, final String userPassword,

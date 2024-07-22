@@ -23,9 +23,9 @@ public class EarnedPoint extends Point {
     private int participationCount;
 
     @Builder
-    public EarnedPoint(Event event, User user, long pointChange, boolean isWinner, int participationCount, String description) {
-        super(event, user, pointChange, description);
-        this.rewardType = EARNED_REWARD;
+    public EarnedPoint(Event event, User user, long pointChange, boolean isWinner, String rewardType, String description,int participationCount) {
+        super(event, user, pointChange, description,EARNED_REWARD);
+        this.rewardType = rewardType;
         this.isWinner = isWinner;
         this.participationCount = participationCount;
     }
