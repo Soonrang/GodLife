@@ -43,6 +43,8 @@ public abstract class Point {
     @Column(name = "point_change_description")
     private String description;
 
+    @Column(name = "deleted_at")
+    private String deletedAt;
 
     public Point(Event event, User user, long pointChange, String description, String pointType) {
         this.event = event;
@@ -50,13 +52,34 @@ public abstract class Point {
         this.pointChange = pointChange;
         this.description = description;
         this.pointType = pointType;
+        this.deletedAt = "N";
     }
 
-    public Point(Product product, User user, Point point, long pointChange, String description, String usedReward) {
+
+    //이후 관리자 페이지에서 적용
+    public static final String NOT_DELETED = "N";
+    public static final String DELETED = "Y";
+
+    public Point(Product product, User user, long pointChange, String description, String pointType) {
         this.product = product;
         this.user = user;
         this.pointChange = pointChange;
         this.description = description;
         this.pointType = pointType;
     }
+
+
+    public Point(Event event, User user, long pointChange, String description, String rewardType, String pointType) {
+        this.event = event;
+        this.user = user;
+        this.pointChange = pointChange;
+        this.description = description;
+        this.pointType = pointType;
+    }
+
+    //소프트 딜리트 적용
+    public void delete() {
+        this.deletedAt = "Y";
+    }
+
 }

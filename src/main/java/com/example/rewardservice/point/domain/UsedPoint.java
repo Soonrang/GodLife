@@ -17,11 +17,9 @@ import lombok.Setter;
 @DiscriminatorValue("USED")
 public class UsedPoint extends Point {
 
-    private static final String USED_REWARD = "사용";
-
 
     @Builder
-    public UsedPoint(Product product, User user, Point point, long pointChange, String description, String pointType) {
-        super(product, user, point, pointChange, description, USED_REWARD);
+    public UsedPoint(Product product, User user, long pointChange, String description, String pointType) {
+        super(product, user, pointChange, description,pointType);
     }
 }
