@@ -3,6 +3,8 @@ package com.example.rewardservice.event.application;
 import com.example.rewardservice.event.application.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.point.PointRepository;
+import com.example.rewardservice.point.application.PointService;
+import com.example.rewardservice.point.application.dto.AddPointRequest;
 import com.example.rewardservice.point.domain.EarnedPoint;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.repository.UserRepository;
@@ -21,6 +23,7 @@ public class RouletteService {
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
     private final EventRepository eventRepository;
+    private final PointService pointService;
 
     private static final int MAX_DAILY_SPINS = 3;
     private static final String ATTENDANCE_MESSAGE = "룰렛";
@@ -36,16 +39,16 @@ public class RouletteService {
         user.earnPoints(earnedPoints);
         userRepository.save(user);
 
-        EarnedPoint earnedPoint = EarnedPoint.builder()
-                .event(event)
-                .user(user)
-                .participationCount(DailyRouletteCount(eventId, userEmail) + 1)
-                .isWinner(false)
+        AddPointRequest addPointRequest = AddPointRequest.builder()
+                .userEmail(userEmail)
+                .eventId(eventId)
                 .pointChange(earnedPoints)
                 .description(ATTENDANCE_MESSAGE)
+                .isWinner(false)
+                .participationCount(DailyRouletteCount(eventId, userEmail) + 1)
                 .build();
 
-        pointRepository.save(earnedPoint);
+        pointService.addEarnedPoint(addPointRequest);
     }
 
     public boolean hasParticipatedToday(String userEmail, UUID eventId) {
