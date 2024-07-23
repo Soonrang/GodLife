@@ -1,5 +1,6 @@
 package com.example.rewardservice.point.domain;
 
+import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.user.domain.User;
@@ -14,23 +15,23 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "point_type")
-public abstract class Point {
+@DiscriminatorColumn(name = "point_types")
+public abstract class Point extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "point_id")
+    @Column(name = "point_id", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @Column(name = "point_type")
+    @Column(name = "point_type", insertable = false, updatable = false)
     private String pointType;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false, columnDefinition = "BINARY(16)")
     private Product product;
 
     @ManyToOne
@@ -45,6 +46,8 @@ public abstract class Point {
 
     @Column(name = "deleted_at")
     private String deletedAt;
+
+
 
     public Point(Event event, User user, long pointChange, String description, String pointType) {
         this.event = event;
@@ -68,14 +71,6 @@ public abstract class Point {
         this.pointType = pointType;
     }
 
-
-    public Point(Event event, User user, long pointChange, String description, String rewardType, String pointType) {
-        this.event = event;
-        this.user = user;
-        this.pointChange = pointChange;
-        this.description = description;
-        this.pointType = pointType;
-    }
 
     //소프트 딜리트 적용
     public void delete() {
