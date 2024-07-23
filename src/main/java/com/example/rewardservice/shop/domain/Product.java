@@ -15,8 +15,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_id", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(name =  "product_category")

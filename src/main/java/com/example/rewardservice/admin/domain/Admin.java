@@ -1,4 +1,4 @@
-package com.example.rewardservice.Admin.domain;
+package com.example.rewardservice.admin.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
