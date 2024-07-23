@@ -80,7 +80,7 @@ public class User extends BaseEntity {
         this.totalPoint += points;
     }
 
-    public void usePoints(long points) {
+    public void validateUsePoints(long points) {
         if(this.totalPoint < points) {
             throw new IllegalArgumentException("포인트가 부족합니다.");
         }
