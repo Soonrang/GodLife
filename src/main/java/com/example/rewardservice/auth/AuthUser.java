@@ -21,6 +21,6 @@ ElementType을 명시하면 해당 타입에서만 커스텀 어노테이션 적
 @Target({ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Parameter(hidden = true)
-@AuthenticationPrincipal(expression = "#this == 'annoymousUser' ? null : user")
+@AuthenticationPrincipal(expression = "#this == 'annoymousUser' ? null : admin")
 public @interface AuthUser {
 }
