@@ -1,6 +1,6 @@
-package com.example.rewardservice.Admin.application;
+package com.example.rewardservice.admin.application;
 
-import com.example.rewardservice.Admin.domain.Admin;
+import com.example.rewardservice.admin.domain.Admin;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 

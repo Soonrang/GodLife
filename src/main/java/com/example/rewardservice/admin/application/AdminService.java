@@ -1,4 +1,4 @@
-package com.example.rewardservice.Admin.application;
+package com.example.rewardservice.admin.application;
 
 import com.example.rewardservice.event.application.repository.EventRepository;
 import com.example.rewardservice.point.PointRepository;
@@ -6,8 +6,8 @@ import com.example.rewardservice.security.jwt.util.JWTUtil;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
 import com.example.rewardservice.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import lombok.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @Transactional
