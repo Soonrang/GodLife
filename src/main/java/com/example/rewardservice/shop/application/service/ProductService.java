@@ -1,6 +1,6 @@
 package com.example.rewardservice.shop.application.service;
 
-import com.example.rewardservice.image.application.service.ImageFileService;
+import com.example.rewardservice.image.application.service.profileImageService;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.UsePointRequest;
 import com.example.rewardservice.point.domain.UsedPoint;
@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ImageFileService imageFileService;
+    private final profileImageService profileImageService;
     private final UserRepository userRepository;
     private final PointService pointService;
 
 
     public ProductInfoResponse createProduct(User company, RegisterProductRequest registerProductRequest) {
-        List<ProductImage> productImages = imageFileService.storeImageFiles(registerProductRequest.getProductImages()).stream()
+        List<ProductImage> productImages = profileImageService.storeProfileImages(registerProductRequest.getProductImages()).stream()
                 .map(ProductImageDto::fromStoreImageDto)
                 .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), null))
                 .collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class ProductService {
         User company = userRepository.findByEmail(updateProductRequest.getCompanyEmail())
                 .orElseThrow(() -> new IllegalArgumentException("기업ID가 없습니다."));
 
-        List<ProductImage> newProductImages = imageFileService.storeImageFiles(updateProductRequest.getProductImages()).stream()
+        List<ProductImage> newProductImages = profileImageService.storeProfileImages(updateProductRequest.getProductImages()).stream()
                 .map(ProductImageDto::fromStoreImageDto)
                 .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), product))
                 .collect(Collectors.toList());

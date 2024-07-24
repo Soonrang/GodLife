@@ -12,7 +12,7 @@ public class MyPageResponse {
     private final String nickname;
     private final String name;
     private final long totalPoint;
-    private final String ImageFile;
+    private final String profileImage;
 
     public static MyPageResponse from(final User user) {
         return new MyPageResponse(
@@ -20,7 +20,7 @@ public class MyPageResponse {
                 user.getNickname(),
                 user.getName(),
                 user.getTotalPoint(),
-                user.getImageFile());
+                user.getProfileImage());
     }
 
 }

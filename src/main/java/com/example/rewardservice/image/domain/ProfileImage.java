@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class ProfileImage {
     public static final String DEFAULT_PROFILE_IMAGE_ID = "1";

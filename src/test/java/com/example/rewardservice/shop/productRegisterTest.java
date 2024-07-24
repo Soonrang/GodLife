@@ -1,7 +1,7 @@
 package com.example.rewardservice.shop;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
-import com.example.rewardservice.image.application.service.ImageFileService;
+import com.example.rewardservice.image.application.service.profileImageService;
 import com.example.rewardservice.shop.application.request.RegisterProductRequest;
 import com.example.rewardservice.shop.application.request.UpdateProductRequest;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
@@ -41,7 +41,7 @@ class ProductRegisterTest {
     private ProductRepository productRepository;
 
     @MockBean
-    private ImageFileService imageFileService;
+    private profileImageService profileImageService;
 
     @Autowired
     private UserRepository userRepository;
@@ -59,7 +59,7 @@ class ProductRegisterTest {
         mockUser.setId(UUID.fromString("188d690e-f3be-4dbd-a938-414cf6416ac5"));
         mockUser.setEmail("company@example.com");
         mockUser.setName("Company Name");
-        mockUser.setImageFile("defaultImage.jpg");
+        mockUser.setprofileImage("defaultImage.jpg");
         userRepository.saveAndFlush(mockUser);  // 저장 후 즉시 플러시하여 DB에 반영
 
         MultipartFile image = new MockMultipartFile("productImages", "image.jpg", "image/jpeg", "image content".getBytes());
@@ -79,7 +79,7 @@ class ProductRegisterTest {
         updateProductRequest.setDescription("스타벅스 Hot아메리카노입니다.");
 
         List<StoreImageDto> storeImageDtos = Collections.singletonList(new StoreImageDto("image.jpg", "storedImage.jpg"));
-        when(imageFileService.storeImageFiles(anyList())).thenReturn(storeImageDtos);
+        when(profileImageService.storeProfileImages(anyList())).thenReturn(storeImageDtos);
     }
 
     @Test

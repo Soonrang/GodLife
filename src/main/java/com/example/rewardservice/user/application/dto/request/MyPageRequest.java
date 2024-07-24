@@ -19,7 +19,7 @@ public class MyPageRequest {
     private String nickname;
 
     @NotBlank(message = "프로필 사진은 필수입니다.")
-    private MultipartFile imageFile;
+    private MultipartFile profileImage;
 
 
 

@@ -1,7 +1,7 @@
 package com.example.rewardservice.user.application;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
-import com.example.rewardservice.image.application.service.ImageFileService;
+import com.example.rewardservice.image.application.service.profileImageService;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.application.dto.request.MyPageRequest;
@@ -20,12 +20,12 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ImageFileService imageFileService;
+    private final profileImageService profileImageService;
     private static final long INITIAL_POINT = 0;
 
     //RegisterRequest 수정 필요
     public User registerUser(RegisterRequest registerRequest) {
-        StoreImageDto storeImageDto = imageFileService.storeImageFile(registerRequest.getImageFile());
+        StoreImageDto storeImageDto = profileImageService.storeProfileImage(registerRequest.getProfileImage());
 
         User user = User.builder()
                 .email(registerRequest.getEmail())
@@ -33,7 +33,7 @@ public class UserService {
                 .name(registerRequest.getName())
                 .nickname(registerRequest.getNickname())
                 .totalPoint(INITIAL_POINT)
-                .ImageFile(storeImageDto.getStoreName())
+                .profileImage(storeImageDto.getStoreName())
                 .userSocial(false)
                 .memberState(MemberState.ACTIVE)
                 .build();
@@ -65,15 +65,15 @@ public class UserService {
         User user = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
 
         StoreImageDto storeImageDto = null;
-        if (myPageRequest.getImageFile() != null && !myPageRequest.getImageFile().isEmpty()) {
-            storeImageDto = imageFileService.storeProfileImageFile(myPageRequest.getImageFile());
+        if (myPageRequest.getProfileImage() != null && !myPageRequest.getProfileImage().isEmpty()) {
+            storeImageDto = profileImageService.storeProfileImage(myPageRequest.getProfileImage());
             String imageUrl = storeImageDto.getStoreName();
-            user.setImageFile(imageUrl);
+            user.setProfileImage(imageUrl);
         }
 
         userRepository.save(user);
 
-        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getImageFile());
+        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getProfileImage());
 
     }
 
@@ -84,10 +84,10 @@ public class UserService {
         User user = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
 
         StoreImageDto storeImageDto = null;
-        if (myPageRequest.getImageFile() != null && !myPageRequest.getImageFile().isEmpty()) {
-            storeImageDto = imageFileService.storeProfileImageFile(myPageRequest.getImageFile());
+        if (myPageRequest.getProfileImage() != null && !myPageRequest.getProfileImage().isEmpty()) {
+            storeImageDto = profileImageService.storeProfileprofileImage(myPageRequest.getProfileImage());
             String imageUrl = storeImageDto.getStoreName();
-            user.setImageFile(imageUrl);
+            user.setprofileImage(imageUrl);
         }
 
         if (myPageRequest.getName() != null) {
@@ -99,7 +99,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getImageFile());
+        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getProfileImage());
     }
 */
 

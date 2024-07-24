@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Getter
 @Service
-public class ImageFileService {
+public class profileImageService {
 
     //파일 확장자 구분
     private static final String EXTENSION_DELIMITER = ".";
@@ -27,50 +27,50 @@ public class ImageFileService {
     @Value("${com.example.image.user.dir}")
     private String imageStoreDir;
 
-    public List<StoreImageDto> storeImageFiles(final List<MultipartFile> files) {
+    public List<StoreImageDto> storeProfileImages(final List<MultipartFile> files) {
         final List<StoreImageDto> storeImageDtos = new ArrayList<>();
 
         for(MultipartFile file : files) {
             if(file.isEmpty()) {
                 throw new ImageException("File is empty");
             }
-            storeImageDtos.add(storeImageFile(file));
+            storeImageDtos.add(storeProfileImage(file));
         }
         return storeImageDtos;
     }
 
-    public StoreImageDto storeImageFile(final MultipartFile file) {
+//    public StoreImageDto storeProfileImage(final MultipartFile file) {
+//        try {
+//            final String originalFilename = file.getOriginalFilename();
+//            final String storeProfileImagename = createstoreProfileImageName(originalFilename);
+//            final String fullPath = findFullPath(storeProfileImagename);
+//
+//            file.transferTo(new File(fullPath));
+//            return new StoreImageDto(originalFilename, storeProfileImagename);
+//        } catch (IOException e) {
+//            throw new ImageException("이미지 저장에 실패했습니다.");
+//        }
+//    }
+
+    public StoreImageDto storeProfileImage(final MultipartFile file) {
         try {
             final String originalFilename = file.getOriginalFilename();
-            final String storeImageFilename = createStoreImageFileName(originalFilename);
-            final String fullPath = findFullPath(storeImageFilename);
-
-            file.transferTo(new File(fullPath));
-            return new StoreImageDto(originalFilename, storeImageFilename);
-        } catch (IOException e) {
-            throw new ImageException("이미지 저장에 실패했습니다.");
-        }
-    }
-
-    public StoreImageDto storeProfileImageFile(final MultipartFile file) {
-        try {
-            final String originalFilename = file.getOriginalFilename();
-            final String storeImageFilename = createStoreImageFileName(originalFilename);
-            final String fullPath = findFullPath(storeImageFilename);
+            final String storeProfileImagename = createstoreProfileImageName(originalFilename);
+            final String fullPath = findFullPath(storeProfileImagename);
 
             ensureDirectoryExists(imageStoreDir);
             //프로필 이미지 등록시 이미지 크기 줄이기
             reduceFileSize(file, fullPath);
 
-            return new StoreImageDto(originalFilename, storeImageFilename);
+            return new StoreImageDto(originalFilename, storeProfileImagename);
         } catch (IOException e) {
             throw new ImageException("이미지 저장에 실패했습니다.");
         }
     }
 
     //이미지 불러오기
-    public byte[] getImageFile(String imageFile) throws IOException {
-        Path imagePath = Paths.get(imageStoreDir, imageFile); // 전체 경로로 수정
+    public byte[] getProfileImage(String profileImage) throws IOException {
+        Path imagePath = Paths.get(imageStoreDir, profileImage); // 전체 경로로 수정
         return Files.readAllBytes(imagePath);
     }
 
@@ -81,13 +81,13 @@ public class ImageFileService {
                 .toFile(new File(fullPath));
     }
 
-    private String findFullPath(final String storeImageFilename) {
-        return imageStoreDir + storeImageFilename;
+    private String findFullPath(final String storeProfileImagename) {
+        return imageStoreDir + storeProfileImagename;
     }
 
-    private String createStoreImageFileName(final String originalFilename) {
+    private String createstoreProfileImageName(final String originalFilename) {
         final String extension = extractExtension(originalFilename);
-        validateImageFileExtension(extension);
+        validateprofileImageExtension(extension);
         final String uuid = UUID.randomUUID().toString();
 
         return uuid + EXTENSION_DELIMITER + extension;
@@ -98,7 +98,7 @@ public class ImageFileService {
         return originalFilename.substring(position + 1);
     }
 
-    private void validateImageFileExtension(final String extension) {
+    private void validateprofileImageExtension(final String extension) {
     if(!WHITE_IMAGE_EXTENSION.contains(extension)) {
         throw new ImageException("지원하지 않는 확장자입니다.: " + extension);
     }
