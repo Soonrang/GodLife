@@ -27,6 +27,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 @Configuration
@@ -37,6 +38,13 @@ public class CustomSecurityConfig{
 
     private final APIUserDetailService APIUserDetailService;
     private final JWTUtil jwtUtil;
+
+    private static final List<String> AUTH_WHITELIST = Arrays.asList(
+            "/", "/**", "/oauth/**", "/api/**",
+            "/actuator/health", "/withdraw", "/mission/**", "/home",
+            "/swagger/**", "/swagger-ui/**"
+    );
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -96,11 +104,19 @@ public class CustomSecurityConfig{
         });
 
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/check-email", "/api/register", "/api/login",
-                        "/api/logout", "/api/check-nickname",
-                        "/user/profileImage", "/event/**", "/user/**","/images/**").permitAll()
+                .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
+                .requestMatchers("/v3/api-docs","/api/check-email", "/api/register", "/api/login", "/api/logout", "/api/check-nickname", "/user/profileImage", "/event/**", "/user/**",
+                        "/v3/api-docs/**","/swagger-ui/**").permitAll()
+//                .requestMatchers(AUTH_WHITELIST.stream().toArray(String[]::new)).permitAll()
                 .anyRequest().authenticated()
         );
+
+//        http.authorizeHttpRequests(authorize -> authorize
+//                .requestMatchers("/api/check-email", "/api/register", "/api/login",
+//                        "/api/logout", "/api/check-nickname",
+//                        "/user/profileImage", "/event/**", "/user/**","/images/**","/**").permitAll()
+//                .anyRequest().authenticated()
+//        );
 
 
 //        http.authorizeHttpRequests(authorize -> authorize.requestMatchers(
@@ -131,6 +147,8 @@ public class CustomSecurityConfig{
 
         return source;
     }
+
+
 
 
 }

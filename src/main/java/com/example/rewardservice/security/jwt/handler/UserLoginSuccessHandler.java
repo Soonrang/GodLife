@@ -44,7 +44,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
 //                        "nickname", user.getNickname(),
 //                        "name", user.getName(),
 //                        "totalPoint", user.getTotalPoint(),
-//                        "imageFile", user.getImageFile()
+//                        "profileImage", user.getProfileImage()
 //                )
 //        ));
 //        response.getWriter().write(jsonResponse);

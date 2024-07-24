@@ -60,10 +60,10 @@ public class UserInfoController {
 //        MyPageResponse userInfo = userService.getUserInfo(email);
 //        log.info("User info retrieved: {}", userInfo);
 //
-//        String profileImageUrl = userInfo.getImageFile();
+//        String profileImageUrl = userInfo.getProfileImage();
 //        log.info("Profile image URL: {}", profileImageUrl);
 //
-//        byte[] imageBytes = imageFileService.getImageFile(profileImageUrl);
+//        byte[] imageBytes = profileImageService.getProfileImage(profileImageUrl);
 //        log.info("Image bytes length: {}", imageBytes.length);
 //
 //        HttpHeaders headers = new HttpHeaders();

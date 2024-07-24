@@ -23,7 +23,6 @@ import static jakarta.persistence.EnumType.STRING;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -44,13 +43,14 @@ public class User extends BaseEntity {
     private long totalPoint;
 
     @Column(name = "profile_image_url", nullable = false)
-    private String ImageFile;
+    private String profileImage;
 
     @Enumerated(value = STRING)
     private MemberState memberState;
 
     @Column(name = "user_social")
     private boolean userSocial;
+
 
     /* //관리자 계정으로 업로드
     @OneToMany(mappedBy = "user")
@@ -63,17 +63,40 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MemberRole memberRole;
 
     public User(final String email, final String userPassword,
-                final String userName, final long totalPoint, final String ImageFile, final String nickname ) {
+                final String userName, final long totalPoint, final String profileImage, final String nickname ) {
         this.email = email;
         this.password = userPassword;
         this.name = userName;
         this.totalPoint = totalPoint;
-        this.ImageFile = ImageFile;
+        this.profileImage = profileImage;
         this.nickname = nickname;
         this.memberState = ACTIVE;
         this.userSocial = false;
+    }
+
+    public User(String email) {
+        this.email = email;
+        this.memberRole = MemberRole.USER;
+    }
+
+    public boolean isAdmin(){
+        return memberRole == MemberRole.ADMIN;
+    }
+
+    public void updateRole(MemberRole role) {
+        this.memberRole = role;
+    }
+
+    public User(final String email, String password, String nickname){
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.profileImage = ".jpg";
     }
 
     public void earnPoints(long points) {
@@ -91,8 +114,8 @@ public class User extends BaseEntity {
         this.password = upw;
     }
 
-    public User updateImageFile(String newImageFile) {
-        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newImageFile);
+    public User updateProfileImage(String newProfileImage) {
+        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newprofileImage);
     }
 
 }

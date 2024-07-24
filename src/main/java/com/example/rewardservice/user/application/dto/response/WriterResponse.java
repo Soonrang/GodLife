@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 public class WriterResponse {
 
     private final String nickname;
-    private final String ImageFile;
+    private final String profileImage;
 
     public static WriterResponse of(final User user) {
-        return new WriterResponse(user.getNickname(), user.getImageFile());
+        return new WriterResponse(user.getNickname(), user.getProfileImage());
     }
 }
