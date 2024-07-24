@@ -18,19 +18,19 @@ public class APIUserDetailDto implements UserDetails {
     private String name;
     private String nickname;
     private long totalPoint;
-    private String ImageFile;
+    private String profileImage;
     private Collection<? extends GrantedAuthority> authorities;
 
     public APIUserDetailDto(UUID id, String userEmail, String userPassword, String userName,
                             String userNickname, long userTotalPoint,
-                            String ImageFile, Collection<? extends GrantedAuthority> authorities) {
+                            String profileImage, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = userEmail;
         this.password = userPassword;
         this.name = userName;
         this.nickname = userNickname;
         this.totalPoint = userTotalPoint;
-        this.ImageFile = ImageFile;
+        this.profileImage = profileImage;
     }
 
     public APIUserDetailDto() {
@@ -44,7 +44,7 @@ public class APIUserDetailDto implements UserDetails {
         this.name = user.getName();
         this.nickname = user.getNickname();
         this.totalPoint = user.getTotalPoint();
-        this.ImageFile = user.getImageFile();
+        this.profileImage = user.getProfileImage();
         this.authorities = authorities;
     }
 

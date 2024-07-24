@@ -77,14 +77,14 @@ public class UserController {
 //                                                 @RequestPart("myPageRequest") MyPageRequest myPageRequest) {
 //        userService.updateUserInfo(email,
 //                myPageRequest.getPassword(),
-//                myPageRequest.getImageFile(),
+//                myPageRequest.getProfileImage(),
 //                myPageRequest.getNickname(),
 //                myPageRequest.getName());
 //        return ResponseEntity.ok("User info updated successfully");
 //    }
 //@PostMapping("/upload/single")
 //public StoreImageDto uploadSingleImage(@RequestParam("file")MultipartFile file){
-//    return imageFileService.storeImageFile(file);
+//    return profileImageService.storeProfileImage(file);
 //}
 
 

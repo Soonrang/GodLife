@@ -38,7 +38,7 @@ public class APIUserDetailService implements UserDetailsService {
                 user.getName(),
                 user.getNickname(),
                 user.getTotalPoint(),
-                user.getImageFile(),
+                user.getProfileImage(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER"))
         );
 
