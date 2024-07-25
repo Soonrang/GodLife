@@ -1,7 +1,7 @@
 package com.example.rewardservice.admin.presentation;
 
 import com.example.rewardservice.admin.application.AdminProductService;
-import com.example.rewardservice.admin.application.dto.RegisterProductRequest;
+import com.example.rewardservice.admin.application.dto.ProductRegisterRequest;
 import com.example.rewardservice.admin.application.dto.UpdateProductRequest;
 import com.example.rewardservice.auth.AuthUser;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
@@ -21,8 +21,8 @@ public class AdminProductController {
 
     @PostMapping("/product/register")
     public ResponseEntity<ProductInfoResponse> getProduct(@AuthUser User company,
-                                                          @ModelAttribute RegisterProductRequest registerProductRequest) {
-        ProductInfoResponse createdProduct = adminProductService.createProduct(company, registerProductRequest);
+                                                          @ModelAttribute ProductRegisterRequest productRegisterRequest) {
+        ProductInfoResponse createdProduct = adminProductService.createProduct(company, productRegisterRequest);
         return ResponseEntity.ok(createdProduct);
     }
 

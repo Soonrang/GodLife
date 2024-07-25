@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class RegisterProductRequest {
+public class ProductRegisterRequest {
     private String category;
     private String productName;
     private long price;

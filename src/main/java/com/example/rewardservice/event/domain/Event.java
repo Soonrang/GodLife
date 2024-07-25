@@ -10,13 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "event_type")
-public abstract class Event extends BaseEntity {
+@Builder
+public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,50 +24,31 @@ public abstract class Event extends BaseEntity {
     @Column(name = "event_name")
     private String name;
 
-    @Column(name = "event_description")
-    private String description;
-
-    @Column(name = "event_start_date")
-    private LocalDateTime startDate;
-
-    @Column(name = "event_end_date")
-    private LocalDateTime endDate;
-
-    @Column(name = "event_announcement_date")
-    private LocalDateTime announcementDate;
-
     @Column(name = "event_state")
     private String eventState;
 
-    @Column(name = "event_reward")
-    private int reward;
-
     @Column(name = "event_type", insertable = false, updatable = false)
-    private String eventType;
+    private EventType eventType;
 
-    @OneToMany(mappedBy = "event")
-    private List<Point> points;
+    @Embedded
+    private EventPeriod  eventPeriod;
 
-    public Event(String name, String description, LocalDateTime startDate, LocalDateTime endDate, String eventState,String eventType) {
+//    @OneToMany(mappedBy = "event")
+//    private List<Point> points;
+
+    public Event(String name, String eventState,EventType eventType, EventPeriod eventPeriod) {
         this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.eventState = eventState;
         this.eventType = eventType;
+        this.eventPeriod = eventPeriod;
     }
 
-    public void updateEvent(String name,
-                            String description,
-                            LocalDateTime startDate,
-                            LocalDateTime endDate,
-                            String eventState
-    ) {
-        this.name = name;
-        this.description = description;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.eventState = eventState;
-    }
+   public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {
+       this.name = name;
+       this.eventState = eventState;
+       this.eventType = eventType;
+       this.eventPeriod = eventPeriod;
+   }
+
 
 }
