@@ -1,6 +1,6 @@
 package com.example.rewardservice.point.application;
 
-import com.example.rewardservice.event.application.repository.EventRepository;
+import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.point.PointRepository;
 import com.example.rewardservice.point.application.dto.AddPointRequest;

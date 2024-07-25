@@ -1,6 +1,6 @@
 package com.example.rewardservice.admin.application;
 
-import com.example.rewardservice.admin.application.dto.RegisterProductRequest;
+import com.example.rewardservice.admin.application.dto.ProductRegisterRequest;
 import com.example.rewardservice.admin.application.dto.UpdateProductRequest;
 import com.example.rewardservice.image.application.service.ProfileImageService;
 import com.example.rewardservice.shop.application.ProductImageDto;
@@ -24,22 +24,22 @@ public class AdminProductService {
     private final ProfileImageService profileImageService;
     private final UserRepository userRepository;
 
-    public ProductInfoResponse createProduct(User company, RegisterProductRequest registerProductRequest) {
-        List<ProductImage> productImages = profileImageService.storeProfileImages(registerProductRequest.getProductImages()).stream()
+    public ProductInfoResponse createProduct(User company, ProductRegisterRequest productRegisterRequest) {
+        List<ProductImage> productImages = profileImageService.storeProfileImages(productRegisterRequest.getProductImages()).stream()
                 .map(ProductImageDto::fromStoreImageDto)
                 .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), null))
                 .collect(Collectors.toList());
 
         Product product = new Product(
                 UUID.randomUUID(),
-                registerProductRequest.getCategory(),
+                productRegisterRequest.getCategory(),
                 company,
                 company.getName(),
-                registerProductRequest.getProductName(),
-                registerProductRequest.getPrice(),
-                registerProductRequest.getStock(),
+                productRegisterRequest.getProductName(),
+                productRegisterRequest.getPrice(),
+                productRegisterRequest.getStock(),
                 productImages,
-                registerProductRequest.getDescription()
+                productRegisterRequest.getDescription()
         );
 
         productImages.forEach(productImage -> productImage.setProduct(product));

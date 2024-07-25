@@ -1,7 +1,7 @@
 package com.example.rewardservice.event.presentation;
 
-import com.example.rewardservice.event.application.AttendanceService;
-import com.example.rewardservice.event.application.RouletteService;
+import com.example.rewardservice.event.application.service.AttendanceService;
+import com.example.rewardservice.event.application.service.RouletteService;
 import com.example.rewardservice.event.application.dto.response.MonthlyAttendanceResponse;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +51,8 @@ public class EventController {
         return ResponseEntity.ok(restRouletteCount);
     }
 
-    @PostMapping("/event/roulette/updatePoint/{eventId}/{earnedPoints}")
-    public ResponseEntity<String> updateRoulettePoint(@PathVariable UUID eventId, @PathVariable long earnedPoints) {
+    @PostMapping("/event/roulette/updatePoint/{eventId}")
+    public ResponseEntity<String> updateRoulettePoint(@PathVariable UUID eventId, @RequestBody long earnedPoints) {
         try {
             String email = jwtTokenExtractor.getCurrentUserEmail();
             rouletteService.participateInRouletteEvent(email, eventId, earnedPoints);
