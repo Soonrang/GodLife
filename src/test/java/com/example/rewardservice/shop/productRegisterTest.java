@@ -1,9 +1,7 @@
 package com.example.rewardservice.shop;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
-import com.example.rewardservice.image.application.service.profileImageService;
-import com.example.rewardservice.shop.application.request.RegisterProductRequest;
-import com.example.rewardservice.shop.application.request.UpdateProductRequest;
+import com.example.rewardservice.image.application.service.ProfileImageService;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.application.service.ProductService;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
@@ -41,7 +39,7 @@ class ProductRegisterTest {
     private ProductRepository productRepository;
 
     @MockBean
-    private profileImageService profileImageService;
+    private ProfileImageService profileImageService;
 
     @Autowired
     private UserRepository userRepository;

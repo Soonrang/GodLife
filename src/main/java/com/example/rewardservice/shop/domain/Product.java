@@ -26,7 +26,7 @@ public class Product extends BaseEntity {
 
     //회사 계정을 따로 만들어 연결
     @ManyToOne
-    @JoinColumn(name = "user_email", nullable = false)
+    @JoinColumn(name = "user_email")
     private User company;
 
     @Column(name = "company_name")

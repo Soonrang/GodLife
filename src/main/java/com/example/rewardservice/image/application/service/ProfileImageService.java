@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Getter
 @Service
-public class profileImageService {
+public class ProfileImageService {
 
     //파일 확장자 구분
     private static final String EXTENSION_DELIMITER = ".";
@@ -55,7 +55,7 @@ public class profileImageService {
     public StoreImageDto storeProfileImage(final MultipartFile file) {
         try {
             final String originalFilename = file.getOriginalFilename();
-            final String storeProfileImagename = createstoreProfileImageName(originalFilename);
+            final String storeProfileImagename = createStoreProfileImageName(originalFilename);
             final String fullPath = findFullPath(storeProfileImagename);
 
             ensureDirectoryExists(imageStoreDir);
@@ -85,7 +85,7 @@ public class profileImageService {
         return imageStoreDir + storeProfileImagename;
     }
 
-    private String createstoreProfileImageName(final String originalFilename) {
+    private String createStoreProfileImageName(final String originalFilename) {
         final String extension = extractExtension(originalFilename);
         validateprofileImageExtension(extension);
         final String uuid = UUID.randomUUID().toString();
