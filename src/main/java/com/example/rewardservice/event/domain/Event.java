@@ -1,5 +1,6 @@
 package com.example.rewardservice.event.domain;
 
+import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.point.domain.Point;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "event_type")
-public abstract class Event {
+public abstract class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,9 +28,6 @@ public abstract class Event {
 
     @Column(name = "event_description")
     private String description;
-
-    @Column(name = "even_create_date")
-    private LocalDateTime createdAt;
 
     @Column(name = "event_start_date")
     private LocalDateTime startDate;
@@ -46,10 +44,20 @@ public abstract class Event {
     @Column(name = "event_reward")
     private int reward;
 
+    @Column(name = "event_type", insertable = false, updatable = false)
+    private String eventType;
+
     @OneToMany(mappedBy = "event")
     private List<Point> points;
 
-
+    public Event(String name, String description, LocalDateTime startDate, LocalDateTime endDate, String eventState,String eventType) {
+        this.name = name;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.eventState = eventState;
+        this.eventType = eventType;
+    }
 
     public void updateEvent(String name,
                             String description,

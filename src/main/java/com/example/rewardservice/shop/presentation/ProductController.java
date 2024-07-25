@@ -1,8 +1,6 @@
 package com.example.rewardservice.shop.presentation;
 
 import com.example.rewardservice.auth.AuthUser;
-import com.example.rewardservice.shop.application.request.RegisterProductRequest;
-import com.example.rewardservice.shop.application.request.UpdateProductRequest;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.application.service.ProductService;
 import com.example.rewardservice.user.domain.User;
@@ -19,13 +17,6 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
-
-    @PostMapping("/product/register")
-    public ResponseEntity<ProductInfoResponse> getProduct(@AuthUser User company,
-                                                          @ModelAttribute RegisterProductRequest registerProductRequest) {
-        ProductInfoResponse createdProduct = productService.createProduct(company, registerProductRequest);
-        return ResponseEntity.ok(createdProduct);
-    }
 
     @PostMapping("/product/purchase")
     public ResponseEntity<Void> purchaseProduct(@AuthUser User user, @RequestParam UUID productId) {
@@ -44,18 +35,4 @@ public class ProductController {
         List<ProductInfoResponse> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
-
-    @PutMapping("/{productId}")
-    public ResponseEntity<ProductInfoResponse> updateProduct(@PathVariable UUID productId,
-                                                             @ModelAttribute UpdateProductRequest updateProductRequest) {
-        ProductInfoResponse updatedProduct = productService.updateProduct(productId, updateProductRequest);
-        return ResponseEntity.ok(updatedProduct);
-    }
-
-    @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
-        productService.deleteProduct(productId);
-        return ResponseEntity.noContent().build();
-    }
-
 }

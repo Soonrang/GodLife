@@ -24,18 +24,18 @@ public abstract class Point extends BaseEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "event_id", nullable = false)
+    @JoinColumn(name = "event_id")
     private Event event;
 
     @Column(name = "point_type", insertable = false, updatable = false)
     private String pointType;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false, columnDefinition = "BINARY(16)")
+    @JoinColumn(name = "product_id", columnDefinition = "BINARY(16)")
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "user_email", nullable = false)
+    @JoinColumn(name = "user_email")
     private User user;
 
     @Column(name = "point_change")

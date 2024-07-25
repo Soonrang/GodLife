@@ -42,7 +42,7 @@ public class User extends BaseEntity {
     @Column(name = "user_total_point")
     private long totalPoint;
 
-    @Column(name = "profile_image_url", nullable = false)
+    @Column(name = "profile_image_url")
     private String profileImage;
 
     @Enumerated(value = STRING)
@@ -51,21 +51,15 @@ public class User extends BaseEntity {
     @Column(name = "user_social")
     private boolean userSocial;
 
-
-    /* //관리자 계정으로 업로드
-    @OneToMany(mappedBy = "user")
-    private List<Event> createdEvents;
-     */
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Point> points;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private MemberRole memberRole;
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private MemberRole memberRole;
 
     public User(final String email, final String userPassword,
                 final String userName, final long totalPoint, final String profileImage, final String nickname ) {
@@ -79,25 +73,25 @@ public class User extends BaseEntity {
         this.userSocial = false;
     }
 
-    public User(String email) {
-        this.email = email;
-        this.memberRole = MemberRole.USER;
-    }
+//    public User(String email) {
+//        this.email = email;
+//        this.memberRole = MemberRole.USER;
+//    }
+//
+//    public boolean isAdmin(){
+//        return memberRole == MemberRole.ADMIN;
+//    }
+//
+//    public void updateRole(MemberRole role) {
+//        this.memberRole = role;
+//    }
 
-    public boolean isAdmin(){
-        return memberRole == MemberRole.ADMIN;
-    }
-
-    public void updateRole(MemberRole role) {
-        this.memberRole = role;
-    }
-
-    public User(final String email, String password, String nickname){
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.profileImage = ".jpg";
-    }
+//    public User(final String email, String password, String nickname){
+//        this.email = email;
+//        this.password = password;
+//        this.nickname = nickname;
+//        this.profileImage = ".jpg";
+//    }
 
     public void earnPoints(long points) {
         this.totalPoint += points;
@@ -115,7 +109,7 @@ public class User extends BaseEntity {
     }
 
     public User updateProfileImage(String newProfileImage) {
-        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newprofileImage);
+        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newProfileImage);
     }
 
 }

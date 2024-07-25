@@ -1,4 +1,4 @@
-package com.example.rewardservice.shop.application.request;
+package com.example.rewardservice.admin.application.dto;
 
 import lombok.Getter;
 import lombok.Setter;
