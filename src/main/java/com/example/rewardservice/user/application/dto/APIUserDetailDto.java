@@ -31,6 +31,7 @@ public class APIUserDetailDto implements UserDetails {
         this.nickname = userNickname;
         this.totalPoint = userTotalPoint;
         this.profileImage = profileImage;
+        this.authorities = authorities;
     }
 
     public APIUserDetailDto() {

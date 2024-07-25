@@ -1,7 +1,7 @@
 package com.example.rewardservice.user.application;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
-import com.example.rewardservice.image.application.service.profileImageService;
+import com.example.rewardservice.image.application.service.ProfileImageService;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.application.dto.request.MyPageRequest;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final profileImageService profileImageService;
+    private final ProfileImageService profileImageService;
     private static final long INITIAL_POINT = 0;
 
     //RegisterRequest 수정 필요

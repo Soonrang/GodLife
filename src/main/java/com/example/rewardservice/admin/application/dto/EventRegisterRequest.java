@@ -1,4 +1,4 @@
-package com.example.rewardservice.event.application.dto.request;
+package com.example.rewardservice.admin.application.dto;
 
 import lombok.Data;
 
@@ -16,5 +16,7 @@ public class EventRegisterRequest {
     private LocalDateTime endDate;
 
     private String eventState;
+
+    private String eventType;
 
 }

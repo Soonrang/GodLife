@@ -10,13 +10,13 @@ public class MonthlyAttendanceResponse {
 
     private final int attendanceCount;
     private final long totalPoints;
-    private final boolean isChecked;
+    private final boolean hasAttendance;
     private final EventDTO event;
 
-    public MonthlyAttendanceResponse(int attendanceCount, long totalPoints, boolean isChecked, AttendanceEvent event) {
+    public MonthlyAttendanceResponse(int attendanceCount, long totalPoints, boolean hasAttendance, AttendanceEvent event) {
         this.attendanceCount = attendanceCount;
         this.totalPoints = totalPoints;
-        this.isChecked = isChecked;
+        this.hasAttendance = hasAttendance;
         this.event = new EventDTO(event);
     }
 

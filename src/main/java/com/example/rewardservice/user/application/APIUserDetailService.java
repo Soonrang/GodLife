@@ -5,6 +5,7 @@ import com.example.rewardservice.user.application.dto.APIUserDetailDto;
 import com.example.rewardservice.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,6 +31,13 @@ public class APIUserDetailService implements UserDetailsService {
 
         log.info("UserDetailService user: " + user.toString());
 
+        List<GrantedAuthority> authorities;
+        if ("admin@gmail.com".equals(user.getEmail())) {
+            authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"), new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else {
+            authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+
         // UserDTO 객체 생성
         APIUserDetailDto APIUserDetailDTO = new APIUserDetailDto(
                 user.getId(),
@@ -39,7 +47,7 @@ public class APIUserDetailService implements UserDetailsService {
                 user.getNickname(),
                 user.getTotalPoint(),
                 user.getProfileImage(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                authorities
         );
 
         log.info(APIUserDetailDTO);

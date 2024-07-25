@@ -39,12 +39,6 @@ public class CustomSecurityConfig{
     private final APIUserDetailService APIUserDetailService;
     private final JWTUtil jwtUtil;
 
-    private static final List<String> AUTH_WHITELIST = Arrays.asList(
-            "/", "/**", "/oauth/**", "/api/**",
-            "/actuator/health", "/withdraw", "/mission/**", "/home",
-            "/swagger/**", "/swagger-ui/**"
-    );
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -107,24 +101,9 @@ public class CustomSecurityConfig{
                 .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
                 .requestMatchers("/v3/api-docs","/api/check-email", "/api/register", "/api/login", "/api/logout", "/api/check-nickname", "/user/profileImage", "/event/**", "/user/**",
                         "/v3/api-docs/**","/swagger-ui/**").permitAll()
-//                .requestMatchers(AUTH_WHITELIST.stream().toArray(String[]::new)).permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
         );
-
-//        http.authorizeHttpRequests(authorize -> authorize
-//                .requestMatchers("/api/check-email", "/api/register", "/api/login",
-//                        "/api/logout", "/api/check-nickname",
-//                        "/user/profileImage", "/event/**", "/user/**","/images/**","/**").permitAll()
-//                .anyRequest().authenticated()
-//        );
-
-
-//        http.authorizeHttpRequests(authorize -> authorize.requestMatchers(
-//                        "/api/**",
-//                        "/user/**",
-//                        "/event/**").permitAll()
-//                .anyRequest().authenticated()
-//        );
 
         return http.build();
     }
