@@ -22,7 +22,7 @@ public class ProfileImageService {
 
     //파일 확장자 구분
     private static final String EXTENSION_DELIMITER = ".";
-    private static final List<String> WHITE_IMAGE_EXTENSION = List.of("jpg","jpeg","png");
+    private static final List<String> WHITE_IMAGE_EXTENSION = List.of("jpg","jpeg","PNG");
 
     @Value("${com.example.image.user.dir}")
     private String imageStoreDir;

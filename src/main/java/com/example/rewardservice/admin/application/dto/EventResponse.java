@@ -1,16 +1,18 @@
 package com.example.rewardservice.admin.application.dto;
 
+import com.example.rewardservice.event.domain.EventPeriod;
 import com.example.rewardservice.event.domain.EventType;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
-public class EventRegisterRequest {
+@AllArgsConstructor
+public class EventResponse {
+    private UUID id;
     private String name;
     private String eventState;
     private EventType eventType;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private EventPeriod eventPeriod;
 }

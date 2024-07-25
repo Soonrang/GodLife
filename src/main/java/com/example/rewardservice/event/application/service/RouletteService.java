@@ -1,7 +1,9 @@
-package com.example.rewardservice.event.application;
+package com.example.rewardservice.event.application.service;
 
-import com.example.rewardservice.event.application.repository.EventRepository;
+import com.example.rewardservice.event.domain.Events.RouletteEvent;
+import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
+import com.example.rewardservice.event.domain.repository.RouletteRepository;
 import com.example.rewardservice.point.PointRepository;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
@@ -23,6 +25,7 @@ public class RouletteService {
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
     private final EventRepository eventRepository;
+    private final RouletteRepository rouletteRepository;
     private final PointService pointService;
 
     private static final int MAX_DAILY_SPINS = 3;
@@ -49,6 +52,9 @@ public class RouletteService {
                 .build();
 
         pointService.addEarnedPoint(addPointRequest);
+
+        RouletteEvent rouletteEvent = new RouletteEvent(event, earnedPoints);
+        rouletteRepository.save(rouletteEvent);
     }
 
     public boolean hasParticipatedToday(String userEmail, UUID eventId) {

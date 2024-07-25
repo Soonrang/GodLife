@@ -1,13 +1,12 @@
 package com.example.rewardservice.admin.application.dto;
 
 import com.example.rewardservice.event.domain.EventType;
-import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class EventRegisterRequest {
+public class EventUpdateRequest {
     private String name;
     private String eventState;
     private EventType eventType;
