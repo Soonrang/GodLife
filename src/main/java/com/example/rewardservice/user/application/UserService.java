@@ -2,18 +2,23 @@ package com.example.rewardservice.user.application;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
 import com.example.rewardservice.image.application.service.ProfileImageService;
+import com.example.rewardservice.point.PointRepository;
+import com.example.rewardservice.point.domain.Point;
+import com.example.rewardservice.user.application.dto.response.PointHistoryResponse;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.application.dto.request.MyPageRequest;
 import com.example.rewardservice.user.application.dto.request.RegisterRequest;
 import com.example.rewardservice.user.application.dto.response.MyPageResponse;
-import com.example.rewardservice.user.repository.UserRepository;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ProfileImageService profileImageService;
     private static final long INITIAL_POINT = 0;
+    private final PointRepository pointRepository;
 
     //RegisterRequest 수정 필요
     public User registerUser(RegisterRequest registerRequest) {
@@ -76,6 +82,18 @@ public class UserService {
         return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getProfileImage());
 
     }
+
+    public List<PointHistoryResponse> getUserPointHistory(String email) {
+        return pointRepository.findByUserEmail(email).stream()
+                .map(point -> new PointHistoryResponse(
+                        point.getPointType(),
+                        point.getPointChange(),
+                        point.getDescription(),
+                        point.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
+    }
+
 
     //빌더패턴 적용
    /* @Transactional

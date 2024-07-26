@@ -11,7 +11,7 @@ import com.example.rewardservice.point.domain.UsedPoint;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
 import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.repository.UserRepository;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

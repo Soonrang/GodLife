@@ -47,6 +47,13 @@ public class Product extends BaseEntity {
     @Column(name= "product_description")
     private String description;
 
+    public Product(UUID uuid, String productName, long price, List<ProductImage> productImages) {
+        this.id = uuid;
+        this.productName = productName;
+        this.price = price;
+        this.productImages =productImages;
+    }
+
 
     public void updateProduct(String category,
                               User company,

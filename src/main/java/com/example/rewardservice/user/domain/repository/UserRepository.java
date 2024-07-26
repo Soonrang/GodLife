@@ -1,4 +1,4 @@
-package com.example.rewardservice.user.repository;
+package com.example.rewardservice.user.domain.repository;
 
 import com.example.rewardservice.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
