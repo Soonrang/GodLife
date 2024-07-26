@@ -13,4 +13,5 @@ import java.util.UUID;
 public interface PointRepository extends JpaRepository<Point, UUID> {
     List<EarnedPoint> findByUserAndCreatedAtBetween(User user, LocalDateTime start, LocalDateTime end);
     List<EarnedPoint> findByUserAndEventAndCreatedAtBetween(User user, Event event, LocalDateTime start, LocalDateTime end);
+    List<Point> findByUserEmail(String email);
 }

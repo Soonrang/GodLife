@@ -4,12 +4,13 @@ import com.example.rewardservice.admin.application.dto.ProductRegisterRequest;
 import com.example.rewardservice.admin.application.dto.UpdateProductRequest;
 import com.example.rewardservice.image.application.service.ProfileImageService;
 import com.example.rewardservice.shop.application.ProductImageDto;
+import com.example.rewardservice.shop.application.response.ProductEasyInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.shop.domain.ProductImage;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
 import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.repository.UserRepository;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,25 @@ public class AdminProductService {
     private final ProductRepository productRepository;
     private final ProfileImageService profileImageService;
     private final UserRepository userRepository;
+
+
+    public ProductEasyInfoResponse createEasyProduct(ProductRegisterRequest productRegisterRequest) {
+        List<ProductImage> productImages = profileImageService.storeProfileImages(productRegisterRequest.getProductImages()).stream()
+                .map(ProductImageDto::fromStoreImageDto)
+                .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), null))
+                .collect(Collectors.toList());
+
+        Product product = new Product(
+                UUID.randomUUID(),
+                productRegisterRequest.getProductName(),
+                productRegisterRequest.getPrice(),
+                productImages
+        );
+        productImages.forEach(productImage -> productImage.setProduct(product));
+
+        Product savedProduct = productRepository.save(product);
+        return ProductEasyInfoResponse.from(savedProduct);
+    }
 
     public ProductInfoResponse createProduct(User company, ProductRegisterRequest productRegisterRequest) {
         List<ProductImage> productImages = profileImageService.storeProfileImages(productRegisterRequest.getProductImages()).stream()

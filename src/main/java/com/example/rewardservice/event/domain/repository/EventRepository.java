@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
     Optional<Event> findById(UUID eventId);
+    boolean existsByName(String name);
 }

@@ -2,11 +2,11 @@ package com.example.rewardservice.shop.application.service;
 
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.UsePointRequest;
+import com.example.rewardservice.shop.application.response.ProductEasyInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
-import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.repository.UserRepository;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,9 +28,9 @@ public class ProductService {
         return ProductInfoResponse.from(product);
     }
 
-    public List<ProductInfoResponse> getAllProducts() {
+    public List<ProductEasyInfoResponse> getAllProducts() {
         return productRepository.findAll().stream()
-                .map(ProductInfoResponse::from)
+                .map(ProductEasyInfoResponse::from)
                 .collect(Collectors.toList());
     }
 
@@ -41,13 +41,9 @@ public class ProductService {
 
     @Transactional
     public void purchaseProduct(String email, UUID productId) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(()-> new IllegalArgumentException("회원 ID가 없습니다."));
-
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new IllegalArgumentException("상품 ID가 없습니다."));
 
-        product.reduceStock(1);
         productRepository.save(product);
 
         UsePointRequest usePointRequest = UsePointRequest.builder()
@@ -60,6 +56,24 @@ public class ProductService {
         pointService.usedPoints(usePointRequest);
     }
 
-
-
+//    @Transactional
+//    public void purchaseProduct(String email, UUID productId) {
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(()-> new IllegalArgumentException("회원 ID가 없습니다."));
+//
+//        Product product = productRepository.findById(productId)
+//                .orElseThrow(()-> new IllegalArgumentException("상품 ID가 없습니다."));
+//
+//        product.reduceStock(1);
+//        productRepository.save(product);
+//
+//        UsePointRequest usePointRequest = UsePointRequest.builder()
+//                .userEmail(email)
+//                .productId(productId)
+//                .pointChange(product.getPrice())
+//                .description("상품 구매")
+//                .build();
+//
+//        pointService.usedPoints(usePointRequest);
+//    }
 }

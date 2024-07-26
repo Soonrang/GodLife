@@ -1,9 +1,11 @@
 package com.example.rewardservice.event.presentation;
 
+import com.example.rewardservice.auth.AuthUser;
 import com.example.rewardservice.event.application.service.AttendanceService;
 import com.example.rewardservice.event.application.service.RouletteService;
 import com.example.rewardservice.event.application.dto.response.MonthlyAttendanceResponse;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-//@RequestMapping("/event")
+@RequestMapping("/event")
 @RequiredArgsConstructor
 public class EventController {
 
@@ -20,7 +22,7 @@ public class EventController {
     private final JwtTokenExtractor jwtTokenExtractor;
 
     //출석
-    @PostMapping("/event/participate/{eventId}")
+    @PostMapping("/participate/{eventId}")
     public ResponseEntity<Void> participateInAttendanceEvent(@PathVariable UUID eventId) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         attendanceService.participateInAttendanceEvent(eventId, email);
@@ -34,7 +36,7 @@ public class EventController {
 //        return ResponseEntity.ok(hasAttended);
 //    }
 
-    @GetMapping("/event/monthlyCount/{eventId}")
+    @GetMapping("/monthlyCount/{eventId}")
     public ResponseEntity<MonthlyAttendanceResponse> getMonthlyAttendance(@PathVariable UUID eventId) {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
         MonthlyAttendanceResponse response = attendanceService.getAttendanceData(userEmail, eventId);
@@ -44,14 +46,14 @@ public class EventController {
 
 
     //-----------------------------------룰렛------------------------------------
-    @GetMapping("/event/roulette/count/{eventId}")
+    @GetMapping("/roulette/count/{eventId}")
     public ResponseEntity<Integer> hasParticipatedToday(@PathVariable UUID eventId) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         int restRouletteCount = rouletteService.getRouletteCount(email, eventId);
         return ResponseEntity.ok(restRouletteCount);
     }
 
-    @PostMapping("/event/roulette/updatePoint/{eventId}")
+    @PostMapping("/roulette/updatePoint/{eventId}")
     public ResponseEntity<String> updateRoulettePoint(@PathVariable UUID eventId, @RequestBody long earnedPoints) {
         try {
             String email = jwtTokenExtractor.getCurrentUserEmail();
@@ -61,6 +63,5 @@ public class EventController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
 }
