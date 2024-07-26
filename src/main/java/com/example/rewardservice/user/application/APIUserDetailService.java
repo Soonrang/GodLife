@@ -2,7 +2,7 @@ package com.example.rewardservice.user.application;
 
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.application.dto.APIUserDetailDto;
-import com.example.rewardservice.user.repository.UserRepository;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;

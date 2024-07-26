@@ -1,6 +1,8 @@
 package com.example.rewardservice.shop.presentation;
 
 import com.example.rewardservice.auth.AuthUser;
+import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.shop.application.response.ProductEasyInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.application.service.ProductService;
 import com.example.rewardservice.user.domain.User;
@@ -17,10 +19,12 @@ import java.util.UUID;
 public class ProductController {
 
     private final ProductService productService;
+    private final JwtTokenExtractor jwtTokenExtractor;
 
     @PostMapping("/product/purchase")
-    public ResponseEntity<Void> purchaseProduct(@AuthUser User user, @RequestParam UUID productId) {
-        productService.purchaseProduct(user.getEmail(), productId);
+    public ResponseEntity<Void> purchaseProduct(@RequestParam UUID productId) {
+        String userEmail = jwtTokenExtractor.getCurrentUserEmail();
+        productService.purchaseProduct(userEmail, productId);
         return ResponseEntity.noContent().build();
     }
 
@@ -31,8 +35,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductInfoResponse>> getAllProducts() {
-        List<ProductInfoResponse> products = productService.getAllProducts();
+    public ResponseEntity<List<ProductEasyInfoResponse>> getAllProducts() {
+        List<ProductEasyInfoResponse> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 }

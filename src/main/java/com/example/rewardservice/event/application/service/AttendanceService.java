@@ -10,7 +10,7 @@ import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
 import com.example.rewardservice.point.domain.EarnedPoint;
 import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.repository.UserRepository;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

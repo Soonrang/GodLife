@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Parameter(hidden = true)
-@AuthenticationPrincipal(expression = "#this == 'annoymousUser' ? null : user")
+@AuthenticationPrincipal(expression = "#this == 'annoymousUser' ? null : ROLE_ADMIN")
 public @interface AuthAdmin {
 }
