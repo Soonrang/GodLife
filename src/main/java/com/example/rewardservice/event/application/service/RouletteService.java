@@ -4,7 +4,7 @@ import com.example.rewardservice.event.domain.Events.RouletteEvent;
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.event.domain.repository.RouletteRepository;
-import com.example.rewardservice.point.PointRepository;
+import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
 import com.example.rewardservice.point.domain.EarnedPoint;

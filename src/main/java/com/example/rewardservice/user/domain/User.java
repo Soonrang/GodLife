@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -73,25 +74,22 @@ public class User extends BaseEntity {
         this.userSocial = false;
     }
 
-//    public User(String email) {
-//        this.email = email;
-//        this.memberRole = MemberRole.USER;
-//    }
-//
-//    public boolean isAdmin(){
-//        return memberRole == MemberRole.ADMIN;
-//    }
-//
-//    public void updateRole(MemberRole role) {
-//        this.memberRole = role;
-//    }
+    public void updateUserInfo(String nickname, String newFile){
+        this.nickname = nickname;
+        this.profileImage = newFile;
+    }
 
-//    public User(final String email, String password, String nickname){
-//        this.email = email;
-//        this.password = password;
-//        this.nickname = nickname;
-//        this.profileImage = ".jpg";
-//    }
+    public void changeMemberState(MemberState memberState){
+        this.memberState =memberState;
+    }
+
+    public void changePassword(String upw) {
+        this.password = upw;
+    }
+
+    public void updateProfileImage(String newProfileImage) {
+        this.profileImage = newProfileImage;
+    }
 
     public void earnPoints(long points) {
         this.totalPoint += points;
@@ -102,14 +100,6 @@ public class User extends BaseEntity {
             throw new IllegalArgumentException("포인트가 부족합니다.");
         }
         this.totalPoint -= points;
-    }
-
-    public void changePassword(String upw) {
-        this.password = upw;
-    }
-
-    public User updateProfileImage(String newProfileImage) {
-        return new User(this.email, this.password, this.name,this.totalPoint,this.nickname, newProfileImage);
     }
 
 }

@@ -1,8 +1,6 @@
-package com.example.rewardservice.point;
+package com.example.rewardservice.point.domain;
 
 import com.example.rewardservice.event.domain.Event;
-import com.example.rewardservice.point.domain.EarnedPoint;
-import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
