@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class GiftPointRequest {
-    private String senderEmail;
-    private String receiverEmail;
-    private long pointAmount;
+    private String senderId;
+    private String recipientId;
+    private long points;
     private String description;
 }

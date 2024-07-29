@@ -2,7 +2,7 @@ package com.example.rewardservice.point.application;
 
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
-import com.example.rewardservice.point.PointRepository;
+import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
 import com.example.rewardservice.point.application.dto.GiftPointRequest;
 import com.example.rewardservice.point.application.dto.UsePointRequest;
@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -59,15 +60,20 @@ public class PointService {
     }
 
     @Transactional
-    public void giftPoints(User sender, GiftPointRequest giftPointRequest) {
-        User receiver = findByUserEmail(giftPointRequest.getReceiverEmail());
+    public void giftPoints(String email, GiftPointRequest giftPointRequest) {
+        System.out.println("Gifting points request: " + giftPointRequest);
 
-        if(sender.getTotalPoint() < giftPointRequest.getPointAmount()) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        User sender = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
+
+        User receiver = findByUserEmail(giftPointRequest.getRecipientId());
+
+        if(sender.getTotalPoint() < giftPointRequest.getPoints()) {
             throw new RuntimeException("포인트가 충분하지 않습니다.");
         }
 
-        deductPointsByGift(sender, giftPointRequest.getPointAmount());
-        addPointsByGift(receiver, giftPointRequest.getPointAmount());
+        deductPointsByGift(sender, giftPointRequest.getPoints());
+        addPointsByGift(receiver, giftPointRequest.getPoints());
         recordPointTransaction(sender, receiver, giftPointRequest);
     }
 
@@ -127,8 +133,8 @@ public class PointService {
     private void recordPointTransaction(User sender, User receiver, GiftPointRequest giftPointRequest) {
         EarnedPoint senderPointRecord = EarnedPoint.builder()
                 .user(sender)
-                .pointChange(-giftPointRequest.getPointAmount())
-                .description("Gift to " + giftPointRequest.getReceiverEmail()+ ": " + giftPointRequest.getDescription())
+                .pointChange(-giftPointRequest.getPoints())
+                .description("Gift to " + giftPointRequest.getRecipientId()+ ": " + giftPointRequest.getDescription())
                 .pointType(POINT_TYPE_GIFT)
                 .build();
         pointRepository.save(senderPointRecord);
@@ -136,8 +142,8 @@ public class PointService {
 
         EarnedPoint recipientPointRecord = EarnedPoint.builder()
                 .user(receiver)
-                .pointChange(giftPointRequest.getPointAmount())
-                .description("Gift from " + giftPointRequest.getSenderEmail() + ": " + giftPointRequest.getDescription())
+                .pointChange(giftPointRequest.getPoints())
+                .description("Gift from " + giftPointRequest.getSenderId() + ": " + giftPointRequest.getDescription())
                 .pointType(POINT_TYPE_GIFT)
                 .build();
         pointRepository.save(recipientPointRecord);

@@ -26,17 +26,10 @@ public class UserInfoController {
     @GetMapping
     public ResponseEntity<MyPageResponse> getUserInfo()  {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-        log.info("***********************************************"+email);
         MyPageResponse userInfo = userService.getUserInfo(email);
         return ResponseEntity.ok(userInfo);
     }
 
-    @PutMapping("/updateImage")
-    public ResponseEntity<MyPageResponse> updateImage(@ModelAttribute MyPageRequest myPageRequest) throws IOException {
-        String email = jwtTokenExtractor.getCurrentUserEmail();
-        MyPageResponse updateUserInfo = userService.updateProfileImage(email,myPageRequest);
-        return ResponseEntity.ok(updateUserInfo);
-    }
 
     @GetMapping("/points-history")
     public ResponseEntity<List<PointHistoryResponse>> getUserPointHistory() {
@@ -46,41 +39,11 @@ public class UserInfoController {
     }
 
 
-   /* @PutMapping("/update")
-    public ResponseEntity<MyPageResponse> updateUserInfo(@ModelAttribute MyPageRequest myPageRequest) throws IOException {
+    @PutMapping("/update")
+    public ResponseEntity<MyPageResponse> updateUserInfo(@ModelAttribute MyPageRequest myPageRequest) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         MyPageResponse updatedUserInfo = userService.updateUserInfo(email, myPageRequest);
         return ResponseEntity.ok(updatedUserInfo);
     }
-*/
-//    @GetMapping
-//    public ResponseEntity<MyPageResponse> getUserInfo() throws IOException {
-//        String email = jwtTokenExtractor.getCurrentUserEmail();
-//        MyPageResponse userInfo = userService.getUserInfo(email);
-//        return ResponseEntity.ok(userInfo);
-//    }
-//
-//    @GetMapping("/profileImage")
-//    public ResponseEntity<Resource> getUserProfileImage() throws IOException {
-//        String email = jwtTokenExtractor.getCurrentUserEmail();
-//        log.info("Extracted email: {}", email);
-//
-//        MyPageResponse userInfo = userService.getUserInfo(email);
-//        log.info("User info retrieved: {}", userInfo);
-//
-//        String profileImageUrl = userInfo.getProfileImage();
-//        log.info("Profile image URL: {}", profileImageUrl);
-//
-//        byte[] imageBytes = profileImageService.getProfileImage(profileImageUrl);
-//        log.info("Image bytes length: {}", imageBytes.length);
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.IMAGE_JPEG); // 이미지의 MIME 타입을 적절히 설정
-//        headers.setContentLength(imageBytes.length);
-//
-//        return ResponseEntity.ok()
-//                .headers(headers)
-//                .body(new ByteArrayResource(imageBytes));
-//    }
 
 }

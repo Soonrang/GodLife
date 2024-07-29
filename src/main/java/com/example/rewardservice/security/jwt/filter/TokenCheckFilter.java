@@ -40,7 +40,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         }
 
 
-        if (path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs/")) {
+        if (path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs/") || path.startsWith("/api/")) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -2,8 +2,7 @@ package com.example.rewardservice.user.application;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
 import com.example.rewardservice.image.application.service.ProfileImageService;
-import com.example.rewardservice.point.PointRepository;
-import com.example.rewardservice.point.domain.Point;
+import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.user.application.dto.response.PointHistoryResponse;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
@@ -15,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +30,7 @@ public class UserService {
     private final PointRepository pointRepository;
 
     //RegisterRequest 수정 필요
-    public User registerUser(RegisterRequest registerRequest) {
+    public void registerUser(RegisterRequest registerRequest) {
         StoreImageDto storeImageDto = profileImageService.storeProfileImage(registerRequest.getProfileImage());
 
         User user = User.builder()
@@ -44,13 +44,34 @@ public class UserService {
                 .memberState(MemberState.ACTIVE)
                 .build();
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public MyPageResponse getUserInfo(final String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("아이디 없음"));
         return MyPageResponse.from(user);
+    }
+
+    @Transactional
+    public MyPageResponse updateUserInfo(String email, MyPageRequest myPageRequest) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        User user = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
+        String newNickname = myPageRequest.getNickname();
+
+        MultipartFile profileImage = myPageRequest.getProfileImage();
+        if (profileImage == null || profileImage.isEmpty()) {
+            throw new IllegalArgumentException("프로필 사진이 없습니다.");
+        }
+
+
+        StoreImageDto storeImageDto = profileImageService.storeProfileImage(myPageRequest.getProfileImage());
+        String newProfileImage = storeImageDto.getStoreName();
+
+        user.updateUserInfo(newNickname,newProfileImage);
+        userRepository.save(user);
+
+        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getProfileImage());
     }
 
     @Transactional
@@ -61,26 +82,8 @@ public class UserService {
         }
 
         User user = optionalUser.get();
-        user.setMemberState(MemberState.DELETED); // 회원 상태를 비활성화로 변경
+        user.changeMemberState(MemberState.DELETED); // 회원 상태를 비활성화로 변경
         userRepository.save(user);
-    }
-
-    @Transactional
-    public MyPageResponse updateProfileImage(String email, MyPageRequest myPageRequest) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        User user = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
-
-        StoreImageDto storeImageDto = null;
-        if (myPageRequest.getProfileImage() != null && !myPageRequest.getProfileImage().isEmpty()) {
-            storeImageDto = profileImageService.storeProfileImage(myPageRequest.getProfileImage());
-            String imageUrl = storeImageDto.getStoreName();
-            user.setProfileImage(imageUrl);
-        }
-
-        userRepository.save(user);
-
-        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getProfileImage());
-
     }
 
     public List<PointHistoryResponse> getUserPointHistory(String email) {
@@ -94,32 +97,8 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    //빌더패턴 적용, 이미지 삭제 로직 필요
 
-    //빌더패턴 적용
-   /* @Transactional
-    public MyPageResponse updateUserInfo(String email, MyPageRequest myPageRequest) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        User user = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
-
-        StoreImageDto storeImageDto = null;
-        if (myPageRequest.getProfileImage() != null && !myPageRequest.getProfileImage().isEmpty()) {
-            storeImageDto = profileImageService.storeProfileprofileImage(myPageRequest.getProfileImage());
-            String imageUrl = storeImageDto.getStoreName();
-            user.setprofileImage(imageUrl);
-        }
-
-        if (myPageRequest.getName() != null) {
-            user.setName(myPageRequest.getName());
-        }
-        if (myPageRequest.getNickname() != null) {
-            user.setNickname(myPageRequest.getNickname());
-        }
-
-        userRepository.save(user);
-
-        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getProfileImage());
-    }
-*/
 
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
