@@ -47,10 +47,12 @@ public class Product extends BaseEntity {
     @Column(name= "product_description")
     private String description;
 
-    public Product(UUID uuid, String productName, long price, List<ProductImage> productImages) {
+    public Product(UUID uuid, String productName, long price, String category, int stock, List<ProductImage> productImages) {
         this.id = uuid;
         this.productName = productName;
         this.price = price;
+        this.category = category;
+        this.stock = stock;
         this.productImages =productImages;
     }
 
@@ -79,4 +81,13 @@ public class Product extends BaseEntity {
         }
         this.stock -= quantity;
     }
+
+    public List<ProductImage> getProductImages() {
+        return productImages;
+    }
+
+    public void setProductImages(List<ProductImage> productImages) {
+        this.productImages = productImages;
+    }
+
 }

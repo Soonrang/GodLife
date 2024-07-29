@@ -38,4 +38,8 @@ public class ProductImage {
         this.imageUrl = imageUrl;
     }
 
+    public ProductImage(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
+
 }

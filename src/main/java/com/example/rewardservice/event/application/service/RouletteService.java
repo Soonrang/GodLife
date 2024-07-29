@@ -1,9 +1,7 @@
 package com.example.rewardservice.event.application.service;
 
-import com.example.rewardservice.event.domain.Events.RouletteEvent;
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
-import com.example.rewardservice.event.domain.repository.RouletteRepository;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
@@ -25,13 +23,12 @@ public class RouletteService {
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
     private final EventRepository eventRepository;
-    private final RouletteRepository rouletteRepository;
     private final PointService pointService;
 
     private static final int MAX_DAILY_SPINS = 3;
     private static final String ATTENDANCE_MESSAGE = "룰렛";
 
-    public void participateInRouletteEvent(String userEmail,UUID eventId, long earnedPoints){
+    public void participateInRouletteEvent(String userEmail, UUID eventId, long earnedPoints){
         Event event = findEventById(eventId);
         User user = findUserByEmail(userEmail);
 
@@ -53,8 +50,8 @@ public class RouletteService {
 
         pointService.addEarnedPoint(addPointRequest);
 
-        RouletteEvent rouletteEvent = new RouletteEvent(event, earnedPoints);
-        rouletteRepository.save(rouletteEvent);
+        event.setAwardPoints(earnedPoints);
+        eventRepository.save(event);
     }
 
     public boolean hasParticipatedToday(String userEmail, UUID eventId) {
@@ -71,13 +68,11 @@ public class RouletteService {
         User user = findUserByEmail(userEmail);
         Event event = findEventById(eventId);
 
-        //하루 조회
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
         List<EarnedPoint> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
 
-        //돌릴 수 있는 룰렛 카운트
         return MAX_DAILY_SPINS - earnedPoints.size();
     }
 
