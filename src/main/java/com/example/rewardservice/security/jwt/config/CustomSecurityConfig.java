@@ -98,10 +98,8 @@ public class CustomSecurityConfig{
         });
 
         http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/js/**", "/css/**", "/images/**").permitAll()
-                .requestMatchers("/v3/api-docs","/api/check-email", "/api/register",
-                        "/api/login", "/api/logout", "/api/check-nickname", "/user/profileImage",
-                        "/event/**", "/user/**","/shop/**",
+                .requestMatchers("/js/**", "/css/**", "/images/**",
+                        "/api/**", "/event/**", "/user/**","/shop/**",
                         "/v3/api-docs/**","/swagger-ui/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

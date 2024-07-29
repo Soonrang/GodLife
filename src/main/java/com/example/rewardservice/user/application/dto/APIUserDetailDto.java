@@ -1,5 +1,6 @@
 package com.example.rewardservice.user.application.dto;
 
+import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +20,7 @@ public class APIUserDetailDto implements UserDetails {
     private String nickname;
     private long totalPoint;
     private String profileImage;
+    private MemberState memberState;
     private Collection<? extends GrantedAuthority> authorities;
 
     public APIUserDetailDto(UUID id, String userEmail, String userPassword, String userName,
