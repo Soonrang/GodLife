@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Builder
+@Table(name = "event")
 public class Event extends BaseEntity {
 
     @Id
@@ -27,28 +29,48 @@ public class Event extends BaseEntity {
     @Column(name = "event_state")
     private String eventState;
 
-    @Column(name = "event_type", insertable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event_type")
     private EventType eventType;
 
     @Embedded
-    private EventPeriod  eventPeriod;
+    private EventPeriod eventPeriod;
 
-//    @OneToMany(mappedBy = "event")
-//    private List<Point> points;
+    @Column(name = "bonus_awarded")
+    private Boolean bonusAwarded;
 
-    public Event(String name, String eventState,EventType eventType, EventPeriod eventPeriod) {
+    @Column(name = "award_points")
+    private Long awardPoints;
+
+    public Event(String name, String eventState, EventType eventType, EventPeriod eventPeriod, Boolean bonusAwarded, Long awardPoints) {
+        this.name = name;
+        this.eventState = eventState;
+        this.eventType = eventType;
+        this.eventPeriod = eventPeriod;
+        this.bonusAwarded = bonusAwarded;
+        this.awardPoints = awardPoints;
+    }
+
+    public Event(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {
         this.name = name;
         this.eventState = eventState;
         this.eventType = eventType;
         this.eventPeriod = eventPeriod;
     }
 
-   public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {
-       this.name = name;
-       this.eventState = eventState;
-       this.eventType = eventType;
-       this.eventPeriod = eventPeriod;
-   }
+    public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod, Boolean bonusAwarded, Long awardPoints) {
+        this.name = name;
+        this.eventState = eventState;
+        this.eventType = eventType;
+        this.eventPeriod = eventPeriod;
+        this.bonusAwarded = bonusAwarded;
+        this.awardPoints = awardPoints;
+    }
 
-
+    public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {
+        this.name = name;
+        this.eventState = eventState;
+        this.eventType = eventType;
+        this.eventPeriod = eventPeriod;
+    }
 }

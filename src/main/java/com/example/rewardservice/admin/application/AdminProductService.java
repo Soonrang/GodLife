@@ -3,7 +3,7 @@ package com.example.rewardservice.admin.application;
 import com.example.rewardservice.admin.application.dto.ProductRegisterRequest;
 import com.example.rewardservice.admin.application.dto.UpdateProductRequest;
 import com.example.rewardservice.image.application.service.ProfileImageService;
-import com.example.rewardservice.shop.application.ProductImageDto;
+import com.example.rewardservice.shop.application.response.ProductImageDto;
 import com.example.rewardservice.shop.application.response.ProductEasyInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.domain.Product;
@@ -36,6 +36,8 @@ public class AdminProductService {
                 UUID.randomUUID(),
                 productRegisterRequest.getProductName(),
                 productRegisterRequest.getPrice(),
+                productRegisterRequest.getCategory(),
+                productRegisterRequest.getStock(),
                 productImages
         );
         productImages.forEach(productImage -> productImage.setProduct(product));

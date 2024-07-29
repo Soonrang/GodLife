@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 public class ProductEasyInfoResponse {
     private UUID id;
     private String productName;
-    private long price;
+    private long productPrice;
+    private String category;
+    private int stock;
     private List<ProductImageResponse> productImages;
 
     public static ProductEasyInfoResponse from(Product product) {
@@ -21,6 +23,8 @@ public class ProductEasyInfoResponse {
                 product.getId(),
                 product.getProductName(),
                 product.getPrice(),
+                product.getCategory(),
+                product.getStock(),
                 product.getProductImages().stream().map(ProductImageResponse::from).collect(Collectors.toList())
         );
     }
