@@ -34,7 +34,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         String path = httpRequest.getRequestURI();
 
         // 로그인과 회원가입 요청시 필터 통과
-        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email") || path.equals("/api/check-nickname") || path.equals("/swagger-ui/index.html") ) {
+        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email") || path.equals("/api/check-nickname") || path.equals("/swagger-ui/index.html") || path.equals("/shop")) {
             filterChain.doFilter(request, response);
             return;
         }

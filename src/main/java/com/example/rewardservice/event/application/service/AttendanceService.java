@@ -1,10 +1,8 @@
 package com.example.rewardservice.event.application.service;
 
 import com.example.rewardservice.event.application.dto.response.MonthlyAttendanceResponse;
-import com.example.rewardservice.event.domain.repository.AttendanceEventRepository;
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
-import com.example.rewardservice.event.domain.Events.AttendanceEvent;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
@@ -25,7 +23,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AttendanceService {
     private final EventRepository eventRepository;
-    private final AttendanceEventRepository attendanceEventRepository;
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
     private final PointService pointService;
@@ -33,11 +30,9 @@ public class AttendanceService {
     private static final long ATTENDANCE_POINT = 100;
     private static final long BONUS_POINT = 100;
     private static final int BONUS_PERIOD = 10;
-    //private static final List<Integer> BONUS_DAYS = List.of(10, 20, 30);
     private static final String EVENT_DESCRIPTION_MESSAGE = "출석";
     private static final String EVENT_DESCRIPTION_BONUS_MESSAGE = "출석 보너스";
 
-    // 출석 이벤트 참여
     @Transactional
     public void participateInAttendanceEvent(UUID eventId, String userEmail) {
         User user = findUserByEmail(userEmail);
@@ -66,12 +61,10 @@ public class AttendanceService {
                 .build();
         pointService.addEarnedPoint(addPointRequest);
 
-        //출석 이벤트에 저장
-        AttendanceEvent attendanceEvent = new AttendanceEvent(event, pointsToEarn > ATTENDANCE_POINT);
-        attendanceEventRepository.save(attendanceEvent);
+        event.setBonusAwarded(pointsToEarn > ATTENDANCE_POINT);
+        eventRepository.save(event);
     }
 
-    // 이번달 출석횟수, 누적포인트, 마지막 출석일
     public MonthlyAttendanceResponse getAttendanceData(String userEmail, UUID eventId) {
         User user = findUserByEmail(userEmail);
         Event event = findEventById(eventId);
@@ -116,4 +109,3 @@ public class AttendanceService {
                 .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + userEmail));
     }
 }
-

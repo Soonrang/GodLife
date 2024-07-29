@@ -1,4 +1,4 @@
-package com.example.rewardservice.shop.application;
+package com.example.rewardservice.shop.application.response;
 
 import com.example.rewardservice.image.application.dto.StoreImageDto;
 import lombok.Getter;

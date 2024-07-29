@@ -30,7 +30,7 @@ public class ProfileImageService {
     public List<StoreImageDto> storeProfileImages(final List<MultipartFile> files) {
         final List<StoreImageDto> storeImageDtos = new ArrayList<>();
 
-        for(MultipartFile file : files) {
+        for(MultipartFile file : files) {a
             if(file.isEmpty()) {
                 throw new ImageException("File is empty");
             }
