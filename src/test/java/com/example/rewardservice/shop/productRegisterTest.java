@@ -1,6 +1,6 @@
 //package com.example.rewardservice.shop;
 //
-//import com.example.rewardservice.image.application.dto.StoreImageDto;
+//import com.example.rewardservice.image.application.dto.ImageDto;
 //import com.example.rewardservice.image.application.service.ProfileImageService;
 //import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 //import com.example.rewardservice.shop.application.service.ProductService;
@@ -76,8 +76,8 @@
 //        updateProductRequest.setProductImages(Collections.singletonList(image));
 //        updateProductRequest.setDescription("스타벅스 Hot아메리카노입니다.");
 //
-//        List<StoreImageDto> storeImageDtos = Collections.singletonList(new StoreImageDto("image.jpg", "storedImage.jpg"));
-//        when(profileImageService.storeProfileImages(anyList())).thenReturn(storeImageDtos);
+//        List<ImageDto> ImageDtos = Collections.singletonList(new ImageDto("image.jpg", "storedImage.jpg"));
+//        when(profileImageService.storeProfileImages(anyList())).thenReturn(ImageDtos);
 //    }
 //
 //    @Test

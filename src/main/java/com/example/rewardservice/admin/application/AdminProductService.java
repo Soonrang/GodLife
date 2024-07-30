@@ -1,16 +1,12 @@
 package com.example.rewardservice.admin.application;
 
 import com.example.rewardservice.admin.application.dto.ProductRegisterRequest;
-import com.example.rewardservice.admin.application.dto.UpdateProductRequest;
-import com.example.rewardservice.image.application.service.ProfileImageService;
+import com.example.rewardservice.image.application.service.ImageService;
 import com.example.rewardservice.shop.application.response.ProductImageDto;
 import com.example.rewardservice.shop.application.response.ProductEasyInfoResponse;
-import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.shop.domain.ProductImage;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
-import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +18,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminProductService {
     private final ProductRepository productRepository;
-    private final ProfileImageService profileImageService;
-    private final UserRepository userRepository;
-
+    private final ImageService imageService;
 
     public ProductEasyInfoResponse createEasyProduct(ProductRegisterRequest productRegisterRequest) {
-        List<ProductImage> productImages = profileImageService.storeProfileImages(productRegisterRequest.getProductImages()).stream()
-                .map(ProductImageDto::fromStoreImageDto)
+        List<ProductImage> productImages = imageService.saveImages(productRegisterRequest.getProductImages()).stream()
+                .map(ProductImageDto::fromImageDto)
                 .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), null))
                 .collect(Collectors.toList());
 
@@ -46,31 +40,8 @@ public class AdminProductService {
         return ProductEasyInfoResponse.from(savedProduct);
     }
 
-    public ProductInfoResponse createProduct(User company, ProductRegisterRequest productRegisterRequest) {
-        List<ProductImage> productImages = profileImageService.storeProfileImages(productRegisterRequest.getProductImages()).stream()
-                .map(ProductImageDto::fromStoreImageDto)
-                .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), null))
-                .collect(Collectors.toList());
 
-        Product product = new Product(
-                UUID.randomUUID(),
-                productRegisterRequest.getCategory(),
-                company,
-                company.getName(),
-                productRegisterRequest.getProductName(),
-                productRegisterRequest.getPrice(),
-                productRegisterRequest.getStock(),
-                productImages,
-                productRegisterRequest.getDescription()
-        );
-
-        productImages.forEach(productImage -> productImage.setProduct(product));
-
-        Product savedProduct = productRepository.save(product);
-        return ProductInfoResponse.from(savedProduct);
-    }
-
-    public ProductInfoResponse updateProduct(UUID productId, UpdateProductRequest updateProductRequest){
+   /* public ProductEasyInfoResponse updateProduct(UUID productId, UpdateProductRequest updateProductRequest){
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new IllegalArgumentException("상품아이디가 없습니다."));
 
@@ -78,7 +49,7 @@ public class AdminProductService {
                 .orElseThrow(() -> new IllegalArgumentException("기업ID가 없습니다."));
 
         List<ProductImage> newProductImages = profileImageService.storeProfileImages(updateProductRequest.getProductImages()).stream()
-                .map(ProductImageDto::fromStoreImageDto)
+                .map(ProductImageDto::fromImageDto)
                 .map(dto -> new ProductImage(UUID.randomUUID(), dto.getStoreName(), product))
                 .collect(Collectors.toList());
 
@@ -96,7 +67,7 @@ public class AdminProductService {
         Product updatedProduct = productRepository.save(product);
         return ProductInfoResponse.from(updatedProduct);
     }
-
+*/
 
     public void deleteProduct(UUID productId) {
         Product product = productRepository.findById(productId)
