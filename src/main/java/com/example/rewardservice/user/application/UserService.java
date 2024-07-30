@@ -1,7 +1,7 @@
 package com.example.rewardservice.user.application;
 
-import com.example.rewardservice.image.application.dto.StoreImageDto;
-import com.example.rewardservice.image.application.service.ProfileImageService;
+import com.example.rewardservice.image.application.dto.ImageDto;
+import com.example.rewardservice.image.application.service.ImageService;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.user.application.dto.response.PointHistoryResponse;
 import com.example.rewardservice.user.domain.MemberState;
@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ProfileImageService profileImageService;
+    private final ImageService imageService;
     private static final long INITIAL_POINT = 0;
     private final PointRepository pointRepository;
 
     //RegisterRequest 수정 필요
     public void registerUser(RegisterRequest registerRequest) {
-        StoreImageDto storeImageDto = profileImageService.storeProfileImage(registerRequest.getProfileImage());
+        ImageDto ImageDto = imageService.saveImage(registerRequest.getProfileImage());
 
         User user = User.builder()
                 .email(registerRequest.getEmail())
@@ -39,7 +39,7 @@ public class UserService {
                 .name(registerRequest.getName())
                 .nickname(registerRequest.getNickname())
                 .totalPoint(INITIAL_POINT)
-                .profileImage(storeImageDto.getStoreName())
+                .profileImage(ImageDto.getStoreName())
                 .userSocial(false)
                 .memberState(MemberState.ACTIVE)
                 .build();
@@ -64,9 +64,8 @@ public class UserService {
             throw new IllegalArgumentException("프로필 사진이 없습니다.");
         }
 
-
-        StoreImageDto storeImageDto = profileImageService.storeProfileImage(myPageRequest.getProfileImage());
-        String newProfileImage = storeImageDto.getStoreName();
+        ImageDto ImageDto = imageService.saveImage(myPageRequest.getProfileImage());
+        String newProfileImage = ImageDto.getStoreName();
 
         user.updateUserInfo(newNickname,newProfileImage);
         userRepository.save(user);

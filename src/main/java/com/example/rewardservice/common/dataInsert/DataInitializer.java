@@ -1,5 +1,4 @@
 package com.example.rewardservice.common.dataInsert;
-import com.example.rewardservice.image.application.service.ProfileImageService;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.shop.domain.ProductImage;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
@@ -9,9 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Component

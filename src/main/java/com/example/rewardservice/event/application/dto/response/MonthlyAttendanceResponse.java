@@ -1,6 +1,5 @@
 package com.example.rewardservice.event.application.dto.response;
 
-import com.example.rewardservice.event.domain.Events.AttendanceEvent;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

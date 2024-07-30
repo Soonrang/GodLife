@@ -1,6 +1,6 @@
 package com.example.rewardservice.shop.application.response;
 
-import com.example.rewardservice.image.application.dto.StoreImageDto;
+import com.example.rewardservice.image.application.dto.ImageDto;
 import lombok.Getter;
 
 @Getter
@@ -14,8 +14,8 @@ public class ProductImageDto {
         this.storeName = storeName;
     }
 
-    public static ProductImageDto fromStoreImageDto(StoreImageDto storeImageDto) {
-        return new ProductImageDto(storeImageDto.getUploadName(), storeImageDto.getStoreName());
+    public static ProductImageDto fromImageDto(ImageDto ImageDto) {
+        return new ProductImageDto(ImageDto.getUploadName(), ImageDto.getStoreName());
     }
 
 }
