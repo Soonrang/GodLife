@@ -1,6 +1,6 @@
 package com.example.rewardservice.image.application.service;
 
-import com.example.rewardservice.image.application.dto.StoreImageDto;
+import com.example.rewardservice.image.application.dto.ImageDto;
 import com.example.rewardservice.image.exception.ImageException;
 import lombok.Getter;
 import net.coobird.thumbnailator.Thumbnails;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Getter
 @Service
-public class ProfileImageService {
+public class ImageService {
 
     //파일 확장자 구분
     private static final String EXTENSION_DELIMITER = ".";
@@ -27,29 +27,29 @@ public class ProfileImageService {
     @Value("${com.example.image.user.dir}")
     private String imageStoreDir;
 
-    public List<StoreImageDto> storeProfileImages(final List<MultipartFile> files) {
-        final List<StoreImageDto> storeImageDtos = new ArrayList<>();
+    public List<ImageDto> saveImages(final List<MultipartFile> files) {
+        final List<ImageDto> ImageDtos = new ArrayList<>();
 
-        for(MultipartFile file : files) {a
+        for(MultipartFile file : files) {
             if(file.isEmpty()) {
                 throw new ImageException("File is empty");
             }
-            storeImageDtos.add(storeProfileImage(file));
+            ImageDtos.add(saveImage(file));
         }
-        return storeImageDtos;
+        return ImageDtos;
     }
 
-    public StoreImageDto storeProfileImage(final MultipartFile file) {
+    public ImageDto saveImage(final MultipartFile file) {
         try {
             final String originalFilename = file.getOriginalFilename();
-            final String storeProfileImageName = createStoreProfileImageName(originalFilename);
-            final String fullPath = findFullPath(storeProfileImageName);
+            final String saveImageName = createStoreProfileImageName(originalFilename);
+            final String fullPath = findFullPath(saveImageName);
 
             ensureDirectoryExists(imageStoreDir);
             //프로필 이미지 등록시 이미지 크기 줄이기
             reduceFileSize(file, fullPath);
 
-            return new StoreImageDto(originalFilename, storeProfileImageName);
+            return new ImageDto(originalFilename, saveImageName);
         } catch (IOException e) {
             throw new ImageException("이미지 저장에 실패했습니다.");
         }

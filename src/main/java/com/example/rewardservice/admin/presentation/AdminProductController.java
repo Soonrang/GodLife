@@ -31,12 +31,13 @@ public class AdminProductController {
         return ResponseEntity.ok(createdProduct);
     }
 
-    @PutMapping("/{productId}")
+   /* @PutMapping("/{productId}")
     public ResponseEntity<ProductInfoResponse> updateProduct(@PathVariable UUID productId,
                                                              @ModelAttribute UpdateProductRequest updateProductRequest) {
         ProductInfoResponse updatedProduct = adminProductService.updateProduct(productId, updateProductRequest);
         return ResponseEntity.ok(updatedProduct);
-    }
+   }
+    */
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {

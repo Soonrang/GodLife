@@ -13,22 +13,22 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductInfoResponse {
     private UUID id;
-    private String category;
-    private String companyName;
     private String productName;
-    private long price;
+    private long productPrice;
+    private String category;
+    private int stock;
     private List<ProductImageResponse> productImages;
-    private String description;
+    private byte[] imageUrl;
 
-    public static ProductInfoResponse from(Product product) {
+    public static ProductInfoResponse from(Product product, byte[] imageUrl) {
         return new ProductInfoResponse(
                 product.getId(),
-                product.getCategory(), // Assuming Category has a getName() method
-                product.getCompany().getName(),
                 product.getProductName(),
                 product.getPrice(),
+                product.getCategory(),
+                product.getStock(),
                 product.getProductImages().stream().map(ProductImageResponse::from).collect(Collectors.toList()),
-                product.getDescription()
+                imageUrl
         );
     }
 }
