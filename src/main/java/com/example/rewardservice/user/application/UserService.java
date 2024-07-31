@@ -88,16 +88,13 @@ public class UserService {
     public List<PointHistoryResponse> getUserPointHistory(String email) {
         return pointRepository.findByUserEmail(email).stream()
                 .map(point -> new PointHistoryResponse(
-                        point.getPointType(),
-                        point.getPointChange(),
+                        point.getType(),
+                        point.getAmount(),
                         point.getDescription(),
                         point.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
     }
-
-    //빌더패턴 적용, 이미지 삭제 로직 필요
-
 
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);

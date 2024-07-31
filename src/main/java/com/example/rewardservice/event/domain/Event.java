@@ -36,35 +36,11 @@ public class Event extends BaseEntity {
     @Embedded
     private EventPeriod eventPeriod;
 
-    @Column(name = "bonus_awarded")
-    private Boolean bonusAwarded;
-
-    @Column(name = "award_points")
-    private Long awardPoints;
-
-    public Event(String name, String eventState, EventType eventType, EventPeriod eventPeriod, Boolean bonusAwarded, Long awardPoints) {
-        this.name = name;
-        this.eventState = eventState;
-        this.eventType = eventType;
-        this.eventPeriod = eventPeriod;
-        this.bonusAwarded = bonusAwarded;
-        this.awardPoints = awardPoints;
-    }
-
     public Event(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {
         this.name = name;
         this.eventState = eventState;
         this.eventType = eventType;
         this.eventPeriod = eventPeriod;
-    }
-
-    public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod, Boolean bonusAwarded, Long awardPoints) {
-        this.name = name;
-        this.eventState = eventState;
-        this.eventType = eventType;
-        this.eventPeriod = eventPeriod;
-        this.bonusAwarded = bonusAwarded;
-        this.awardPoints = awardPoints;
     }
 
     public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {

@@ -2,10 +2,10 @@ package com.example.rewardservice.event.application.service;
 
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
+import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
-import com.example.rewardservice.point.domain.EarnedPoint;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class RouletteService {
     private final PointService pointService;
 
     private static final int MAX_DAILY_SPINS = 3;
-    private static final String ATTENDANCE_MESSAGE = "룰렛";
+    private static final String ROULETTE_MESSAGE = "룰렛";
 
     public void participateInRouletteEvent(String userEmail, UUID eventId, long earnedPoints){
         Event event = findEventById(eventId);
@@ -42,15 +42,12 @@ public class RouletteService {
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(userEmail)
                 .eventId(eventId)
-                .pointChange(earnedPoints)
-                .description(ATTENDANCE_MESSAGE)
-                .isWinner(false)
-                .participationCount(DailyRouletteCount(eventId, userEmail) + 1)
+                .point(earnedPoints)
+                .description(ROULETTE_MESSAGE)
                 .build();
 
         pointService.addEarnedPoint(addPointRequest);
 
-        event.setAwardPoints(earnedPoints);
         eventRepository.save(event);
     }
 
@@ -60,7 +57,7 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<EarnedPoint> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
+        List<Point> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
         return earnedPoints.size() >= MAX_DAILY_SPINS;
     }
 
@@ -71,7 +68,7 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<EarnedPoint> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
+        List<Point> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
 
         return MAX_DAILY_SPINS - earnedPoints.size();
     }
@@ -83,7 +80,7 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<EarnedPoint> points = pointRepository.findByUserAndEventAndCreatedAtBetween(
+        List<Point> points = pointRepository.findByUserAndEventAndCreatedAtBetween(
                 user, event, startOfDay, endOfDay);
 
         return points.size();
