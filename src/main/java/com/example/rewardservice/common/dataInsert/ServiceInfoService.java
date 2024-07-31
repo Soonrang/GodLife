@@ -55,10 +55,12 @@ public class ServiceInfoService {
     public void createAutoEvents() {
         String attendanceEventName = "7월 출석 이벤트";
         String rouletteEventName = "7월 룰렛 이벤트";
+        String pageEventName = "페이지 이동 이벤트";
 
         // 이벤트가 존재하는지 확인
         boolean attendanceEventExists = eventRepository.existsByName(attendanceEventName);
         boolean rouletteEventExists = eventRepository.existsByName(rouletteEventName);
+        boolean pageEventExists = eventRepository.existsByName(pageEventName);
 
         if (!attendanceEventExists) {
             Event attendanceEvent = Event.builder()
@@ -67,6 +69,20 @@ public class ServiceInfoService {
                     .eventType(EventType.ATTENDANCE)
                     .eventPeriod(new EventPeriod(
                             LocalDateTime.of(2024, 7, 1, 0, 0),
+                            LocalDateTime.of(2024, 7, 31, 23, 59)
+                    ))
+                    .build();
+
+            eventRepository.save(attendanceEvent);
+        }
+
+        if (!attendanceEventExists) {
+            Event attendanceEvent = Event.builder()
+                    .name( "8월 출석 이벤트")
+                    .eventState("ACTIVE")
+                    .eventType(EventType.ATTENDANCE)
+                    .eventPeriod(new EventPeriod(
+                            LocalDateTime.of(2024, 8, 1, 0, 0),
                             LocalDateTime.of(2024, 7, 31, 23, 59)
                     ))
                     .build();
@@ -86,6 +102,33 @@ public class ServiceInfoService {
                     .build();
 
             eventRepository.save(rouletteEvent);
+        }
+
+        if (!rouletteEventExists) {
+            Event rouletteEvent = Event.builder()
+                    .name( "8월 룰렛 이벤트")
+                    .eventState("ACTIVE")
+                    .eventType(EventType.ROULETTE)
+                    .eventPeriod(new EventPeriod(
+                            LocalDateTime.of(2024, 8, 1, 0, 0),
+                            LocalDateTime.of(2024, 8, 31, 23, 59)
+                    ))
+                    .build();
+
+            eventRepository.save(rouletteEvent);
+        }
+
+        if(!pageEventExists) {
+            Event pageEvent = Event.builder()
+                    .name(pageEventName)
+                    .eventState("ACTIVE")
+                    .eventType(EventType.VIEW)
+                    .eventPeriod(new EventPeriod(
+                            LocalDateTime.of(2024, 7, 1, 0, 0),
+                            LocalDateTime.of(2024, 10, 30, 23, 59)
+                    ))
+                    .build();
+            eventRepository.save(pageEvent);
         }
     }
 }

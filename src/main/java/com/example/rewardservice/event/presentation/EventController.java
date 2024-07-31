@@ -4,6 +4,9 @@ import com.example.rewardservice.auth.AuthUser;
 import com.example.rewardservice.event.application.service.AttendanceService;
 import com.example.rewardservice.event.application.service.RouletteService;
 import com.example.rewardservice.event.application.dto.response.MonthlyAttendanceResponse;
+import com.example.rewardservice.event.application.service.ViewCountService;
+import com.example.rewardservice.point.application.dto.ViewPointRequest;
+import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import com.example.rewardservice.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class EventController {
     private final RouletteService rouletteService;
     private final AttendanceService attendanceService;
     private final JwtTokenExtractor jwtTokenExtractor;
+    private final ViewCountService viewCountService;
 
     //출석
     @PostMapping("/participate/{eventId}")
@@ -62,6 +66,17 @@ public class EventController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+    @PostMapping("/view-point/{eventId}")
+    public ResponseEntity<Void> viewPoint(@PathVariable UUID eventId, @RequestBody long earnedPoints) {
+        String user = jwtTokenExtractor.getCurrentUserEmail();
+        viewCountService.viewPoints(eventId,user, earnedPoints);
+        return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/checkParticipation")
+    public ResponseEntity<Boolean> checkParticipation(@RequestParam UUID eventId, @RequestParam String userEmail) {
+        boolean hasParticipated = viewCountService.checkIfUserParticipatedToday(eventId, userEmail);
+        return ResponseEntity.ok(!hasParticipated);
     }
 
 }

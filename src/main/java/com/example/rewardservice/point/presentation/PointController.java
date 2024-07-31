@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/points")
@@ -36,17 +37,8 @@ public class PointController {
         return ResponseEntity.ok(Map.of("email", exists));
     }
 
-    @PostMapping("/view-point")
-    public ResponseEntity<Point> viewPoint(@RequestBody ViewPointRequest viewPointRequest) {
-        String user = jwtTokenExtractor.getCurrentUserEmail();
-        pointService.viewPoints(user, viewPointRequest);
-        return ResponseEntity.noContent().build();
-    }
 
-    @GetMapping("/getPointStatus")
-    public ResponseEntity<Boolean> getStatus(){
-        boolean status = false;
-        return ResponseEntity.ok(status);
-    }
+
+
 
 }

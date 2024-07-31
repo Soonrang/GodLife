@@ -19,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,20 +40,10 @@ public class PointService {
     private static final String POINT_TYPE_VIEW = "뷰어";
 
 
-
     @Transactional
     public void addEarnedPoint(AddPointRequest addPointRequest) {
         User user = findByUserEmail(addPointRequest.getUserEmail());
         Event event = findByEventId(addPointRequest.getEventId());
-
-        EventParticipation participation = EventParticipation.builder()
-                .user(user)
-                .event(event)
-                .pointEarned(addPointRequest.getPoint())
-                .description(addPointRequest.getDescription())
-                .build();
-
-        eventParticipationRepository.save(participation);
 
         Point point = Point.builder()
                 .event(event)
@@ -115,11 +108,6 @@ public class PointService {
         pointRepository.save(viewPoint);
     }
 
-    public boolean validatePointAmount(long validatePoints){
-        long points = 200;
-        return (validatePoints == points);
-    }
-
     private User findByUserEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + email));
@@ -171,5 +159,7 @@ public class PointService {
                 .build();
         pointRepository.save(recipientPointRecord);
     }
+
+
 
 }
