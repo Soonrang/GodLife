@@ -58,7 +58,7 @@ public class ProductService {
         UsePointRequest usePointRequest = UsePointRequest.builder()
                 .userEmail(email)
                 .productId(productId)
-                .pointChange(product.getPrice())
+                .point(product.getPrice())
                 .description("상품 구매")
                 .build();
 
@@ -77,27 +77,4 @@ public class ProductService {
         }
         return null;
     }
-
-
-
-//    @Transactional
-//    public void purchaseProduct(String email, UUID productId) {
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(()-> new IllegalArgumentException("회원 ID가 없습니다."));
-//
-//        Product product = productRepository.findById(productId)
-//                .orElseThrow(()-> new IllegalArgumentException("상품 ID가 없습니다."));
-//
-//        product.reduceStock(1);
-//        productRepository.save(product);
-//
-//        UsePointRequest usePointRequest = UsePointRequest.builder()
-//                .userEmail(email)
-//                .productId(productId)
-//                .pointChange(product.getPrice())
-//                .description("상품 구매")
-//                .build();
-//
-//        pointService.usedPoints(usePointRequest);
-//    }
 }

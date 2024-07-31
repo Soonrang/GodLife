@@ -3,16 +3,14 @@ package com.example.rewardservice.point.presentation;
 import com.example.rewardservice.auth.AuthUser;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.point.application.dto.GiftPointRequest;
+import com.example.rewardservice.point.application.dto.ViewPointRequest;
 import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import com.example.rewardservice.user.application.UserService;
 import com.example.rewardservice.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -36,6 +34,19 @@ public class PointController {
         String email = request.get("recipientId");
         boolean exists = userService.emailExists(email);
         return ResponseEntity.ok(Map.of("email", exists));
+    }
+
+    @PostMapping("/view-point")
+    public ResponseEntity<Point> viewPoint(@RequestBody ViewPointRequest viewPointRequest) {
+        String user = jwtTokenExtractor.getCurrentUserEmail();
+        pointService.viewPoints(user, viewPointRequest);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/getPointStatus")
+    public ResponseEntity<Boolean> getStatus(){
+        boolean status = false;
+        return ResponseEntity.ok(status);
     }
 
 }

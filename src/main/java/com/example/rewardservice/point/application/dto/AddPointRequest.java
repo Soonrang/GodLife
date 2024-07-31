@@ -11,11 +11,9 @@ public class AddPointRequest {
 
     private UUID eventId;
     private String userEmail;
-    private long pointChange;
+    private long point;
     private String description;
-    private boolean isWinner;
     private String rewardType;
     private String pointType;
-    private int participationCount;
 
 }
