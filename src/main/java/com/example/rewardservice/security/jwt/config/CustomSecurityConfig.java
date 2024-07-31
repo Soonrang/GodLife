@@ -100,8 +100,9 @@ public class CustomSecurityConfig{
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/js/**", "/css/**", "/images/**",
                         "/api/**", "/event/**", "/user/**","/shop/**",
-                        "/v3/api-docs/**","/swagger-ui/**").permitAll()
+                        "/v3/api-docs/**","/swagger-ui/**","/points/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
+
                 .anyRequest().authenticated()
         );
 

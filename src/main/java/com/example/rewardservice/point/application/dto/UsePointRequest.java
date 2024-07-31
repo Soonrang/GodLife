@@ -10,6 +10,6 @@ import java.util.UUID;
 public class UsePointRequest {
     String userEmail;
     UUID productId;
-    long pointChange;
+    long point;
     String description;
 }
