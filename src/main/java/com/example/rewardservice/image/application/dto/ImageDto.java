@@ -1,5 +1,6 @@
 package com.example.rewardservice.image.application.dto;
 
+import com.example.rewardservice.shop.application.response.ProductImageDto;
 import lombok.Getter;
 
 @Getter
@@ -13,5 +14,9 @@ public class ImageDto {
     public ImageDto(final String uploadName, final String storeName) {
         this.uploadName = uploadName;
         this.storeName = storeName;
+    }
+
+    public static ImageDto fromImageDto(ImageDto ImageDto) {
+        return new ImageDto(ImageDto.getUploadName(), ImageDto.getStoreName());
     }
 }

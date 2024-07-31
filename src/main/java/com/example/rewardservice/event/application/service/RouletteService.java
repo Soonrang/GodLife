@@ -1,5 +1,7 @@
 package com.example.rewardservice.event.application.service;
 
+import com.example.rewardservice.event.domain.EventParticipation;
+import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.point.domain.Point;
@@ -24,6 +26,7 @@ public class RouletteService {
     private final PointRepository pointRepository;
     private final EventRepository eventRepository;
     private final PointService pointService;
+    private final EventParticipationRepository eventParticipationRepository;
 
     private static final int MAX_DAILY_SPINS = 3;
     private static final String ROULETTE_MESSAGE = "룰렛";
@@ -39,6 +42,7 @@ public class RouletteService {
         user.earnPoints(earnedPoints);
         userRepository.save(user);
 
+        //포인트 기록 전달
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(userEmail)
                 .eventId(eventId)
@@ -46,8 +50,16 @@ public class RouletteService {
                 .description(ROULETTE_MESSAGE)
                 .build();
 
-        pointService.addEarnedPoint(addPointRequest);
+        //이벤트 참여 리스트 생성
+        EventParticipation participation = EventParticipation.builder()
+                .user(user)
+                .event(event)
+                .pointEarned(addPointRequest.getPoint())
+                .description(addPointRequest.getDescription())
+                .build();
 
+        pointService.addEarnedPoint(addPointRequest);
+        eventParticipationRepository.save(participation);
         eventRepository.save(event);
     }
 

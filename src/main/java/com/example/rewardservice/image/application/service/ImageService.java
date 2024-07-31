@@ -42,7 +42,7 @@ public class ImageService {
     public ImageDto saveImage(final MultipartFile file) {
         try {
             final String originalFilename = file.getOriginalFilename();
-            final String saveImageName = createStoreProfileImageName(originalFilename);
+            final String saveImageName = createSaveImageName(originalFilename);
             final String fullPath = findFullPath(saveImageName);
 
             ensureDirectoryExists(imageStoreDir);
@@ -68,11 +68,13 @@ public class ImageService {
                 .toFile(new File(fullPath));
     }
 
-    private String findFullPath(final String storeProfileImagename) {
-        return imageStoreDir + storeProfileImagename;
+    //사진 경로
+    public String findFullPath(final String imageName) {
+        return imageStoreDir + imageName;
     }
 
-    private String createStoreProfileImageName(final String originalFilename) {
+    //난수로 이미지 저장(중복방지)
+    private String createSaveImageName(final String originalFilename) {
         final String extension = extractExtension(originalFilename);
         validateProfileImageExtension(extension);
         final String uuid = UUID.randomUUID().toString();
@@ -80,6 +82,7 @@ public class ImageService {
         return uuid + EXTENSION_DELIMITER + extension;
     }
 
+    //확장자 추출
     private String extractExtension(final String originalFilename) {
         int position = originalFilename.lastIndexOf(EXTENSION_DELIMITER);
         return originalFilename.substring(position + 1);
