@@ -1,5 +1,5 @@
 package com.example.rewardservice.event.domain;
 
 public enum EventType {
-    ROULETTE, ATTENDANCE, QUIZ
+    ROULETTE, ATTENDANCE, QUIZ ,VIEW
 }

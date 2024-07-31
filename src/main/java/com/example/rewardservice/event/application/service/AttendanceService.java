@@ -1,6 +1,8 @@
 package com.example.rewardservice.event.application.service;
 
 import com.example.rewardservice.event.application.dto.response.MonthlyAttendanceResponse;
+import com.example.rewardservice.event.domain.EventParticipation;
+import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.point.domain.Point;
@@ -26,6 +28,7 @@ public class AttendanceService {
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
     private final PointService pointService;
+    private final EventParticipationRepository eventParticipationRepository;
 
     private static final long ATTENDANCE_POINT = 100;
     private static final long BONUS_POINT = 100;
@@ -34,8 +37,8 @@ public class AttendanceService {
     private static final String EVENT_DESCRIPTION_BONUS_MESSAGE = "출석 보너스";
 
     @Transactional
-    public void participateInAttendanceEvent(UUID eventId, String userEmail) {
-        User user = findUserByEmail(userEmail);
+    public void participateInAttendanceEvent(UUID eventId, String email) {
+        User user = findUserByEmail(email);
         Event event = findEventById(eventId);
 
         if (checkTodayAttendance(event, user)) {
@@ -52,28 +55,37 @@ public class AttendanceService {
         }
 
         AddPointRequest addPointRequest = AddPointRequest.builder()
-                .userEmail(userEmail)
+                .userEmail(email)
                 .eventId(eventId)
                 .point(pointsToEarn)
                 .description(description)
                 .build();
 
+        EventParticipation participation = EventParticipation.builder()
+                .user(user)
+                .event(event)
+                .pointEarned(addPointRequest.getPoint())
+                .description(addPointRequest.getDescription())
+                .build();
+
+        eventParticipationRepository.save(participation);
+
         pointService.addEarnedPoint(addPointRequest);
         eventRepository.save(event);
     }
 
-    public MonthlyAttendanceResponse getAttendanceData(String userEmail, UUID eventId) {
-        User user = findUserByEmail(userEmail);
+    public MonthlyAttendanceResponse getAttendanceData(String email, UUID eventId) {
+        User user = findUserByEmail(email);
         Event event = findEventById(eventId);
 
         LocalDateTime startOfMonth = event.getEventPeriod().getStartDate();
         LocalDateTime endOfMonth = event.getEventPeriod().getEndDate();
 
-        List<Point> points = pointRepository.findByUserAndEventAndCreatedAtBetween(
+        List<EventParticipation> points = eventParticipationRepository.findByUserAndEventAndCreatedAtBetween(
                 user, event, startOfMonth, endOfMonth);
 
         int attendanceCount = points.size();
-        long totalPoints = points.stream().mapToLong(Point::getAmount).sum();
+        long totalPoints = points.stream().mapToLong(EventParticipation::getPointEarned).sum();
         boolean hasAttendance = checkTodayAttendance(event, user);
 
         return new MonthlyAttendanceResponse(attendanceCount, totalPoints, hasAttendance);
@@ -101,8 +113,8 @@ public class AttendanceService {
                 .orElseThrow(() -> new RuntimeException("해당 ID의 이벤트가 없습니다: " + eventId));
     }
 
-    private User findUserByEmail(String userEmail) {
-        return userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + userEmail));
+    private User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + email));
     }
 }

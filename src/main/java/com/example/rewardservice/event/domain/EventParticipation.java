@@ -5,6 +5,7 @@ import com.example.rewardservice.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 @Builder
 @AllArgsConstructor
+@Getter
 public class EventParticipation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
