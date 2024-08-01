@@ -1,5 +1,6 @@
 package com.example.rewardservice.event.application.service;
 
+import com.example.rewardservice.common.ValidateService;
 import com.example.rewardservice.event.domain.EventParticipation;
 import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
 import com.example.rewardservice.event.domain.repository.EventRepository;
@@ -27,45 +28,47 @@ public class RouletteService {
     private final EventRepository eventRepository;
     private final PointService pointService;
     private final EventParticipationRepository eventParticipationRepository;
+    private final ValidateService validateService;
 
     private static final int MAX_DAILY_SPINS = 3;
     private static final String ROULETTE_MESSAGE = "룰렛";
 
-    public void participateInRouletteEvent(String userEmail, UUID eventId, long earnedPoints){
-        Event event = findEventById(eventId);
-        User user = findUserByEmail(userEmail);
+    public void participateInRouletteEvent(String email, UUID eventId, long earnedPoints){
+        Event event = validateService.findByEventId(eventId);
+        User user = validateService.findByUserEmail(email);
 
-        if (hasParticipatedToday(userEmail, eventId)) {
+        if (hasParticipatedToday(email, eventId)) {
             throw new RuntimeException("오늘 룰렛 참여 횟수를 초과했습니다.");
         }
 
         user.earnPoints(earnedPoints);
         userRepository.save(user);
 
-        //포인트 기록 전달
-        AddPointRequest addPointRequest = AddPointRequest.builder()
-                .userEmail(userEmail)
-                .eventId(eventId)
-                .point(earnedPoints)
-                .description(ROULETTE_MESSAGE)
-                .build();
-
-        //이벤트 참여 리스트 생성
+        // 이벤트 참여 기록 저장
         EventParticipation participation = EventParticipation.builder()
                 .user(user)
                 .event(event)
-                .pointEarned(addPointRequest.getPoint())
-                .description(addPointRequest.getDescription())
+                .points(earnedPoints)
                 .build();
 
-        pointService.addEarnedPoint(addPointRequest);
         eventParticipationRepository.save(participation);
+
+        // 포인트 적립 기록 저장
+        AddPointRequest addPointRequest = AddPointRequest.builder()
+                .userEmail(email)
+                .eventId(eventId)
+                .point(earnedPoints)
+                .activityId(participation.getId())
+                .build();
+
+        eventParticipationRepository.save(participation);
+        pointService.addEarnedPoint(addPointRequest);
         eventRepository.save(event);
     }
 
     public boolean hasParticipatedToday(String userEmail, UUID eventId) {
-        User user = findUserByEmail(userEmail);
-        Event event = findEventById(eventId);
+        User user = validateService.findByUserEmail(userEmail);
+        Event event = validateService.findByEventId(eventId);
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
@@ -74,8 +77,8 @@ public class RouletteService {
     }
 
     public int getRouletteCount(String userEmail, UUID eventId) {
-        User user = findUserByEmail(userEmail);
-        Event event = findEventById(eventId);
+        User user = validateService.findByUserEmail(userEmail);
+        Event event = validateService.findByEventId(eventId);
 
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
@@ -86,8 +89,8 @@ public class RouletteService {
     }
 
     private int DailyRouletteCount(UUID eventId, String userEmail) {
-        Event event = findEventById(eventId);
-        User user = findUserByEmail(userEmail);
+        Event event = validateService.findByEventId(eventId);
+        User user = validateService.findByUserEmail(userEmail);
 
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
@@ -96,16 +99,6 @@ public class RouletteService {
                 user, event, startOfDay, endOfDay);
 
         return points.size();
-    }
-
-    private Event findEventById(UUID eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new RuntimeException("해당 ID의 이벤트가 없습니다: " + eventId));
-    }
-
-    private User findUserByEmail(String userEmail) {
-        return userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + userEmail));
     }
 
 }

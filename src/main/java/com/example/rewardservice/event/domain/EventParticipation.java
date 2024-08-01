@@ -14,10 +14,11 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class EventParticipation extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID participationId;
+    private UUID id;
 
     @ManyToOne
     @JoinColumn
@@ -27,18 +28,20 @@ public class EventParticipation extends BaseEntity {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    private Long pointEarned;
+    private Long points;
 
     private String description;
 
     public EventParticipation(User user, Event event, Long pointEarned, String description) {
         this.user = user;
         this.event = event;
-        this.pointEarned = pointEarned;
+        this.points = pointEarned;
         this.description = description;
     }
 
-    public EventParticipation() {
-
+    public EventParticipation(User user, Event event, long points) {
+        this.user = user;
+        this.event =event;
+        this.points = points;
     }
 }

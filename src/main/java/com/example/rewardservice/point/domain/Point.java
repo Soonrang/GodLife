@@ -1,6 +1,7 @@
 package com.example.rewardservice.point.domain;
 
 import com.example.rewardservice.common.BaseEntity;
+import com.example.rewardservice.donation.domain.DonationRecord;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.user.domain.User;
@@ -34,31 +35,22 @@ public class Point extends BaseEntity {
     private char deleted = NOT_DELETED;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", columnDefinition = "BINARY(16)")
-    private Product product;
-
-    @ManyToOne
-    @JoinColumn(name = "user_email")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "event_id")
-    private Event event;
+    @Column(name = "activity_type")
+    private String activityType;
 
-    public Point(Event event, User user, long amount, String description, String pointType) {
-        this.event = event;
+    @Column(name = "activity_id", columnDefinition = "BINARY(16)")
+    private UUID activityId;
+
+    public Point(User user, long amount, String description, String type, String activityType, UUID activityId) {
         this.user = user;
         this.amount = amount;
         this.description = description;
-        this.type = pointType;
-    }
-
-    public Point(Product product, User user, long pointChange, String description, String pointType) {
-        this.product = product;
-        this.user = user;
-        this.amount = pointChange;
-        this.description = description;
-        this.type = pointType;
+        this.type = type;
+        this.activityType = activityType;
+        this.activityId = activityId;
     }
 
     //이후 관리자 페이지에서 적용
@@ -67,6 +59,11 @@ public class Point extends BaseEntity {
 
     public Point() {
 
+    }
+
+    public Point(Product product, User user, long point, String description, String pointTypeUsed) {
+
+        super();
     }
 
     //소프트 딜리트 적용

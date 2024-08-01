@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-    private final PointService pointService;
     private final ImageService imageService;
 
     public ProductInfoResponse getProductById(UUID productId) {
@@ -48,22 +46,6 @@ public class ProductService {
                 .orElseThrow(()-> new IllegalArgumentException("카테고리가 없습니다."));
     }
 
-    @Transactional
-    public void purchaseProduct(String email, UUID productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new IllegalArgumentException("상품 ID가 없습니다."));
-
-        productRepository.save(product);
-
-        UsePointRequest usePointRequest = UsePointRequest.builder()
-                .userEmail(email)
-                .productId(productId)
-                .point(product.getPrice())
-                .description("상품 구매")
-                .build();
-
-        pointService.usedPoints(usePointRequest);
-    }
 
     private byte[] getProductImageData(Product product) {
         Optional<ProductImage> firstImageOptional = product.getProductImages().stream().findFirst();

@@ -15,5 +15,6 @@ public class AddPointRequest {
     private String description;
     private String rewardType;
     private String pointType;
+    private UUID activityId;
 
 }

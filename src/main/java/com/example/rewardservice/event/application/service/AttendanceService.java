@@ -54,22 +54,26 @@ public class AttendanceService {
             description = EVENT_DESCRIPTION_BONUS_MESSAGE;
         }
 
+        // 이벤트 참여 기록 저장
+        EventParticipation participation = EventParticipation.builder()
+                .user(user)
+                .event(event)
+                .points(pointsToEarn)
+                .description(description)
+                .build();
+
+        eventParticipationRepository.save(participation);
+
+        // 포인트 적립 기록 저장
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(email)
                 .eventId(eventId)
                 .point(pointsToEarn)
                 .description(description)
-                .build();
-
-        EventParticipation participation = EventParticipation.builder()
-                .user(user)
-                .event(event)
-                .pointEarned(addPointRequest.getPoint())
-                .description(addPointRequest.getDescription())
+                .activityId(participation.getId())
                 .build();
 
         eventParticipationRepository.save(participation);
-
         pointService.addEarnedPoint(addPointRequest);
         eventRepository.save(event);
     }
@@ -85,7 +89,7 @@ public class AttendanceService {
                 user, event, startOfMonth, endOfMonth);
 
         int attendanceCount = points.size();
-        long totalPoints = points.stream().mapToLong(EventParticipation::getPointEarned).sum();
+        long totalPoints = points.stream().mapToLong(EventParticipation::getPoints).sum();
         boolean hasAttendance = checkTodayAttendance(event, user);
 
         return new MonthlyAttendanceResponse(attendanceCount, totalPoints, hasAttendance);
