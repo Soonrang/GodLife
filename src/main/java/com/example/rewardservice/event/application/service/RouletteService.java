@@ -1,14 +1,13 @@
 package com.example.rewardservice.event.application.service;
 
 import com.example.rewardservice.common.ValidateService;
+import com.example.rewardservice.event.application.request.AddPointRequest;
 import com.example.rewardservice.event.domain.EventParticipation;
 import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
-import com.example.rewardservice.point.domain.Point;
-import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.PointService;
-import com.example.rewardservice.point.application.dto.AddPointRequest;
+import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,48 +21,34 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class RouletteService {
-
-    private final UserRepository userRepository;
-    private final PointRepository pointRepository;
-    private final EventRepository eventRepository;
-    private final PointService pointService;
     private final EventParticipationRepository eventParticipationRepository;
     private final ValidateService validateService;
+    private final PointService pointService;
+    private final UserRepository userRepository;
+    private final EventRepository eventRepository;
 
     private static final int MAX_DAILY_SPINS = 3;
     private static final String ROULETTE_MESSAGE = "룰렛";
 
     public void participateInRouletteEvent(String email, UUID eventId, long earnedPoints){
-        Event event = validateService.findByEventId(eventId);
-        User user = validateService.findByUserEmail(email);
+        Event event = findByEventId(eventId);
+        User user = findByUserEmail(email);
 
         if (hasParticipatedToday(email, eventId)) {
             throw new RuntimeException("오늘 룰렛 참여 횟수를 초과했습니다.");
         }
-
-        user.earnPoints(earnedPoints);
-        userRepository.save(user);
-
         // 이벤트 참여 기록 저장
-        EventParticipation participation = EventParticipation.builder()
-                .user(user)
-                .event(event)
-                .points(earnedPoints)
-                .build();
-
+        EventParticipation participation = new EventParticipation(user, event, earnedPoints, "이벤트 참여");
         eventParticipationRepository.save(participation);
 
         // 포인트 적립 기록 저장
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(email)
-                .eventId(eventId)
-                .point(earnedPoints)
+                .points(earnedPoints)
+                .description("이벤트 참여: " + event.getName())
                 .activityId(participation.getId())
                 .build();
-
-        eventParticipationRepository.save(participation);
         pointService.addEarnedPoint(addPointRequest);
-        eventRepository.save(event);
     }
 
     public boolean hasParticipatedToday(String userEmail, UUID eventId) {
@@ -72,8 +57,8 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<Point> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
-        return earnedPoints.size() >= MAX_DAILY_SPINS;
+        List<EventParticipation> participations = eventParticipationRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
+        return participations.size() >= MAX_DAILY_SPINS;
     }
 
     public int getRouletteCount(String userEmail, UUID eventId) {
@@ -83,9 +68,9 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<Point> earnedPoints = pointRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
+        List<EventParticipation> participations = eventParticipationRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
 
-        return MAX_DAILY_SPINS - earnedPoints.size();
+        return MAX_DAILY_SPINS - participations.size();
     }
 
     private int DailyRouletteCount(UUID eventId, String userEmail) {
@@ -95,10 +80,21 @@ public class RouletteService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDateTime.now();
 
-        List<Point> points = pointRepository.findByUserAndEventAndCreatedAtBetween(
+        List<EventParticipation> points = eventParticipationRepository.findByUserAndEventAndCreatedAtBetween(
                 user, event, startOfDay, endOfDay);
 
         return points.size();
+    }
+    public User findByUserEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + email));
+    }
+    public Event findByEventId(UUID eventId) {
+        if (eventId == null) {
+            return null;
+        }
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new RuntimeException("해당 ID의 이벤트가 없습니다: " + eventId));
     }
 
 }

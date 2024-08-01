@@ -1,4 +1,4 @@
-package com.example.rewardservice.user.application.dto;
+package com.example.rewardservice.security.jwt.dto;
 
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;

@@ -3,11 +3,13 @@ package com.example.rewardservice.donation.domain;
 import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.event.domain.EventPeriod;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Getter
 public class Donation extends BaseEntity {
 
     @Id

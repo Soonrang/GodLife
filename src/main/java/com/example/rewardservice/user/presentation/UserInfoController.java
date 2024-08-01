@@ -1,17 +1,16 @@
 package com.example.rewardservice.user.presentation;
 
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
-import com.example.rewardservice.user.application.dto.request.MyPageRequest;
-import com.example.rewardservice.user.application.dto.response.MyPageResponse;
-import com.example.rewardservice.user.application.UserService;
-import com.example.rewardservice.user.application.dto.response.PointHistoryResponse;
+import com.example.rewardservice.user.application.request.MyPageRequest;
+import com.example.rewardservice.user.application.response.MyPageResponse;
+import com.example.rewardservice.user.application.service.UserService;
+import com.example.rewardservice.user.application.response.PointHistoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -29,15 +28,6 @@ public class UserInfoController {
         MyPageResponse userInfo = userService.getUserInfo(email);
         return ResponseEntity.ok(userInfo);
     }
-
-
-    @GetMapping("/points-history")
-    public ResponseEntity<List<PointHistoryResponse>> getUserPointHistory() {
-        String email = jwtTokenExtractor.getCurrentUserEmail();
-        List<PointHistoryResponse> pointHistory = userService.getUserPointHistory(email);
-        return ResponseEntity.ok(pointHistory);
-    }
-
 
     @PutMapping("/update")
     public ResponseEntity<MyPageResponse> updateUserInfo(@ModelAttribute MyPageRequest myPageRequest) {

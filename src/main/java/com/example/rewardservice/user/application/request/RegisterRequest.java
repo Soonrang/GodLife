@@ -1,4 +1,4 @@
-package com.example.rewardservice.user.application.dto.request;
+package com.example.rewardservice.user.application.request;
 
 import com.example.rewardservice.user.domain.MemberState;
 import jakarta.persistence.*;

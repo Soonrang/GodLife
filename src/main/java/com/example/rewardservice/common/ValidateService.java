@@ -10,21 +10,22 @@ import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.domain.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-@Component
+@RequiredArgsConstructor
 public class ValidateService {
 
-    private EventRepository eventRepository;
-    private UserRepository userRepository;
-    private ProductRepository productRepository;
-    private DonationRepository donationRepository;
-    private DonationRecordRepository donationRecordRepository;
-    private EventParticipationRepository eventParticipationRepository;
+    private final EventRepository eventRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final DonationRepository donationRepository;
+    private final DonationRecordRepository donationRecordRepository;
+    private final EventParticipationRepository eventParticipationRepository;
 
     public User findByUserEmail(String email) {
         return userRepository.findByEmail(email)

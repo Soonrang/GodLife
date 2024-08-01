@@ -2,7 +2,7 @@ package com.example.rewardservice.security.jwt.filter;
 
 import com.example.rewardservice.security.jwt.exception.AccessTokenException;
 import com.example.rewardservice.security.jwt.util.JWTUtil;
-import com.example.rewardservice.user.application.APIUserDetailService;
+import com.example.rewardservice.security.APIUserDetailService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;

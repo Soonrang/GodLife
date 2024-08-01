@@ -1,14 +1,11 @@
 package com.example.rewardservice.event.presentation;
 
-import com.example.rewardservice.auth.AuthUser;
 import com.example.rewardservice.event.application.service.AttendanceService;
 import com.example.rewardservice.event.application.service.RouletteService;
-import com.example.rewardservice.event.application.dto.response.MonthlyAttendanceResponse;
+import com.example.rewardservice.event.application.response.MonthlyAttendanceResponse;
 import com.example.rewardservice.event.application.service.ViewCountService;
-import com.example.rewardservice.point.application.dto.ViewPointRequest;
-import com.example.rewardservice.point.domain.Point;
+import com.example.rewardservice.event.application.request.ViewPointRequest;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
-import com.example.rewardservice.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

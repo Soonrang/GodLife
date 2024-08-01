@@ -1,14 +1,13 @@
 package com.example.rewardservice.user.domain;
 
-import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.common.BaseEntity;
+import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.shop.domain.Product;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -94,6 +93,7 @@ public class User extends BaseEntity {
     public void earnPoints(long points) {
         this.totalPoint += points;
     }
+    public void usedPoints(long points) { this.totalPoint -= points; }
 
     public void validateUsePoints(long points) {
         if(this.totalPoint < points) {

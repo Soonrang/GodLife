@@ -1,5 +1,6 @@
 package com.example.rewardservice.donation.domain;
 
+import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Getter
-public class DonationRecord {
+public class DonationRecord extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

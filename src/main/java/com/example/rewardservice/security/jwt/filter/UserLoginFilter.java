@@ -38,6 +38,7 @@ public class UserLoginFilter extends AbstractAuthenticationProcessingFilter {
                 jsonData.get("email"),
                 jsonData.get("password"));
 
+        log.info(authenticationToken);
         return getAuthenticationManager().authenticate(authenticationToken);
     }
 

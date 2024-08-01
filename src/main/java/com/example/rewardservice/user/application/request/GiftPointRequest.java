@@ -1,6 +1,8 @@
-package com.example.rewardservice.point.application.dto;
+package com.example.rewardservice.user.application.request;
 
 import lombok.Getter;
+
+import java.util.UUID;
 
 @Getter
 public class GiftPointRequest {
@@ -8,4 +10,6 @@ public class GiftPointRequest {
     private String receiverEmail;
     private long points;
     private String description;
+    private UUID activityId;
+
 }
