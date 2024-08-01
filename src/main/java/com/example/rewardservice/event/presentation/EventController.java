@@ -68,15 +68,16 @@ public class EventController {
         }
     }
     @PostMapping("/view-point/{eventId}")
-    public ResponseEntity<Void> viewPoint(@PathVariable UUID eventId, @RequestBody long earnedPoints) {
+    public ResponseEntity<Void> viewPoint(@PathVariable UUID eventId, @RequestBody ViewPointRequest viewPointRequest) {
         String user = jwtTokenExtractor.getCurrentUserEmail();
-        viewCountService.viewPoints(eventId,user, earnedPoints);
+        viewCountService.viewPoints(eventId,user, viewPointRequest.getPoints());
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/checkParticipation")
-    public ResponseEntity<Boolean> checkParticipation(@RequestParam UUID eventId, @RequestParam String userEmail) {
-        boolean hasParticipated = viewCountService.checkIfUserParticipatedToday(eventId, userEmail);
-        return ResponseEntity.ok(!hasParticipated);
+    public ResponseEntity<Boolean> checkParticipation(@RequestParam UUID eventId) {
+        String userEmail = jwtTokenExtractor.getCurrentUserEmail();
+        boolean hasParticipated = viewCountService.checkIfUserParticipatedToday(eventId,userEmail);
+        return ResponseEntity.ok(hasParticipated);
     }
 
 }
