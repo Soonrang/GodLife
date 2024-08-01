@@ -1,4 +1,4 @@
-package com.example.rewardservice.point.application.dto;
+package com.example.rewardservice.event.application.request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,13 +8,8 @@ import java.util.UUID;
 @Getter
 @Builder
 public class AddPointRequest {
-
-    private UUID eventId;
     private String userEmail;
-    private long point;
+    private long points;
     private String description;
-    private String rewardType;
-    private String pointType;
     private UUID activityId;
-
 }

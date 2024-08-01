@@ -1,14 +1,24 @@
-package com.example.rewardservice.user.application;
+package com.example.rewardservice.user.application.service;
 
+import com.example.rewardservice.common.ValidateService;
+import com.example.rewardservice.donation.domain.DonationRecord;
+import com.example.rewardservice.donation.domain.DonationRecordRepository;
+import com.example.rewardservice.event.domain.EventParticipation;
+import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
 import com.example.rewardservice.image.application.dto.ImageDto;
 import com.example.rewardservice.image.application.service.ImageService;
 import com.example.rewardservice.point.domain.PointRepository;
-import com.example.rewardservice.user.application.dto.response.PointHistoryResponse;
+import com.example.rewardservice.shop.domain.PurchaseRecord;
+import com.example.rewardservice.shop.domain.repository.PurchaseRecordRepository;
+import com.example.rewardservice.user.application.response.PointHistoryResponse;
+import com.example.rewardservice.user.application.response.PointRecordResponse;
+import com.example.rewardservice.user.domain.GiftRecord;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.application.dto.request.MyPageRequest;
-import com.example.rewardservice.user.application.dto.request.RegisterRequest;
-import com.example.rewardservice.user.application.dto.response.MyPageResponse;
+import com.example.rewardservice.user.application.request.MyPageRequest;
+import com.example.rewardservice.user.application.request.RegisterRequest;
+import com.example.rewardservice.user.application.response.MyPageResponse;
+import com.example.rewardservice.user.domain.repository.GiftRecordRepository;
 import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,8 +37,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
-    private static final long INITIAL_POINT = 0;
     private final PointRepository pointRepository;
+
+    private static final long INITIAL_POINT = 0;
 
     //RegisterRequest 수정 필요
     public void registerUser(RegisterRequest registerRequest) {
@@ -51,6 +63,26 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("아이디 없음"));
         return MyPageResponse.from(user);
+    }
+
+    public List<PointRecordResponse> getAllPointTransactions(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("아이디 없음"));
+
+        return pointRepository.findByUser(user)
+                .stream()
+                .map(PointRecordResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<PointRecordResponse> getPointTransactionsByType(String email, String type) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("아이디 없음"));
+
+        return pointRepository.findByUserAndType(user, type)
+                .stream()
+                .map(PointRecordResponse::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -85,16 +117,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<PointHistoryResponse> getUserPointHistory(String email) {
-        return pointRepository.findByUserEmail(email).stream()
-                .map(point -> new PointHistoryResponse(
-                        point.getType(),
-                        point.getAmount(),
-                        point.getDescription(),
-                        point.getCreatedAt()
-                ))
-                .collect(Collectors.toList());
-    }
 
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);

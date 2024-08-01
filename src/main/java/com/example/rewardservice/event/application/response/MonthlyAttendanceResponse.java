@@ -1,4 +1,4 @@
-package com.example.rewardservice.event.application.dto.response;
+package com.example.rewardservice.event.application.response;
 
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
-package com.example.rewardservice.user.application;
+package com.example.rewardservice.security;
 
 import com.example.rewardservice.user.domain.User;
-import com.example.rewardservice.user.application.dto.APIUserDetailDto;
+import com.example.rewardservice.security.jwt.dto.APIUserDetailDto;
 import com.example.rewardservice.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
