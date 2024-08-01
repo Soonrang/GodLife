@@ -5,7 +5,7 @@ import com.example.rewardservice.security.jwt.filter.TokenCheckFilter;
 import com.example.rewardservice.security.jwt.filter.UserLoginFilter;
 import com.example.rewardservice.security.jwt.handler.UserLoginSuccessHandler;
 import com.example.rewardservice.security.jwt.util.JWTUtil;
-import com.example.rewardservice.user.application.APIUserDetailService;
+import com.example.rewardservice.security.APIUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -27,7 +27,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 
 @Configuration

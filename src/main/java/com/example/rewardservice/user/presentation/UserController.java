@@ -1,17 +1,11 @@
 package com.example.rewardservice.user.presentation;
 
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
-import com.example.rewardservice.security.jwt.util.JWTUtil;
-import com.example.rewardservice.user.application.dto.request.LoginRequest;
-import com.example.rewardservice.user.application.dto.request.RegisterRequest;
-import com.example.rewardservice.user.application.dto.response.LoginResponse;
-import com.example.rewardservice.user.application.APIUserDetailService;
-import com.example.rewardservice.user.application.UserService;
+import com.example.rewardservice.user.application.request.RegisterRequest;
+import com.example.rewardservice.user.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
