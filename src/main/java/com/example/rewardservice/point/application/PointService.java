@@ -1,17 +1,27 @@
 package com.example.rewardservice.point.application;
 
+import com.example.rewardservice.common.ValidateService;
+import com.example.rewardservice.donation.application.DonationService;
+import com.example.rewardservice.donation.application.dto.DonationRequest;
+import com.example.rewardservice.donation.domain.Donation;
+import com.example.rewardservice.donation.domain.DonationRecord;
+import com.example.rewardservice.donation.domain.DonationRecordRepository;
 import com.example.rewardservice.event.domain.EventParticipation;
 import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
 import com.example.rewardservice.event.domain.repository.EventRepository;
 import com.example.rewardservice.event.domain.Event;
 import com.example.rewardservice.point.application.dto.ViewPointRequest;
+import com.example.rewardservice.point.domain.GiftRecord;
+import com.example.rewardservice.point.domain.GiftRecordRepository;
 import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.dto.AddPointRequest;
 import com.example.rewardservice.point.application.dto.GiftPointRequest;
 import com.example.rewardservice.point.application.dto.UsePointRequest;
 import com.example.rewardservice.shop.domain.Product;
+import com.example.rewardservice.shop.domain.PurchaseRecord;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
+import com.example.rewardservice.shop.domain.repository.PurchaseRecordRepository;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -33,24 +43,29 @@ public class PointService {
     private final EventRepository eventRepository;
     private final ProductRepository productRepository;
     private final EventParticipationRepository eventParticipationRepository;
+    private final PurchaseRecordRepository purchaseRecordRepository;
+    private final DonationRecordRepository donationRecordRepository;
+    private final GiftRecordRepository giftRecordRepository;
+    private final ValidateService validateService;
+    private final DonationService donationService;
 
     private static final String POINT_TYPE_EARNED = "적립";
     private static final String POINT_TYPE_USED = "사용";
     private static final String POINT_TYPE_GIFT = "선물";
     private static final String POINT_TYPE_VIEW = "뷰어";
+    private static final String POINT_TYPE_DONATION = "기부";
 
 
     @Transactional
     public void addEarnedPoint(AddPointRequest addPointRequest) {
         User user = findByUserEmail(addPointRequest.getUserEmail());
-        Event event = findByEventId(addPointRequest.getEventId());
 
         Point point = Point.builder()
-                .event(event)
                 .user(user)
                 .amount(addPointRequest.getPoint())
                 .description(addPointRequest.getDescription())
                 .type(POINT_TYPE_EARNED)
+                .activityId(addPointRequest.getActivityId())
                 .build();
 
         pointRepository.save(point);
@@ -62,6 +77,9 @@ public class PointService {
     public void usedPoints(UsePointRequest usePointRequest) {
         User user = findByUserEmail(usePointRequest.getUserEmail());
         Product product = findByProductId(usePointRequest.getProductId());
+
+        PurchaseRecord purchaseRecord = new PurchaseRecord(user, product, usePointRequest.getPoint());
+        purchaseRecordRepository.save(purchaseRecord);
 
         Point usedPoint = new Point(
                 product,
@@ -77,36 +95,68 @@ public class PointService {
     }
 
     @Transactional
-    public void giftPoints(String email, GiftPointRequest giftPointRequest) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        User sender = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
+    public void giftPoints(GiftPointRequest giftPointRequest) {
+        User sender = findByUserEmail(giftPointRequest.getSenderEmail());
+        User receiver = findByUserEmail(giftPointRequest.getReceiverEmail());
 
-        User receiver = findByUserEmail(giftPointRequest.getRecipientId());
-
-        if(sender.getTotalPoint() < giftPointRequest.getPoints()) {
+        if (sender.getTotalPoint() < giftPointRequest.getPoints()) {
             throw new RuntimeException("포인트가 충분하지 않습니다.");
         }
 
-        deductPointsByGift(sender, giftPointRequest.getPoints());
-        addPointsByGift(receiver, giftPointRequest.getPoints());
-        recordPointTransaction(sender, receiver, giftPointRequest);
+        GiftRecord giftRecord = new GiftRecord(sender, receiver, giftPointRequest.getPoints());
+        giftRecordRepository.save(giftRecord);
+
+        Point senderPointRecord = Point.builder()
+                .user(sender)
+                .amount(-giftPointRequest.getPoints())
+                .description(giftPointRequest.getReceiverEmail() + "에게 포인트를 선물하였습니다.")
+                .type(POINT_TYPE_GIFT)
+                .activityId(giftRecord.getId())
+                .build();
+
+        Point receiverPointRecord = Point.builder()
+                .user(receiver)
+                .amount(giftPointRequest.getPoints())
+                .description(giftPointRequest.getSenderEmail() + "이 보낸 포인트 선물입니다.")
+                .type(POINT_TYPE_GIFT)
+                .activityId(giftRecord.getId())
+                .build();
+
+        pointRepository.save(senderPointRecord);
+        pointRepository.save(receiverPointRecord);
+
+        sender.validateUsePoints(giftPointRequest.getPoints());
+        receiver.earnPoints(giftPointRequest.getPoints());
+
+        userRepository.save(sender);
+        userRepository.save(receiver);
     }
 
     @Transactional
-    public void viewPoints(String email, ViewPointRequest viewPointRequest) {
-        User user = findByUserEmail(email);
+    public void donatePoints(DonationRequest donationRequest) {
+        User user = findByUserEmail(donationRequest.getEmail());
+        Donation donation = validateService.findByDonationId(donationRequest.getId());
 
-        Point viewPoint = Point.builder()
+        if (user.getTotalPoint() < donationRequest.getPoints()) {
+            throw new RuntimeException("포인트가 충분하지 않습니다.");
+        }
+
+        DonationRecord donationRecord = new DonationRecord(user, donation, donationRequest.getPoints());
+        donationRecordRepository.save(donationRecord);
+
+        Point point = Point.builder()
                 .user(user)
-                .type(POINT_TYPE_VIEW)
-                .amount(viewPointRequest.getPoints())
-                .description(viewPointRequest.getPageName())
+                .amount(donationRequest.getPoints())
+                .description(donationRequest.getTitle() + " 기부")
+                .type(POINT_TYPE_DONATION)
+                .activityId(donationRecord.getId())
                 .build();
 
-        user.earnPoints(viewPointRequest.getPoints());
-
-        pointRepository.save(viewPoint);
+        pointRepository.save(point);
+        user.validateUsePoints(donationRequest.getPoints());
+        userRepository.save(user);
     }
+
 
     private User findByUserEmail(String email) {
         return userRepository.findByEmail(email)
@@ -145,7 +195,7 @@ public class PointService {
         Point senderPointRecord = Point.builder()
                 .user(sender)
                 .amount(-giftPointRequest.getPoints())
-                .description(giftPointRequest.getRecipientId() + "에게 포인트를 선물하였습니다.")
+                .description(giftPointRequest.getReceiverEmail() + "에게 포인트를 선물하였습니다.")
                 .type(POINT_TYPE_GIFT)
                 .build();
         pointRepository.save(senderPointRecord);
@@ -154,12 +204,10 @@ public class PointService {
         Point recipientPointRecord = Point.builder()
                 .user(receiver)
                 .amount(giftPointRequest.getPoints())
-                .description(giftPointRequest.getSenderId() + "이 보낸 포인트 선물입니다.")
+                .description(giftPointRequest.getSenderEmail() + "이 보낸 포인트 선물입니다.")
                 .type(POINT_TYPE_GIFT)
                 .build();
         pointRepository.save(recipientPointRecord);
     }
-
-
 
 }

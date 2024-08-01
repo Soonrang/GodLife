@@ -42,11 +42,10 @@ public class ViewCountService {
                 .description(event.getName()+EVENT_VIEW_DESCRIPTION_MESSAGE)
                 .build();
 
-        //이벤트 참여 리스트 생성
         EventParticipation participation = EventParticipation.builder()
                 .user(user)
                 .event(event)
-                .pointEarned(addPointRequest.getPoint())
+                .points(addPointRequest.getPoint())
                 .description(addPointRequest.getDescription())
                 .build();
 

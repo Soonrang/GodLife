@@ -26,7 +26,7 @@ public class PointController {
     @PostMapping("/gift")
     public ResponseEntity<Point> gift(@RequestBody GiftPointRequest giftPointRequest) {
         String sender = jwtTokenExtractor.getCurrentUserEmail();
-        pointService.giftPoints(sender, giftPointRequest);
+        pointService.giftPoints(giftPointRequest);
         return ResponseEntity.noContent().build();
     }
 
