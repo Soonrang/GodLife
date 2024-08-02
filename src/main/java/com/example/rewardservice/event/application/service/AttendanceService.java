@@ -60,7 +60,7 @@ public class AttendanceService {
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(email)
                 .points(earnedPoint)
-                .description("이벤트 참여: " + event.getName())
+                .description(event.getName()+description)
                 .activityId(participation.getId())
                 .build();
         pointService.addEarnedPoint(addPointRequest);
