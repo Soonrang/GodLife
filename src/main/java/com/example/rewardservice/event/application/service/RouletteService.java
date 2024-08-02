@@ -38,14 +38,14 @@ public class RouletteService {
             throw new RuntimeException("오늘 룰렛 참여 횟수를 초과했습니다.");
         }
         // 이벤트 참여 기록 저장
-        EventParticipation participation = new EventParticipation(user, event, earnedPoints, "이벤트 참여");
+        EventParticipation participation = new EventParticipation(user, event, earnedPoints, ROULETTE_MESSAGE);
         eventParticipationRepository.save(participation);
 
         // 포인트 적립 기록 저장
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(email)
                 .points(earnedPoints)
-                .description("이벤트 참여: " + event.getName())
+                .description(event.getName() + "참여")
                 .activityId(participation.getId())
                 .build();
         pointService.addEarnedPoint(addPointRequest);

@@ -56,6 +56,6 @@ public class ViewCountService {
         List<EventParticipation> participations = eventParticipationRepository
                 .findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
 
-        return !participations.isEmpty();
+        return !participations.isEmpty(); //참여 기록이 있으면 true
     }
 }
