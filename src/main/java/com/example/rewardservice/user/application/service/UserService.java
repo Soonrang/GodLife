@@ -7,6 +7,7 @@ import com.example.rewardservice.event.domain.EventParticipation;
 import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
 import com.example.rewardservice.image.application.dto.ImageDto;
 import com.example.rewardservice.image.application.service.ImageService;
+import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.shop.domain.PurchaseRecord;
 import com.example.rewardservice.shop.domain.repository.PurchaseRecordRepository;
@@ -38,12 +39,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ImageService imageService;
     private final PointRepository pointRepository;
-
+    private final S3ImageService s3ImageService;
     private static final long INITIAL_POINT = 0;
 
     //RegisterRequest 수정 필요
     public void registerUser(RegisterRequest registerRequest) {
-        ImageDto ImageDto = imageService.saveImage(registerRequest.getProfileImage());
+        String profileImageUrl = s3ImageService.upload(registerRequest.getProfileImage());
 
         User user = User.builder()
                 .email(registerRequest.getEmail())
@@ -51,7 +52,7 @@ public class UserService {
                 .name(registerRequest.getName())
                 .nickname(registerRequest.getNickname())
                 .totalPoint(INITIAL_POINT)
-                .profileImage(ImageDto.getStoreName())
+                .profileImage(profileImageUrl)
                 .userSocial(false)
                 .memberState(MemberState.ACTIVE)
                 .build();
