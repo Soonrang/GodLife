@@ -1,53 +1,24 @@
 package com.example.rewardservice.common.config;
 
-
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 
+//http://localhost:3001/swagger-ui/index.html#/
+@OpenAPIDefinition(info = @Info(title = "Reward Service",version = "v1"))
+@RequiredArgsConstructor
 @Configuration
 public class SwaggerConfig {
-
     @Bean
-    public OpenAPI openAPI() {
+    public GroupedOpenApi chatOpenApi() {
+        String[] paths = {"/**"};
 
-// Security 스키마 설정
-        SecurityScheme bearerAuth = new SecurityScheme()
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("bearer")
-                .bearerFormat("Authorization")
-                .in(SecurityScheme.In.HEADER)
-                .name(HttpHeaders.AUTHORIZATION);
-
-// Security 요청 설정
-        SecurityRequirement addSecurityItem = new SecurityRequirement();
-        addSecurityItem.addList("Authorization");
-
-        return new OpenAPI()
-                .components(
-                        new Components()
-                                .addSecuritySchemes("Authorization", bearerAuth)
-
-                        )
-                // API 마다 Security 인증 컴포넌트 설정
-                .addSecurityItem(addSecurityItem)
-
-                .info(new Info().title("SpringDoc SwaggerUI example")
-                        .description("Test SwaggerUI application")
-                        .version("v0.0.1"));
-
+        return GroupedOpenApi.builder()
+                .group("Reward Service v1")
+                .pathsToMatch(paths)
+                .build();
     }
-
-//    @Bean
-//    public GroupedOpenApi group2() {
-//        return GroupedOpenApi.builder()
-//                .group("API")
-//                .pathsToMatch("/api/**")
-//                .build();
-//    }
 }
