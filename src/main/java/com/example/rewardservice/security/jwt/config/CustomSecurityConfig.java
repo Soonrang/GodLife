@@ -83,7 +83,7 @@ public class CustomSecurityConfig{
                 tokenCheckFilter(jwtUtil, APIUserDetailService), UsernamePasswordAuthenticationFilter.class);
 
         //refreshToken 호출
-        http.addFilterBefore(new RefreshTokenFilter("/refreshToken", jwtUtil),TokenCheckFilter.class);
+        http.addFilterBefore(new RefreshTokenFilter("/api/refreshToken", jwtUtil),TokenCheckFilter.class);
 
 
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
