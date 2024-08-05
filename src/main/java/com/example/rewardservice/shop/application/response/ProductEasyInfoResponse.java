@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public class ProductEasyInfoResponse {
-    private UUID id;
     private String productName;
     private long productPrice;
     private String category;
@@ -20,7 +19,6 @@ public class ProductEasyInfoResponse {
 
     public static ProductEasyInfoResponse from(Product product) {
         return new ProductEasyInfoResponse(
-                product.getId(),
                 product.getProductName(),
                 product.getPrice(),
                 product.getCategory(),
