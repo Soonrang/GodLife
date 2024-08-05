@@ -28,19 +28,10 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        String path = request.getRequestURI();
+        log.info("Request Path: {}", path);
 
-        String path = httpRequest.getRequestURI();
-
-        // 로그인과 회원가입 요청시 필터 통과
-        if (path.equals("/api/login") || path.equals("/api/register") || path.equals("/api/check-email") || path.equals("/api/check-nickname") || path.equals("/swagger-ui/index.html") || path.equals("/shop")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-
-        if (path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs/") || path.startsWith("/api/")) {
+        if (isExemptedPath(path)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -68,6 +59,12 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         } catch (AccessTokenException accessTokenException) {
             accessTokenException.sendResponseError(response);
         }
+    }
+    private boolean isExemptedPath(String path) {
+        return path.equals("/api/login") || path.equals("/api/register") ||
+                path.equals("/api/check-email") || path.equals("/api/check-nickname") ||
+                path.equals("/swagger-ui/index.html") || path.equals("/shop") ||
+                path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs/") ||;
     }
 
     private Map<String, Object> validateAccessToken(HttpServletRequest request) throws AccessTokenException {
