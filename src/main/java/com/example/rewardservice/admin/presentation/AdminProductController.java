@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/admin/shop")
+@RequestMapping("/api/admin/shop")
 @RequiredArgsConstructor
 public class AdminProductController {
 
