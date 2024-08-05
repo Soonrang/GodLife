@@ -1,20 +1,14 @@
 package com.example.rewardservice.image.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.util.IOUtils;
+import com.amazonaws.services.s3.model.*;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +34,18 @@ public class S3ImageService  {
         }
         return this.uploadImage(image);
     }
+
+    public List<String> uploadMultiple(MultipartFile[] images) {
+        List<String> urls = new ArrayList<>();
+        for (MultipartFile image : images) {
+            if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
+                throw new IllegalArgumentException("파일이 비어있습니다.");
+            }
+            urls.add(this.uploadImage(image));
+        }
+        return urls;
+    }
+
 
     private String uploadImage(MultipartFile image) {
         this.validateImageFileExtention(image.getOriginalFilename());
@@ -92,7 +98,7 @@ public class S3ImageService  {
                             .withCannedAcl(CannedAccessControlList.PublicRead);
             amazonS3.putObject(putObjectRequest); // put image to S3
         }catch (Exception e){
-            new IllegalArgumentException("파일이 비어있습니다.");
+            new IllegalArgumentException("파일 업로드에 실패했습니다.", e);
         }finally {
             byteArrayInputStream.close();
             os.close();
@@ -106,7 +112,7 @@ public class S3ImageService  {
         try{
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
         }catch (Exception e){
-            throw new IllegalArgumentException("파일이 비어있습니다.");
+            throw new IllegalArgumentException("파일 삭제에 실패했습니다.", e);
         }
     }
 
@@ -116,7 +122,7 @@ public class S3ImageService  {
             String decodingKey = URLDecoder.decode(url.getPath(), "UTF-8");
             return decodingKey.substring(1); // 맨 앞의 '/' 제거
         }catch (MalformedURLException | UnsupportedEncodingException e){
-            throw new IllegalArgumentException("파일이 비어있습니다.");
+            throw new IllegalArgumentException("이미지 주소를 해석할 수 없습니다.", e);
         }
     }
 

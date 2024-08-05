@@ -5,6 +5,7 @@ import com.example.rewardservice.image.application.service.ImageService;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.shop.application.request.UsePointRequest;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
+import com.example.rewardservice.shop.application.response.ProductPagingResponse;
 import com.example.rewardservice.shop.domain.Product;
 import com.example.rewardservice.shop.domain.ProductImage;
 import com.example.rewardservice.shop.domain.PurchaseRecord;
@@ -13,6 +14,7 @@ import com.example.rewardservice.shop.domain.repository.PurchaseRecordRepository
 import com.example.rewardservice.user.domain.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -65,6 +67,24 @@ public class ProductService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public Page<ProductPagingResponse> paging(Pageable pageable) {
+        int page = pageable.getPageNumber();
+
+        if (page < 0) {
+            page = 0;
+        }
+
+        int pageLimit = 12;
+
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, pageLimit,Sort.by(Sort.Direction.DESC, "id")));
+
+        List<ProductPagingResponse> pagingResponses = products.stream()
+                .map(ProductPagingResponse::from).collect(Collectors.toList());
+
+        return new PageImpl<>(pagingResponses, pageable, products.getTotalElements());
+    }
+
 
     public Product getProductByCategory(String category) {
         return productRepository.findByCategory(category)
