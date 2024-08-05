@@ -100,7 +100,7 @@ public class CustomSecurityConfig{
                 .requestMatchers("/js/**", "/css/**", "/images/**",
                         "/api/**", "/event/**", "/user/**","/shop/**",
                         "/v3/api-docs/**","/swagger-ui/**","/points/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
         );
