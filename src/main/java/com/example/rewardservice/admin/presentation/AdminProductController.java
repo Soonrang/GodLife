@@ -24,9 +24,7 @@ public class AdminProductController {
     private final AdminProductService adminProductService;
 
     @PostMapping("/product/register")
-    public ResponseEntity<ProductEasyInfoResponse>  registerProduct(@ModelAttribute ProductRegisterRequest productRegisterRequest,
-                                                                    @RequestParam("productImages") List<MultipartFile> files) {
-        productRegisterRequest.setProductImages(files);
+    public ResponseEntity<ProductEasyInfoResponse>  registerProduct(@ModelAttribute ProductRegisterRequest productRegisterRequest) {
         ProductEasyInfoResponse createdProduct = adminProductService.createEasyProduct(productRegisterRequest);
         return ResponseEntity.ok(createdProduct);
     }
