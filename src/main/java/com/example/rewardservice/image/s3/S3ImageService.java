@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.*;
 
+import com.example.rewardservice.image.exception.ImageException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 @Slf4j
 public class S3ImageService  {
+    private static final int MAX_IMAGE_LIST_SIZE = 5;
+    private static final int EMPTY_LIST_SIZE = 0;
 
     private final AmazonS3 amazonS3;
 
@@ -35,7 +38,9 @@ public class S3ImageService  {
         return this.uploadImage(image);
     }
 
-    public List<String> uploadMultiple(MultipartFile[] images) {
+    public List<String> uploadMultiple(List<MultipartFile> images) {
+        validateSizeOfImages(images);
+
         List<String> urls = new ArrayList<>();
         for (MultipartFile image : images) {
             if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
@@ -123,6 +128,15 @@ public class S3ImageService  {
             return decodingKey.substring(1); // 맨 앞의 '/' 제거
         }catch (MalformedURLException | UnsupportedEncodingException e){
             throw new IllegalArgumentException("이미지 주소를 해석할 수 없습니다.", e);
+        }
+    }
+
+    private void validateSizeOfImages(final List<MultipartFile> images) {
+        if(images.size() > MAX_IMAGE_LIST_SIZE) {
+            throw new IllegalArgumentException("이미지 개수를 초과했습니다.");
+        }
+        if(images.size() == EMPTY_LIST_SIZE) {
+            throw new IllegalArgumentException("이미지가 존재하지 않습니다." + EMPTY_LIST_SIZE);
         }
     }
 

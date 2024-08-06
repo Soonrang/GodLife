@@ -18,9 +18,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class DonationService {
-    private final DonationRepository donationRepository;
     private final DonationRecordRepository donationRecordRepository;
-    private final UserRepository userRepository;
     private final ValidateService validateService;
     private final PointService pointService;
 
