@@ -12,15 +12,6 @@ jobs:
     permissions:
       contents: read
 
-    services:
-      mysql:
-        image: mysql:5.7
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: mydb
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -32,11 +23,10 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3.4.2
 
+    - name: Create application-aws.properties
+      run: echo "${{ secrets.AWSPROPERTIES }}" > src/main/resources/application-aws.properties
+
     - name: Build with Gradle Wrapper
-      env:
-        AWSRDS: ${{ secrets.AWSRDS }}
-        AWSS3: ${{ secrets.AWSS3 }}
-        JWTKEY: ${{ secrets.JWTKEY }}
       run: |
         chmod +x ./gradlew
         ./gradlew build --warning-mode all
@@ -60,8 +50,4 @@ jobs:
         gradle-version: 8.8
 
     - name: Generate and submit dependency graph
-      env:
-        AWSRDS: ${{ secrets.AWSRDS }}
-        AWSS3: ${{ secrets.AWSS3 }}
-        JWTKEY: ${{ secrets.JWTKEY }}
       run: ./gradlew dependencies --warning-mode all
