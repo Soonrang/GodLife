@@ -60,6 +60,15 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        
+    - name: init with Gradle
+      uses: gradle/gradle-build-action@v2
+    - run: gradle init
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: 8.8
+    - run: build
 
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
