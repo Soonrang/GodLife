@@ -32,9 +32,13 @@ public class PurchaseRecord extends BaseEntity {
     @Column(name = "points_used")
     private long points;
 
-    public PurchaseRecord(User user, Product product, long points) {
+    @Column(name = "product_quantity")
+    private int productQuantity;
+
+    public PurchaseRecord(User user, Product product, long points, int productQuantity) {
         this.user = user;
         this.product = product;
         this.points = points;
+        this.productQuantity = productQuantity;
     }
 }

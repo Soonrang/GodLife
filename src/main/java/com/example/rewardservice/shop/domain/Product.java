@@ -86,4 +86,8 @@ public class Product extends BaseEntity {
         this.productImages = productImages;
     }
 
+    public void minusPurchaseQuantity(int purchaseQuantity) {
+        this.stock -= purchaseQuantity;
+    }
+
 }
