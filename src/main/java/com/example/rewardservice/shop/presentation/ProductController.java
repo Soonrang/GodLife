@@ -2,6 +2,7 @@ package com.example.rewardservice.shop.presentation;
 
 import com.example.rewardservice.auth.AuthUser;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.shop.application.request.PurchaseRequest;
 import com.example.rewardservice.shop.application.response.ProductEasyInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductPagingResponse;
@@ -25,9 +26,9 @@ public class ProductController {
     private final JwtTokenExtractor jwtTokenExtractor;
 
     @PostMapping("/product/purchase")
-    public ResponseEntity<Void> purchaseProduct(@RequestParam UUID productId) {
+    public ResponseEntity<Void> purchaseProduct(@RequestParam UUID productId, @RequestBody PurchaseRequest purchaseRequest) {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
-        productService.purchaseProduct(userEmail, productId);
+        productService.purchaseProduct(userEmail, productId, purchaseRequest);
         return ResponseEntity.noContent().build();
     }
 

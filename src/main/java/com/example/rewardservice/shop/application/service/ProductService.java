@@ -3,6 +3,7 @@ package com.example.rewardservice.shop.application.service;
 import com.example.rewardservice.common.ValidateService;
 import com.example.rewardservice.image.application.service.ImageService;
 import com.example.rewardservice.point.application.PointService;
+import com.example.rewardservice.shop.application.request.PurchaseRequest;
 import com.example.rewardservice.shop.application.request.UsePointRequest;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductPagingResponse;
@@ -32,22 +33,33 @@ public class ProductService {
     private final PurchaseRecordRepository purchaseRecordRepository;
     private final PointService pointService;
 
+
+    //public record PurchaseRequest(String name, long price, long quantity, long totalPrice)
+
     @Transactional
-    public void purchaseProduct(String email, UUID productId) {
+    public void purchaseProduct(String email, UUID productId, PurchaseRequest purchaseRequest) {
         User user = validateService.findByUserEmail(email);
         Product product = validateService.findByProductId(productId);
 
+        //재고 확인
+        validateQuantity(product.getStock(), purchaseRequest.quantity());
+
+        //상품 총 금액이 프론트에서 던져주는 총 금액과 일치하는지
+        long totalPrice = validateTotalPrice(product.getPrice(), purchaseRequest.quantity(), purchaseRequest.totalPrice());
+
         // 구매 기록 저장
-        PurchaseRecord purchaseRecord = new PurchaseRecord(user, product, product.getPrice());
+        PurchaseRecord purchaseRecord = new PurchaseRecord(user, product, totalPrice, purchaseRequest.quantity());
         purchaseRecordRepository.save(purchaseRecord);
 
+        product.minusPurchaseQuantity(purchaseRequest.quantity());
         // 포인트 사용 기록 저장
         UsePointRequest usePointRequest = UsePointRequest.builder()
                 .userEmail(email)
-                .points(product.getPrice())
-                .description("상품 구매: " + product.getProductName())
+                .points(totalPrice)
+                .description("상품 구매: " + product.getProductName() + "*" + purchaseRequest.quantity()+"개")
                 .activityId(purchaseRecord.getId())
                 .build();
+
         pointService.usePoints(usePointRequest);
     }
 
@@ -103,5 +115,21 @@ public class ProductService {
             }
         }
         return null;
+    }
+
+    private long validateTotalPrice(long price, int quantity, long totalPrice) {
+        long calcTotal = price * quantity;
+
+        if(totalPrice != calcTotal) {
+            throw new IllegalArgumentException("총 구매금액이 일치하지 않습니다.");
+        }
+
+        return calcTotal;
+    }
+
+    private void validateQuantity(int remainQuantity, int purchaseQuantity) {
+        if(remainQuantity - purchaseQuantity < 0) {
+            throw new IllegalArgumentException("상품 재고가 부족합니다.");
+        }
     }
 }
