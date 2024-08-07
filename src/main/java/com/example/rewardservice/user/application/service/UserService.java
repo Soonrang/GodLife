@@ -87,23 +87,21 @@ public class UserService {
     }
 
     @Transactional
-    public MyPageResponse updateUserInfo(String email, MyPageRequest myPageRequest) {
+    public void updateUserInfo(String email, MyPageRequest myPageRequest) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         User user = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
         String newNickname = myPageRequest.getNickname();
 
-        MultipartFile profileImage = myPageRequest.getProfileImage();
-        if (profileImage == null || profileImage.isEmpty()) {
-            throw new IllegalArgumentException("프로필 사진이 없습니다.");
+        String nowProfileImage = user.getProfileImage();
+
+        if(myPageRequest.getProfileImage()!=null) {
+            nowProfileImage = s3ImageService.upload(myPageRequest.getProfileImage());
+            s3ImageService.deleteImageFromS3(user.getProfileImage());
+            user.updateUserInfo(newNickname, nowProfileImage);
         }
 
-        ImageDto ImageDto = imageService.saveImage(myPageRequest.getProfileImage());
-        String newProfileImage = ImageDto.getStoreName();
-
-        user.updateUserInfo(newNickname,newProfileImage);
+        user.updateUserInfo(newNickname,nowProfileImage);
         userRepository.save(user);
-
-        return new MyPageResponse(user.getEmail(), user.getNickname(), user.getName(), user.getTotalPoint(),user.getProfileImage());
     }
 
     @Transactional

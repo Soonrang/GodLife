@@ -34,13 +34,6 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/event/check/{eventId}")
-//    public ResponseEntity<Boolean> checkTodayAttendance(@PathVariable UUID eventId) {
-//        String email = jwtTokenExtractor.getCurrentUserEmail();
-//        boolean hasAttended = attendanceService.checkTodayAttendance(eventId, email);
-//        return ResponseEntity.ok(hasAttended);
-//    }
-
     @GetMapping("/monthlyCount/{eventId}")
     public ResponseEntity<MonthlyAttendanceResponse> getMonthlyAttendance(@PathVariable UUID eventId) {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
@@ -48,7 +41,6 @@ public class EventController {
         return ResponseEntity.ok(response);
 
     }
-
 
     //-----------------------------------룰렛------------------------------------
     @GetMapping("/roulette/count/{eventId}")
@@ -61,14 +53,14 @@ public class EventController {
     @PostMapping("/roulette/updatePoint/{eventId}")
     public ResponseEntity<String> updateRoulettePoint(@PathVariable UUID eventId, @RequestBody UpdatePointRequest updatePointRequest) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-        rouletteService.participateInRouletteEvent(email, eventId, updatePointRequest.getPoints());
+        rouletteService.participateInRouletteEvent(email, eventId, updatePointRequest.getEarnedPoints());
         return ResponseEntity.ok("포인트가 성공적으로 업데이트되었습니다.");
 
     }
     @PostMapping("/view-point/{eventId}")
     public ResponseEntity<Void> viewPoint(@PathVariable UUID eventId, @RequestBody UpdatePointRequest updatePointRequest) {
         String user = jwtTokenExtractor.getCurrentUserEmail();
-        viewCountService.viewPoints(eventId,user, updatePointRequest.getPoints());
+        viewCountService.viewPoints(eventId,user, updatePointRequest.getEarnedPoints());
         return ResponseEntity.noContent().build();
     }
     @GetMapping("/checkParticipation")
