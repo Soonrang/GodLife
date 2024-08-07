@@ -24,7 +24,7 @@ public class ImageService {
     private static final String EXTENSION_DELIMITER = ".";
     private static final List<String> WHITE_IMAGE_EXTENSION = List.of("jpg","jpeg","PNG","png");
 
-    @Value("${com.example.image.user.dir}")
+    //@Value("${com.example.image.user.dir}")
     private String imageStoreDir;
 
     public List<ImageDto> saveImages(final List<MultipartFile> files) {
@@ -89,9 +89,9 @@ public class ImageService {
     }
 
     private void validateProfileImageExtension(final String extension) {
-    if(!WHITE_IMAGE_EXTENSION.contains(extension)) {
-        throw new ImageException("지원하지 않는 확장자입니다.: " + extension);
-    }
+        if(!WHITE_IMAGE_EXTENSION.contains(extension)) {
+            throw new ImageException("지원하지 않는 확장자입니다.: " + extension);
+        }
     }
 
     private void ensureDirectoryExists(String directory) {

@@ -52,27 +52,27 @@ public class AttendanceService {
             earnedPoint += BONUS_POINT;
             description = EVENT_DESCRIPTION_BONUS_MESSAGE;
         }
+
         // 이벤트 참여 기록 저장
-        EventParticipation participation = new EventParticipation(user, event, ATTENDANCE_POINT, "출석");
+        EventParticipation participation = new EventParticipation(user, event, earnedPoint, description);
         eventParticipationRepository.save(participation);
 
         // 포인트 적립 기록 저장
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(email)
                 .points(earnedPoint)
-                .description(event.getName()+description)
+                .description(event.getName() + " " + description)
                 .activityId(participation.getId())
                 .build();
         pointService.addEarnedPoint(addPointRequest);
     }
 
-
     public MonthlyAttendanceResponse getAttendanceData(String email, UUID eventId) {
         User user = validateService.findByUserEmail(email);
         Event event = validateService.findByEventId(eventId);
 
-        LocalDateTime startOfMonth = event.getEventPeriod().getStartDate();
-        LocalDateTime endOfMonth = event.getEventPeriod().getEndDate();
+        LocalDateTime startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
+        LocalDateTime endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth()).atTime(23, 59, 59);
 
         List<EventParticipation> points = eventParticipationRepository.findByUserAndEventAndCreatedAtBetween(
                 user, event, startOfMonth, endOfMonth);
@@ -88,10 +88,6 @@ public class AttendanceService {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDate.now().plusDays(1).atStartOfDay();
 
-        if (checkTodayAttendance(event, user)) {
-            throw new RuntimeException("오늘 이미 출석하셨습니다.");
-        }
-
         List<EventParticipation> participations = eventParticipationRepository.findByUserAndEventAndCreatedAtBetween(user, event, startOfDay, endOfDay);
         return !participations.isEmpty();
     }
@@ -104,7 +100,4 @@ public class AttendanceService {
 
         return participations.size();
     }
-
-
-
 }

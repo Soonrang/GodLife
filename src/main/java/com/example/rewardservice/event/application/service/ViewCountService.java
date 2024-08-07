@@ -22,7 +22,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ViewCountService {
-    private final UserRepository userRepository;
     private final EventParticipationRepository eventParticipationRepository;
     private final ValidateService validateService;
     private final PointService pointService;
@@ -34,6 +33,7 @@ public class ViewCountService {
         Event event = validateService.findByEventId(eventId);
 
         EventParticipation participation = new EventParticipation(user, event, earnedPoints, EVENT_VIEW_DESCRIPTION_MESSAGE);
+        eventParticipationRepository.save(participation);
 
         // 포인트 적립 기록 저장
         AddPointRequest addPointRequest = AddPointRequest.builder()

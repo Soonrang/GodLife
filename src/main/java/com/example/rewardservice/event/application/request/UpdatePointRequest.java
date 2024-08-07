@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class UpdatePointRequest {
-    private long points;
+    private long earnedPoints;
 }

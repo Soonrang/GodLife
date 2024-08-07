@@ -3,13 +3,16 @@ package com.example.rewardservice.user.presentation;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import com.example.rewardservice.user.application.request.MyPageRequest;
 import com.example.rewardservice.user.application.response.MyPageResponse;
+import com.example.rewardservice.user.application.response.PointRecordResponse;
 import com.example.rewardservice.user.application.service.UserService;
 import com.example.rewardservice.user.application.response.PointHistoryResponse;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,11 +32,20 @@ public class UserInfoController {
         return ResponseEntity.ok(userInfo);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<MyPageResponse> updateUserInfo(@ModelAttribute MyPageRequest myPageRequest) {
+    @PostMapping("/update")
+    public ResponseEntity<Void> updateUserInfo(@RequestParam String nickname, @RequestParam(required = false) MultipartFile profileImage) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-        MyPageResponse updatedUserInfo = userService.updateUserInfo(email, myPageRequest);
-        return ResponseEntity.ok(updatedUserInfo);
+        MyPageRequest myPageRequest = new MyPageRequest(nickname, profileImage);
+        log.info("Received update request: nickname={}, profileImage={}", nickname, profileImage);
+        userService.updateUserInfo(email, myPageRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/record")
+    public ResponseEntity<List<PointRecordResponse>> getPointRecord() {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        List<PointRecordResponse> records = userService.getAllPointTransactions(email);
+        return ResponseEntity.ok(records);
     }
 
 }

@@ -73,8 +73,8 @@ public class User extends BaseEntity {
         this.userSocial = false;
     }
 
-    public void updateUserInfo(String nickname, String newFile){
-        this.nickname = nickname;
+    public void updateUserInfo(String NewNickname, String newFile){
+        this.nickname = NewNickname;
         this.profileImage = newFile;
     }
 
