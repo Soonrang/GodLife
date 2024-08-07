@@ -18,17 +18,15 @@ public class ProductInfoResponse {
     private String category;
     private int stock;
     private List<ProductImageResponse> productImages;
-    private byte[] productImageData;
 
-    public static ProductInfoResponse from(Product product, byte[] productImageData) {
+    public static ProductInfoResponse from(Product product) {
         return new ProductInfoResponse(
                 product.getId(),
                 product.getProductName(),
                 product.getPrice(),
                 product.getCategory(),
                 product.getStock(),
-                product.getProductImages().stream().map(ProductImageResponse::from).collect(Collectors.toList()),
-                productImageData
+                product.getProductImages().stream().map(ProductImageResponse::from).collect(Collectors.toList())
         );
     }
 }

@@ -38,11 +38,11 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-//    @GetMapping
-//    public ResponseEntity<List<ProductInfoResponse>> getAllProducts() {
-//        List<ProductInfoResponse> products = productService.getAllProducts();
-//        return ResponseEntity.ok(products);
-//    }
+    @GetMapping("/all")
+    public ResponseEntity<List<ProductInfoResponse>> getAllProducts() {
+        List<ProductInfoResponse> products = productService.getAllProducts();
+        return ResponseEntity.ok(products);
+    }
 
     @GetMapping
     public ResponseEntity<Page<ProductPagingResponse>> getPagedProducts(Pageable pageable) {
