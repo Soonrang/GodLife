@@ -3,7 +3,7 @@ name: Deploy Spring Boot Application
 on:
   push:
     branches:
-      - main  # main branch에 push 시 동작
+      - master  # main branch에 push 시 동작
 
 env:
   S3_BUCKET_NAME: soonrang-tdi
