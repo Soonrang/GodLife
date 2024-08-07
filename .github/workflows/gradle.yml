@@ -1,59 +1,55 @@
-name: Java CI with Gradle
+name: Deploy Spring Boot Application
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - main  # main branch에 push 시 동작
+
+env:
+  S3_BUCKET_NAME: soonrang-tdi
+  CODE_DEPLOY_APPLICATION_NAME: codedeploy_tdi_side
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: pointsmile
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3.4.2
-
-    - name: Create application-aws.properties
-      run: echo "${{ secrets.AWSPROPERTIES }}" > src/main/resources/application-aws.properties
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build --warning-mode all
-
-  dependency-submission:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-    - uses: actions/checkout@v4
     
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - name: Create application-aws.properties
+        run: echo "${{ secrets.AWSPROPERTIES }}" > src/main/resources/application-aws.properties
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build --warning-mode all
         
-    - name: Init with Gradle
-      uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: 8.8
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-
-    - name: Generate and submit dependency graph
-      run: ./gradlew dependencies --warning-mode all
+      - name: Make zip file
+        run: zip -r ${GITHUB_SHA}.zip .
+        
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: Upload to S3
+        run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./${GITHUB_SHA}.zip s3://${{ env.S3_BUCKET_NAME }}/${GITHUB_SHA}.zip
+        
+      - name: Code Deploy
+        run: |
+          aws deploy create-deployment \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=${{ env.S3_BUCKET_NAME }},bundleType=zip,key=${GITHUB_SHA}.zip
