@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 public record AdminDonationRequest(String title, long currentAmount, long targetAmount, EventPeriod eventPeriod,
-                                   @Nullable MultipartFile imageUrl) {
+                                    MultipartFile imageUrl) {
 
 
 }
