@@ -1,10 +1,11 @@
 package com.example.rewardservice.shop.application.service;
 
 import com.example.rewardservice.common.ValidateService;
-import com.example.rewardservice.image.application.service.ImageService;
 import com.example.rewardservice.point.application.PointService;
+import com.example.rewardservice.shop.application.request.MultiPurchaseRequest;
 import com.example.rewardservice.shop.application.request.PurchaseRequest;
 import com.example.rewardservice.shop.application.request.UsePointRequest;
+import com.example.rewardservice.shop.application.response.MultiPurchaseResponse;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductPagingResponse;
 import com.example.rewardservice.shop.domain.Product;
@@ -13,6 +14,7 @@ import com.example.rewardservice.shop.domain.PurchaseRecord;
 import com.example.rewardservice.shop.domain.repository.ProductRepository;
 import com.example.rewardservice.shop.domain.repository.PurchaseRecordRepository;
 import com.example.rewardservice.user.domain.User;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -28,30 +30,30 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final ImageService imageService;
-    private final ValidateService validateService;
     private final PurchaseRecordRepository purchaseRecordRepository;
     private final PointService pointService;
+    private final UserRepository userRepository;
 
 
     //public record PurchaseRequest(String name, long price, long quantity, long totalPrice)
 
     @Transactional
-    public void purchaseProduct(String email, UUID productId, PurchaseRequest purchaseRequest) {
-        User user = validateService.findByUserEmail(email);
-        Product product = validateService.findByProductId(productId);
+    public void purchaseProduct(String email, PurchaseRequest purchaseRequest) {
+        User user = findByUserEmail(email);
+        Product product = findByProductId(purchaseRequest.id());
 
         //재고 확인
         validateQuantity(product.getStock(), purchaseRequest.quantity());
 
         //상품 총 금액이 프론트에서 던져주는 총 금액과 일치하는지
-        long totalPrice = validateTotalPrice(product.getPrice(), purchaseRequest.quantity(), purchaseRequest.totalPrice());
+        long totalPrice = validateTotalPrice(product.getPrice(), purchaseRequest.quantity(), purchaseRequest.total());
 
         // 구매 기록 저장
         PurchaseRecord purchaseRecord = new PurchaseRecord(user, product, totalPrice, purchaseRequest.quantity());
         purchaseRecordRepository.save(purchaseRecord);
 
         product.minusPurchaseQuantity(purchaseRequest.quantity());
+
         // 포인트 사용 기록 저장
         UsePointRequest usePointRequest = UsePointRequest.builder()
                 .userEmail(email)
@@ -66,19 +68,18 @@ public class ProductService {
     public ProductInfoResponse getProductById(UUID productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-        byte[] productImageData = getProductImageData(product);
-        return ProductInfoResponse.from(product,productImageData);
+        return ProductInfoResponse.from(product);
     }
 
     public List<ProductInfoResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream()
                 .map(product -> {
-                    byte[] productImageData = getProductImageData(product);
-                    return ProductInfoResponse.from(product, productImageData);
+                    return ProductInfoResponse.from(product);
                 })
                 .collect(Collectors.toList());
     }
+
 
     public Page<ProductPagingResponse> paging(Pageable pageable) {
         int page = pageable.getPageNumber();
@@ -104,18 +105,18 @@ public class ProductService {
     }
 
 
-    private byte[] getProductImageData(Product product) {
-        Optional<ProductImage> firstImageOptional = product.getProductImages().stream().findFirst();
-        if (firstImageOptional.isPresent()) {
-            String imageUrl = firstImageOptional.get().getImageUrl();
-            try {
-                return imageService.getProfileImage(imageUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
+//    private byte[] getProductImageData(Product product) {
+//        Optional<ProductImage> firstImageOptional = product.getProductImages().stream().findFirst();
+//        if (firstImageOptional.isPresent()) {
+//            String imageUrl = firstImageOptional.get().getImageUrl();
+//            try {
+//                return imageService.getProfileImage(imageUrl);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return null;
+//    }
 
     private long validateTotalPrice(long price, int quantity, long totalPrice) {
         long calcTotal = price * quantity;
@@ -132,4 +133,19 @@ public class ProductService {
             throw new IllegalArgumentException("상품 재고가 부족합니다.");
         }
     }
+
+
+    public User findByUserEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + email));
+    }
+
+    public Product findByProductId(UUID productId) {
+        if (productId == null) {
+            return null;
+        }
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("해당 ID의 상품이 없습니다: " + productId));
+    }
+
 }

@@ -90,4 +90,5 @@ public class Product extends BaseEntity {
         this.stock -= purchaseQuantity;
     }
 
+
 }
