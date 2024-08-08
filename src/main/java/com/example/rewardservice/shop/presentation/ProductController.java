@@ -26,9 +26,9 @@ public class ProductController {
     private final JwtTokenExtractor jwtTokenExtractor;
 
     @PostMapping("/product/purchase")
-    public ResponseEntity<Void> purchaseProduct(@RequestParam UUID productId, @RequestBody PurchaseRequest purchaseRequest) {
+    public ResponseEntity<Void> purchaseProduct(@RequestBody PurchaseRequest purchaseRequest) {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
-        productService.purchaseProduct(userEmail, productId, purchaseRequest);
+        productService.purchaseProduct(userEmail,purchaseRequest);
         return ResponseEntity.noContent().build();
     }
 
