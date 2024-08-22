@@ -61,7 +61,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
         }
     }
     private boolean isExemptedPath(String path) {
-        return path.equals("/api/login") || path.equals("/api/register") ||
+        return path.startsWith("/api/login/") || path.equals("/api/register") ||
                 path.equals("/api/check-email") || path.equals("/api/check-nickname") ||
                 path.equals("/swagger-ui/index.html") || path.equals("/shop") ||
                 path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs/");

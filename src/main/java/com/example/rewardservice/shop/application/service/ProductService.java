@@ -1,6 +1,5 @@
 package com.example.rewardservice.shop.application.service;
 
-import com.example.rewardservice.common.ValidateService;
 import com.example.rewardservice.point.application.PointService;
 import com.example.rewardservice.shop.application.request.MultiPurchaseRequest;
 import com.example.rewardservice.shop.application.request.PurchaseRequest;
@@ -20,9 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,29 +37,33 @@ public class ProductService {
     @Transactional
     public void purchaseProduct(String email, PurchaseRequest purchaseRequest) {
         User user = findByUserEmail(email);
-        Product product = findByProductId(purchaseRequest.id());
 
-        //재고 확인
-        validateQuantity(product.getStock(), purchaseRequest.quantity());
+        for (PurchaseRequest.ProductItem item : purchaseRequest.products()) {
+            Product product = findByProductId(item.id());
 
-        //상품 총 금액이 프론트에서 던져주는 총 금액과 일치하는지
-        long totalPrice = validateTotalPrice(product.getPrice(), purchaseRequest.quantity(), purchaseRequest.total());
+            // 재고 확인 (필요 시 사용)
+            validateQuantity(product.getStock(), item.quantity());
 
-        // 구매 기록 저장
-        PurchaseRecord purchaseRecord = new PurchaseRecord(user, product, totalPrice, purchaseRequest.quantity());
-        purchaseRecordRepository.save(purchaseRecord);
+            // 상품 총 금액이 프론트에서 던져주는 총 금액과 일치하는지 확인
+            long totalPrice = validateTotalPrice(product.getPrice(), item.quantity(), item.price() * item.quantity());
 
-        product.minusPurchaseQuantity(purchaseRequest.quantity());
+            // 구매 기록 저장
+            PurchaseRecord purchaseRecord = new PurchaseRecord(user, product, totalPrice, item.quantity());
+            purchaseRecordRepository.save(purchaseRecord);
 
-        // 포인트 사용 기록 저장
-        UsePointRequest usePointRequest = UsePointRequest.builder()
-                .userEmail(email)
-                .points(totalPrice)
-                .description("상품 구매: " + product.getProductName() + "*" + purchaseRequest.quantity()+"개")
-                .activityId(purchaseRecord.getId())
-                .build();
+            // 상품 재고 차감
+            product.minusPurchaseQuantity(item.quantity());
 
-        pointService.usePoints(usePointRequest);
+            // 포인트 사용 기록 저장
+            UsePointRequest usePointRequest = UsePointRequest.builder()
+                    .userEmail(email)
+                    .points(totalPrice)
+                    .description("상품 구매: " + product.getProductName() + "*" + item.quantity() + "개")
+                    .activityId(purchaseRecord.getId())
+                    .build();
+
+            pointService.usePoints(usePointRequest);
+        }
     }
 
     public ProductInfoResponse getProductById(UUID productId) {

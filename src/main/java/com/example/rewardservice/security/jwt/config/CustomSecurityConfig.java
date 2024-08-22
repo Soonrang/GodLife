@@ -1,11 +1,13 @@
 package com.example.rewardservice.security.jwt.config;
 
+import com.example.rewardservice.security.jwt.filter.OauthLoginFilter;
 import com.example.rewardservice.security.jwt.filter.RefreshTokenFilter;
 import com.example.rewardservice.security.jwt.filter.TokenCheckFilter;
 import com.example.rewardservice.security.jwt.filter.UserLoginFilter;
 import com.example.rewardservice.security.jwt.handler.UserLoginSuccessHandler;
 import com.example.rewardservice.security.jwt.util.JWTUtil;
 import com.example.rewardservice.security.APIUserDetailService;
+import com.example.rewardservice.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -37,6 +39,8 @@ public class CustomSecurityConfig{
 
     private final APIUserDetailService APIUserDetailService;
     private final JWTUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final SocialAuthenticationProvider socialAuthenticationProvider; // SocialAuthenticationProvider 추가
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,6 +65,9 @@ public class CustomSecurityConfig{
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(APIUserDetailService).passwordEncoder(passwordEncoder());
 
+        // SocialAuthenticationProvider를 AuthenticationManager에 추가
+        authenticationManagerBuilder.authenticationProvider(socialAuthenticationProvider);
+
         // Get AuthenticationManager
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
         http.authenticationManager(authenticationManager);
@@ -69,16 +76,24 @@ public class CustomSecurityConfig{
         UserLoginFilter userLoginFilter = new UserLoginFilter("/api/login");
         userLoginFilter.setAuthenticationManager(authenticationManager);
 
+
+        //카카오 필터
+        OauthLoginFilter oauthLoginFilter = new OauthLoginFilter("/api/login/oauth", userRepository);
+        oauthLoginFilter.setAuthenticationManager(authenticationManager);
+
+        log.info("소셜로그인::::"+authenticationManager);
         //APILoginSuccessHandler
         UserLoginSuccessHandler successHandler = new UserLoginSuccessHandler(jwtUtil);
-        //UserLoginSuccessHandler successHandler = new UserLoginSuccessHandler(jwtUtil,APIUserDetailService);
 
         //SuccessHandler 세팅
         userLoginFilter.setAuthenticationSuccessHandler(successHandler);
+        oauthLoginFilter.setAuthenticationSuccessHandler(successHandler);
 
         //APILoginFilter의 위치 조정
         http.addFilterBefore(userLoginFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(oauthLoginFilter, UsernamePasswordAuthenticationFilter.class);
 
+        log.info("APILOIGIN필터 완료-------------------------------------------");
         http.addFilterBefore(
                 tokenCheckFilter(jwtUtil, APIUserDetailService), UsernamePasswordAuthenticationFilter.class);
 

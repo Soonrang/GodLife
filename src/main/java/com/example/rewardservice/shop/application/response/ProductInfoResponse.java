@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductInfoResponse {
     private UUID id;
-    private String name;
+    private String productName;
     private long price;
     private String category;
     private int stock;

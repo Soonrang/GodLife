@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +82,12 @@ public class AttendanceService {
         long totalPoints = points.stream().mapToLong(EventParticipation::getPoints).sum();
         boolean hasAttendance = checkTodayAttendance(event, user);
 
-        return new MonthlyAttendanceResponse(attendanceCount, totalPoints, hasAttendance);
+        // 출석 날짜 리스트를 생성
+        List<LocalDateTime> createdAt = points.stream()
+                .map(EventParticipation::getCreatedAt)
+                .collect(Collectors.toList());
+
+        return new MonthlyAttendanceResponse(attendanceCount, totalPoints, hasAttendance, createdAt);
     }
 
     private boolean checkTodayAttendance(Event event, User user) {
