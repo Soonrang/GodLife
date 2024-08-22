@@ -22,11 +22,13 @@ public class AdminProductService {
     private final S3ImageService s3ImageService;
 
     public ProductEasyInfoResponse createEasyProduct(ProductRegisterRequest productRegisterRequest) {
-        List<ProductImage> productImages = uploadAndSaveImages(productRegisterRequest.getProductImages());
+        // 단일 이미지를 리스트로 처리하는 메서드 호출
+        List<ProductImage> productImages = handleImageUpload(productRegisterRequest.getProductImage());
 
         Product product = Product.builder()
                 .id(UUID.randomUUID())
                 .productName(productRegisterRequest.getProductName())
+                .productCompany(productRegisterRequest.getProductCompany())
                 .price(productRegisterRequest.getPrice())
                 .category(productRegisterRequest.getCategory())
                 .stock(productRegisterRequest.getStock())
@@ -40,20 +42,16 @@ public class AdminProductService {
         return ProductEasyInfoResponse.from(savedProduct);
     }
 
-    private List<ProductImage> uploadAndSaveImages(List<MultipartFile> images) {
-        return images.stream()
-                .map(image -> {
-                    String imageUrl = s3ImageService.upload(image);
-                    return new ProductImage(UUID.randomUUID(), imageUrl);
-                })
-                .collect(Collectors.toList());
+    private List<ProductImage> uploadAndSaveImages(MultipartFile image) {
+        return handleImageUpload(image);  // 단일 이미지 처리 메서드를 호출
     }
 
     public ProductEasyInfoResponse updateProduct(UUID productId, UpdateProductRequest updateProductRequest) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품 아이디를 찾을 수 없습니다."));
 
-        List<ProductImage> productImages = uploadAndSaveImages(updateProductRequest.getProductImages());
+        List<ProductImage> productImages = handleImageUpload(updateProductRequest.getProductImage()); // 단일 이미지 처리
+
         product.updateProduct(
                 updateProductRequest.getCategory(),
                 updateProductRequest.getProductName(),
@@ -69,6 +67,8 @@ public class AdminProductService {
         return ProductEasyInfoResponse.from(updatedProduct);
     }
 
+
+
     public void deleteProduct(UUID productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품 아이디를 찾을 수 없습니다."));
@@ -77,4 +77,17 @@ public class AdminProductService {
 
         productRepository.delete(product);
     }
+
+
+    private List<ProductImage> handleImageUpload(MultipartFile image) {
+        if (image == null || image.isEmpty()) {
+            throw new IllegalArgumentException("이미지가 없습니다.");
+        }
+
+        String imageUrl = s3ImageService.upload(image);
+        ProductImage productImage = new ProductImage(UUID.randomUUID(), imageUrl);
+
+        return List.of(productImage); // 단일 이미지를 리스트로 반환
+    }
+
 }

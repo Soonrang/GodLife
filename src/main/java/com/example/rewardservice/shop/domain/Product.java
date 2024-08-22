@@ -30,7 +30,7 @@ public class Product extends BaseEntity {
     private User company;
 
     @Column(name = "company_name")
-    private String companyName;
+    private String productCompany;
 
     @Column(name = "product_name")
     private String productName;
@@ -47,8 +47,9 @@ public class Product extends BaseEntity {
     @Column(name= "product_description")
     private String description;
 
-    public Product(UUID uuid, String productName, long price, String category, int stock, List<ProductImage> productImages) {
+    public Product(UUID uuid,String productCompany, String productName, long price, String category, int stock, List<ProductImage> productImages) {
         this.id = uuid;
+        this.productCompany = productCompany;
         this.productName = productName;
         this.price = price;
         this.category = category;

@@ -25,7 +25,7 @@ public class ProductController {
     private final ProductService productService;
     private final JwtTokenExtractor jwtTokenExtractor;
 
-    @PostMapping("/product/purchase")
+    @PostMapping("/order")
     public ResponseEntity<Void> purchaseProduct(@RequestBody PurchaseRequest purchaseRequest) {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
         productService.purchaseProduct(userEmail,purchaseRequest);
@@ -38,13 +38,13 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public ResponseEntity<List<ProductInfoResponse>> getAllProducts() {
         List<ProductInfoResponse> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Page<ProductPagingResponse>> getPagedProducts(Pageable pageable) {
         Page<ProductPagingResponse> pagedProducts = productService.paging(pageable);
         return ResponseEntity.ok(pagedProducts);

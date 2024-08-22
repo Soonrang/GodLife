@@ -1,6 +1,5 @@
 package com.example.rewardservice.user.application.service;
 
-
 import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.user.application.response.PointRecordResponse;
@@ -45,6 +44,10 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+//    public void kakaoRegister(KakaoInfo kakaoInfo){
+//        if(userRepository.e)
+//    }
 
     public MyPageResponse getUserInfo(final String email) {
         User user = userRepository.findByEmail(email)

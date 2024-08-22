@@ -14,6 +14,6 @@ public class UpdateProductRequest {
     private String productName;
     private long price;
     private int stock;
-    private List<MultipartFile> productImages;
+    private MultipartFile productImage;
     private String description;
 }

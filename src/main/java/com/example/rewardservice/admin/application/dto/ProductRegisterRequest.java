@@ -10,10 +10,11 @@ import java.util.List;
 @Setter
 public class ProductRegisterRequest {
     private String category;
+    private String productCompany;
     private String productName;
     private long price;
     private int stock;
-    private List<MultipartFile> productImages;
+    private MultipartFile productImage;
     private String description;
 }
 

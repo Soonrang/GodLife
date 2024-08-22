@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductEasyInfoResponse {
     private String productName;
+    private String productCompany;
     private long productPrice;
     private String category;
     private int stock;
@@ -20,6 +21,7 @@ public class ProductEasyInfoResponse {
     public static ProductEasyInfoResponse from(Product product) {
         return new ProductEasyInfoResponse(
                 product.getProductName(),
+                product.getProductCompany(),
                 product.getPrice(),
                 product.getCategory(),
                 product.getStock(),
