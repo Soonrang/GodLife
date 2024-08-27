@@ -1,11 +1,6 @@
-package com.example.rewardservice.user.application.response;
+package com.example.rewardservice.point.application;
 
-import com.example.rewardservice.donation.domain.DonationRecord;
-import com.example.rewardservice.event.domain.EventParticipation;
 import com.example.rewardservice.point.domain.Point;
-import com.example.rewardservice.shop.domain.PurchaseRecord;
-import com.example.rewardservice.user.domain.GiftRecord;
-import com.example.rewardservice.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

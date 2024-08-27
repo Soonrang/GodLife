@@ -1,13 +1,13 @@
 package com.example.rewardservice.shop.presentation;
 
-import com.example.rewardservice.auth.AuthUser;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import com.example.rewardservice.shop.application.request.PurchaseRequest;
-import com.example.rewardservice.shop.application.response.ProductEasyInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductInfoResponse;
 import com.example.rewardservice.shop.application.response.ProductPagingResponse;
+import com.example.rewardservice.shop.application.response.PurchaseDetailResponse;
+import com.example.rewardservice.shop.application.response.PurchaseRecordResponse;
 import com.example.rewardservice.shop.application.service.ProductService;
-import com.example.rewardservice.user.domain.User;
+import com.example.rewardservice.shop.application.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +24,12 @@ public class ProductController {
 
     private final ProductService productService;
     private final JwtTokenExtractor jwtTokenExtractor;
+    private final PurchaseService purchaseService;
 
     @PostMapping("/order")
     public ResponseEntity<Void> purchaseProduct(@RequestBody PurchaseRequest purchaseRequest) {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
-        productService.purchaseProduct(userEmail,purchaseRequest);
+        purchaseService.purchaseProduct(userEmail,purchaseRequest);
         return ResponseEntity.noContent().build();
     }
 
@@ -48,5 +49,21 @@ public class ProductController {
     public ResponseEntity<Page<ProductPagingResponse>> getPagedProducts(Pageable pageable) {
         Page<ProductPagingResponse> pagedProducts = productService.paging(pageable);
         return ResponseEntity.ok(pagedProducts);
+    }
+
+
+    //-----------------------구매
+    @GetMapping("/purchases")
+    public ResponseEntity<List<PurchaseDetailResponse>> getAllPurchases() {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        List<PurchaseDetailResponse> purchases = purchaseService.viewAllPurchases(email);
+        return ResponseEntity.ok(purchases);
+    }
+
+    // 개별 구매 내역 조회
+    @GetMapping("/purchases/{id}")
+    public ResponseEntity<PurchaseDetailResponse> getPurchaseDetail(@PathVariable UUID id) {
+        PurchaseDetailResponse purchaseDetail = purchaseService.viewPurchaseDetails(id);
+        return ResponseEntity.ok(purchaseDetail);
     }
 }
