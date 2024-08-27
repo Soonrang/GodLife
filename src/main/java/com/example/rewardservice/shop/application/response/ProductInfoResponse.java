@@ -14,20 +14,24 @@ import java.util.stream.Collectors;
 public class ProductInfoResponse {
     private UUID id;
     private String productName;
+    private String productCompany;
     private long price;
     private String category;
     private int stock;
     private String productImages;
+    private String state;
 
     public static ProductInfoResponse from(Product product) {
-        String imageUrl = product.getProductImages().isEmpty() ? null : product.getProductImages().get(0).getImageUrl();
+        String productImage = product.getProductImages().isEmpty() ? null : product.getProductImages().get(0).getImageUrl();
         return new ProductInfoResponse(
                 product.getId(),
                 product.getProductName(),
+                product.getProductCompany(),
                 product.getPrice(),
                 product.getCategory(),
                 product.getStock(),
-                imageUrl
+                productImage,
+                product.getStatus()
         );
     }
 }

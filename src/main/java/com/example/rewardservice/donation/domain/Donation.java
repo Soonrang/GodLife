@@ -57,4 +57,5 @@ public class Donation extends BaseEntity {
         this.donationImages = images;
         this.eventPeriod = eventPeriod;
     }
+
 }

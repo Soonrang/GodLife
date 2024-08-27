@@ -2,7 +2,7 @@ package com.example.rewardservice.user.application.service;
 
 import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.point.domain.PointRepository;
-import com.example.rewardservice.user.application.response.PointRecordResponse;
+import com.example.rewardservice.point.application.PointRecordResponse;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.application.request.MyPageRequest;
@@ -29,20 +29,23 @@ public class UserService {
 
     //RegisterRequest 수정 필요
     public void registerUser(RegisterRequest registerRequest) {
-        String profileImageUrl = s3ImageService.upload(registerRequest.getProfileImage());
+        String profileImageUrl = null;
+        if (registerRequest.getProfileImage() != null) {
+            profileImageUrl = s3ImageService.upload(registerRequest.getProfileImage());
 
-        User user = User.builder()
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .name(registerRequest.getName())
-                .nickname(registerRequest.getNickname())
-                .totalPoint(INITIAL_POINT)
-                .profileImage(profileImageUrl)
-                .userSocial(false)
-                .memberState(MemberState.ACTIVE)
-                .build();
+            User user = User.builder()
+                    .email(registerRequest.getEmail())
+                    .password(passwordEncoder.encode(registerRequest.getPassword()))
+                    .name(registerRequest.getName())
+                    .nickname(registerRequest.getNickname())
+                    .totalPoint(INITIAL_POINT)
+                    .profileImage(profileImageUrl)
+                    .userSocial(false)
+                    .memberState(MemberState.ACTIVE)
+                    .build();
 
-        userRepository.save(user);
+            userRepository.save(user);
+        }
     }
 
 //    public void kakaoRegister(KakaoInfo kakaoInfo){

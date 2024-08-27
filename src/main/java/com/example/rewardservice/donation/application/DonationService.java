@@ -1,7 +1,9 @@
 package com.example.rewardservice.donation.application;
 
+import com.example.rewardservice.admin.application.dto.response.DonationResponse;
 import com.example.rewardservice.common.ValidateService;
 import com.example.rewardservice.donation.application.dto.DonatePointRequest;
+import com.example.rewardservice.donation.application.dto.UserDonationResponse;
 import com.example.rewardservice.donation.domain.Donation;
 import com.example.rewardservice.donation.domain.DonationRecord;
 import com.example.rewardservice.donation.domain.DonationRecordRepository;
@@ -14,7 +16,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +29,7 @@ public class DonationService {
     private final PointService pointService;
 
     @Transactional
-    public void donatePoints(UUID donationId, String email, long points) {
+    public UserDonationResponse donatePoints(UUID donationId, String email, long points) {
         User user = findByUserEmail(email);
         Donation donation = findByDonationId(donationId);
 
@@ -45,6 +49,16 @@ public class DonationService {
                 .activityId(donationRecord.getId())
                 .build();
         pointService.donatePoints(donatePointRequest);
+
+        return new UserDonationResponse(
+                donation.getId(),
+                donation.getTitle(),
+                user.getNickname(),
+                points,
+                user.getTotalPoint(),
+                donationRecord.getCreatedAt() // 기부 기록 생성 시간을 기부 날짜로 사용
+        );
+
     }
 
     public Donation findByDonationId(UUID donationId) {
@@ -56,5 +70,31 @@ public class DonationService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + email));
     }
+
+    public DonationResponse getDonationInfo(UUID donationId) {
+        Donation donation = donationRepository.getById(donationId);
+        return new DonationResponse(donation.getId(),
+                donation.getTitle(),
+                donation.getCurrentAmount(),
+                donation.getTargetAmount(),
+                donation.getEventPeriod(),
+                donation.getDonationImages());
+    }
+
+
+    public List<DonationResponse> getAllDonations() {
+        List<Donation> donations = donationRepository.findAll();
+
+        return donations.stream()
+                .map(donation -> new DonationResponse(donation.getId(),
+                        donation.getTitle(),
+                        donation.getCurrentAmount(),
+                        donation.getTargetAmount(),
+                        donation.getEventPeriod(),
+                        donation.getDonationImages()))
+                .collect(Collectors.toList());
+    }
+
+
 
 }

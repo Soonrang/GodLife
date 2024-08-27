@@ -28,9 +28,6 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
         String email = authentication.getName();
         log.info("Authentication Name: " + email);
 
-        //APIUserDetailDto userDetails = (APIUserDetailDto) authentication.getPrincipal();
-        //UUID userId = userDetails.getId(); // UUID를 직접 가져옵니다.
-
 
         Map<String, Object> claims = Map.of("email", email);
         String accessToken = jwtUtil.generateToken(claims, 1);  // 1일
