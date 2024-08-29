@@ -1,7 +1,7 @@
 package com.example.rewardservice.shop.application.response;
 
 import com.example.rewardservice.shop.domain.Product;
-import com.example.rewardservice.user.domain.User;
+import com.example.rewardservice.shop.domain.ProductImage;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,22 +13,26 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductInfoResponse {
     private UUID id;
-    private String name;
+    private String productName;
+    private String productCompany;
     private long price;
     private String category;
     private int stock;
-    private List<ProductImageResponse> productImages;
-    private byte[] productImageData;
+    private String productImages;
+    private String state;
 
-    public static ProductInfoResponse from(Product product, byte[] productImageData) {
+    public static ProductInfoResponse from(Product product) {
+        String productImage = product.getProductImages().isEmpty() ? null : product.getProductImages().get(0).getImageUrl();
         return new ProductInfoResponse(
                 product.getId(),
                 product.getProductName(),
+                product.getProductCompany(),
                 product.getPrice(),
                 product.getCategory(),
                 product.getStock(),
-                product.getProductImages().stream().map(ProductImageResponse::from).collect(Collectors.toList()),
-                productImageData
+                productImage,
+                product.getStatus()
         );
     }
 }
+

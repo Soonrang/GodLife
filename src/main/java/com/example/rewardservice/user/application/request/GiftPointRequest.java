@@ -1,9 +1,11 @@
 package com.example.rewardservice.user.application.request;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.UUID;
 
+@Builder
 @Getter
 public class GiftPointRequest {
     private String senderEmail;

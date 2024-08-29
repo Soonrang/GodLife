@@ -1,33 +1,19 @@
 package com.example.rewardservice.user.application.service;
 
-import com.example.rewardservice.common.ValidateService;
-import com.example.rewardservice.donation.domain.DonationRecord;
-import com.example.rewardservice.donation.domain.DonationRecordRepository;
-import com.example.rewardservice.event.domain.EventParticipation;
-import com.example.rewardservice.event.domain.repository.EventParticipationRepository;
-import com.example.rewardservice.image.application.dto.ImageDto;
-import com.example.rewardservice.image.application.service.ImageService;
 import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.point.domain.PointRepository;
-import com.example.rewardservice.shop.domain.PurchaseRecord;
-import com.example.rewardservice.shop.domain.repository.PurchaseRecordRepository;
-import com.example.rewardservice.user.application.response.PointHistoryResponse;
-import com.example.rewardservice.user.application.response.PointRecordResponse;
-import com.example.rewardservice.user.domain.GiftRecord;
+import com.example.rewardservice.point.application.PointRecordResponse;
 import com.example.rewardservice.user.domain.MemberState;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.application.request.MyPageRequest;
 import com.example.rewardservice.user.application.request.RegisterRequest;
 import com.example.rewardservice.user.application.response.MyPageResponse;
-import com.example.rewardservice.user.domain.repository.GiftRecordRepository;
 import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,28 +23,34 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ImageService imageService;
     private final PointRepository pointRepository;
     private final S3ImageService s3ImageService;
     private static final long INITIAL_POINT = 0;
 
     //RegisterRequest 수정 필요
     public void registerUser(RegisterRequest registerRequest) {
-        String profileImageUrl = s3ImageService.upload(registerRequest.getProfileImage());
+        String profileImageUrl = null;
+        if (registerRequest.getProfileImage() != null) {
+            profileImageUrl = s3ImageService.upload(registerRequest.getProfileImage());
 
-        User user = User.builder()
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .name(registerRequest.getName())
-                .nickname(registerRequest.getNickname())
-                .totalPoint(INITIAL_POINT)
-                .profileImage(profileImageUrl)
-                .userSocial(false)
-                .memberState(MemberState.ACTIVE)
-                .build();
+            User user = User.builder()
+                    .email(registerRequest.getEmail())
+                    .password(passwordEncoder.encode(registerRequest.getPassword()))
+                    .name(registerRequest.getName())
+                    .nickname(registerRequest.getNickname())
+                    .totalPoint(INITIAL_POINT)
+                    .profileImage(profileImageUrl)
+                    .userSocial(false)
+                    .memberState(MemberState.ACTIVE)
+                    .build();
 
-        userRepository.save(user);
+            userRepository.save(user);
+        }
     }
+
+//    public void kakaoRegister(KakaoInfo kakaoInfo){
+//        if(userRepository.e)
+//    }
 
     public MyPageResponse getUserInfo(final String email) {
         User user = userRepository.findByEmail(email)

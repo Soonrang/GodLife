@@ -1,13 +1,12 @@
 package com.example.rewardservice.user.application.request;
 
-import com.example.rewardservice.user.domain.MemberState;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
@@ -35,7 +34,13 @@ public class RegisterRequest {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]{2,10}$" , message = "닉네임은 특수문자를 포함하지 않은 2~10자리여야 합니다.")
     private String nickname;
 
-
     private MultipartFile profileImage;
 
+    public RegisterRequest(String email, String password, String name, String nickname, MultipartFile profileImage) {
+        this.email =email;
+        this.password = password;
+        this.name= name;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+    }
 }

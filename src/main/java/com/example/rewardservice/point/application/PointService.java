@@ -13,14 +13,15 @@ import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PointService {
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
-
 
     private static final String POINT_TYPE_EARNED = "적립";
     private static final String POINT_TYPE_USED = "사용";
@@ -106,6 +107,31 @@ public class PointService {
         user.validateUsePoints(donatePointRequest.getPoints());
         userRepository.save(user);
     }
+
+    public List<PointRecordResponse> getDonationHistory(String email) {
+        User user = findByUserEmail(email);
+        return pointRepository.findByUserAndTypeOrderByCreatedAtDesc(user, POINT_TYPE_DONATION)
+                .stream()
+                .map(PointRecordResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<PointRecordResponse> getGiftHistory(String email) {
+        User user = findByUserEmail(email);
+        return pointRepository.findByUserAndTypeOrderByCreatedAtDesc(user, POINT_TYPE_GIFT)
+                .stream()
+                .map(PointRecordResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<PointRecordResponse> getParticipationHistory(String email) {
+        User user = findByUserEmail(email);
+        return pointRepository.findByUserAndTypeOrderByCreatedAtDesc(user, POINT_TYPE_EARNED)
+                .stream()
+                .map(PointRecordResponse::from)
+                .collect(Collectors.toList());
+    }
+
 
     private User findByUserEmail(String email) {
         return userRepository.findByEmail(email)

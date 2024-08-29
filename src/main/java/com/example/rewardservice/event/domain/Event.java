@@ -4,6 +4,7 @@ import com.example.rewardservice.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -26,6 +27,12 @@ public class Event extends BaseEntity {
     @Column(name = "event_state")
     private String eventState;
 
+    @Column(name = "event_banner")
+    private String eventImageBanner;
+
+    @Column(name = "event_main")
+    private String eventImageMain;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "event_type")
     private EventType eventType;
@@ -33,17 +40,27 @@ public class Event extends BaseEntity {
     @Embedded
     private EventPeriod eventPeriod;
 
-    public Event(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {
+    public Event(String name, String eventState, EventType eventType, EventPeriod eventPeriod
+    ,String imageMain, String imageBanner) {
         this.name = name;
         this.eventState = eventState;
         this.eventType = eventType;
         this.eventPeriod = eventPeriod;
+        this.eventImageMain = imageMain;
+        this.eventImageBanner = imageBanner;
     }
 
-    public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod) {
+    public void updateEvent(String name, String eventState, EventType eventType, EventPeriod eventPeriod
+            ,String imageMain, String imageBanner) {
         this.name = name;
         this.eventState = eventState;
         this.eventType = eventType;
         this.eventPeriod = eventPeriod;
+        this.eventImageMain = imageMain;
+        this.eventImageBanner = imageBanner;
+    }
+
+    public void changeEventStatus(String eventState){
+        this.eventState = eventState;
     }
 }

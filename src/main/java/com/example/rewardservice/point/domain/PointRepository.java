@@ -8,5 +8,8 @@ import java.util.UUID;
 
 public interface PointRepository extends JpaRepository<Point, UUID> {
     List<Point> findByUser(User user);
+
     List<Point> findByUserAndType(User user, String type);
+
+    List<Point> findByUserAndTypeOrderByCreatedAtDesc(User user, String type);
 }
