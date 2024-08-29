@@ -1,14 +1,14 @@
 package com.example.rewardservice.admin.presentation;
 
 import com.example.rewardservice.admin.application.AdminEventService;
-import com.example.rewardservice.admin.application.dto.EventRegisterRequest;
-import com.example.rewardservice.admin.application.dto.EventResponse;
-import com.example.rewardservice.admin.application.dto.EventUpdateRequest;
-import com.example.rewardservice.event.domain.Event;
+import com.example.rewardservice.admin.application.dto.request.EventRegisterRequest;
+import com.example.rewardservice.admin.application.dto.response.EventResponse;
+import com.example.rewardservice.admin.application.dto.request.EventUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +30,16 @@ public class AdminEventController {
     public ResponseEntity<EventResponse> updateEvent(@PathVariable UUID id, @RequestBody EventUpdateRequest eventUpdateRequest) {
         EventResponse updatedEvent = adminEventService.updateEvent(id, eventUpdateRequest);
         return ResponseEntity.ok(updatedEvent);
+    }
+
+    @GetMapping("/viewAll")
+    public ResponseEntity<List<EventResponse>> viewAllEvents(){
+        return ResponseEntity.ok(adminEventService.viewAllEvent());
+    }
+
+    @PostMapping("/change-event-stauts")
+    public ResponseEntity<EventResponse> updateStatusEvent(@PathVariable UUID eventId, @RequestParam("eventState") String eventState){
+        return ResponseEntity.ok(adminEventService.changeEventStatus(eventId, eventState));
     }
 }
 

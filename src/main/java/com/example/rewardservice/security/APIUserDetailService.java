@@ -31,11 +31,15 @@ public class APIUserDetailService implements UserDetailsService {
 
         log.info("UserDetailService user: " + user.toString());
 
-        List<GrantedAuthority> authorities;
+        // 기본적으로 모든 사용자에게 ROLE_USER 권한 부여
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+
+        // 특정 이메일에 대해 추가 권한 부여
         if ("admin@gmail.com".equals(user.getEmail())) {
-            authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"), new SimpleGrantedAuthority("ROLE_ADMIN"));
-        } else {
-            authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+            authorities = List.of(
+                    new SimpleGrantedAuthority("ROLE_USER"),
+                    new SimpleGrantedAuthority("ROLE_ADMIN")
+            );
         }
 
         // UserDTO 객체 생성

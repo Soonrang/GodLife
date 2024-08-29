@@ -30,7 +30,7 @@ public class Product extends BaseEntity {
     private User company;
 
     @Column(name = "company_name")
-    private String companyName;
+    private String productCompany;
 
     @Column(name = "product_name")
     private String productName;
@@ -41,34 +41,47 @@ public class Product extends BaseEntity {
     @Column(name = "product_stock")
     private int stock;
 
+    @Column(name = "product_status")
+    private String status;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductImage> productImages;
 
     @Column(name= "product_description")
     private String description;
 
-    public Product(UUID uuid, String productName, long price, String category, int stock, List<ProductImage> productImages) {
+    public Product(UUID uuid,
+                   String productCompany,
+                   String productName,
+                   long price,
+                   String category,
+                   int stock,
+                   List<ProductImage> productImages,
+                   String status) {
         this.id = uuid;
+        this.productCompany = productCompany;
         this.productName = productName;
         this.price = price;
         this.category = category;
         this.stock = stock;
         this.productImages =productImages;
+        this.status = status;
     }
-
 
     public void updateProduct(String category,
                               String productName,
                               long price,
                               int stock,
                               List<ProductImage> productImages,
-                              String description){
+                              String description,
+                              String status){
         this.category = category;
         this.productName = productName;
         this.price = price;
         this.stock = stock;
         this.productImages = productImages;
         this.description = description;
+        this.status = status;
     }
 
     public void reduceStock(int quantity) {
@@ -82,12 +95,13 @@ public class Product extends BaseEntity {
         return productImages;
     }
 
-    public void setProductImages(List<ProductImage> productImages) {
-        this.productImages = productImages;
-    }
-
     public void minusPurchaseQuantity(int purchaseQuantity) {
         this.stock -= purchaseQuantity;
     }
+
+    public void changeProductStatus(String newStatus) {
+        this.status = newStatus;
+    }
+
 
 }

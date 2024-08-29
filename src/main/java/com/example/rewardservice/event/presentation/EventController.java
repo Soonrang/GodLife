@@ -39,7 +39,6 @@ public class EventController {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
         MonthlyAttendanceResponse response = attendanceService.getAttendanceData(userEmail, eventId);
         return ResponseEntity.ok(response);
-
     }
 
     //-----------------------------------룰렛------------------------------------
