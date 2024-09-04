@@ -24,9 +24,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-    private final PurchaseRecordRepository purchaseRecordRepository;
-    private final PointService pointService;
-    private final UserRepository userRepository;
+
+    private final static String CATEGORY_ALL = "전체";
+    private final static String PRICE_LOW = "priceAsc";
+    private final static String PRICE_HIGH = "priceDesc";
 
 
     public ProductInfoResponse getProductById(UUID productId) {
@@ -42,29 +43,30 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public Page<ProductInfoResponse> getByProductByCategory(String category, int page, int size, String sort) {
+        //기본값은 가격 낮은순, 높은경우에만 정렬을 바꿔줌
+        Sort sortOption = Sort.by("price").ascending();
 
-    public Page<ProductPagingResponse> paging(Pageable pageable) {
-        int page = pageable.getPageNumber();
-
-        if (page < 0) {
-            page = 0;
+        if (PRICE_HIGH.equals(sort)) {
+            sortOption = Sort.by("price").descending();
         }
 
-        int pageLimit = 12;
+        Pageable pageable = PageRequest.of(page, size, sortOption);
+        Page<Product> products;
 
-        Page<Product> products = productRepository.findAll(PageRequest.of(page, pageLimit,Sort.by(Sort.Direction.DESC, "id")));
+        if (CATEGORY_ALL.equals(category)) {
+            products = productRepository.findAll(pageable);
+        } else {
+            products = productRepository.findByCategory(category, pageable);
+        }
 
-        List<ProductPagingResponse> pagingResponses = products.stream()
-                .map(ProductPagingResponse::from).collect(Collectors.toList());
+        List<ProductInfoResponse> productInfo = products.stream()
+                .map(ProductInfoResponse::from)
+                .collect(Collectors.toList());
 
-        return new PageImpl<>(pagingResponses, pageable, products.getTotalElements());
+        return new PageImpl<>(productInfo, pageable, products.getTotalElements());
     }
 
-
-    public Product getProductByCategory(String category) {
-        return productRepository.findByCategory(category)
-                .orElseThrow(()-> new IllegalArgumentException("카테고리가 없습니다."));
-    }
 
 
 //    private byte[] getProductImageData(Product product) {
