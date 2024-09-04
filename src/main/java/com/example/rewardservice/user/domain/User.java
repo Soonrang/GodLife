@@ -1,5 +1,6 @@
 package com.example.rewardservice.user.domain;
 
+import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.shop.domain.Product;
@@ -27,7 +28,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column(name = "user_email")
+    @Column(name="user_email")
     private String email;
 
     @Column(name = "user_password")
@@ -56,6 +57,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Challenge> challenges;
 
 //    @Enumerated(EnumType.STRING)
 //    @Column(nullable = false)
