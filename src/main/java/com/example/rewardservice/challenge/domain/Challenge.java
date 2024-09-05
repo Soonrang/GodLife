@@ -1,5 +1,8 @@
 package com.example.rewardservice.challenge.domain;
 
+import com.example.rewardservice.challenge.domain.vo.ChallengeImages;
+import com.example.rewardservice.challenge.domain.vo.ChallengePeriod;
+import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,8 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Getter
@@ -17,33 +18,17 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Challenge {
+public class Challenge extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
     @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "category", nullable = false)
     private String category;
-
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
-
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
-
-    @Column(name = "start_time")
-    private LocalTime startTime;
-
-    @Column(name = "end_time")
-    private LocalTime endTime;
 
     @Column(name = "participants_limit", nullable = false)
     private long participantsLimit;
@@ -54,44 +39,43 @@ public class Challenge {
     @Column(name = "auth_method", nullable = false)
     private String authMethod;
 
-    @Column(name = "main_image", nullable = true)
-    private String mainImage;
+    @Column(name = "state")
+    private String state;
 
-    @Column(name = "success_image", nullable = true)
-    private String successImage;
+    @Embedded
+    private ChallengePeriod challengePeriod;
 
-    @Column(name = "fail_image", nullable = true)
-    private String failImage;
+    @Embedded
+    private ChallengeImages challengeImages;
 
-    @Column(name = "status")
-    private String status;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    public void updateChallenge(String title, String category, LocalDate startDate, LocalDate endDate,
-                                long participantsLimit, String description, String authMethod,
-                                String mainImageUrl, String successImageUrl, String failImageUrl, String status) {
+    public void updateChallenge(String title, String category,
+                                long participantsLimit,
+                                String description,
+                                String authMethod,
+                                String state,
+                                ChallengePeriod challengePeriod,
+                                ChallengeImages challengeImages) {
         this.title = title;
         this.category = category;
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.participantsLimit = participantsLimit;
         this.description = description;
         this.authMethod = authMethod;
-        this.mainImage = mainImageUrl;
-        this.successImage = successImageUrl;
-        this.failImage = failImageUrl;
-        this.status = status;
+        this.state = state;
+        this.challengePeriod = challengePeriod;
+        this.challengeImages = challengeImages;
     }
 
-    public void checkStatus(LocalDateTime now) {
-        LocalDateTime startDateTime = LocalDateTime.of(this.startDate, this.startTime);
-        LocalDateTime endDateTime = LocalDateTime.of(this.endDate, this.endTime);
-
-        if (now.isBefore(startDateTime)) {
-            this.status = "PENDING";
-        } else if (now.isAfter(endDateTime)) {
-            this.status = "COMPLETED";
+    public void checkStatus(LocalDate now) {
+        if (now.isBefore(this.challengePeriod.getStartDate())) {
+            this.state = "PENDING";
+        } else if (now.isAfter(this.challengePeriod.getEndDate())) {
+            this.state = "COMPLETED";
         } else {
-            this.status = "ONGOING";
+            this.state = "ONGOING";
         }
     }
 }

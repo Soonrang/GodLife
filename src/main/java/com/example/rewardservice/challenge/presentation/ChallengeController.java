@@ -94,7 +94,7 @@ public class ChallengeController {
     @GetMapping("/{id}")
     public ResponseEntity<ChallengeInfoResponse> getChallengeDetail(@PathVariable UUID id) {
         // 서비스 로직을 통해 챌린지 상세 조회
-        ChallengeInfoResponse challengeInfo = challengeService.getChallengeDetail(id);
+        ChallengeInfoResponse challengeInfo = challengeService.viewDetail(id);
 
         // 결과 반환
         return ResponseEntity.ok(challengeInfo);

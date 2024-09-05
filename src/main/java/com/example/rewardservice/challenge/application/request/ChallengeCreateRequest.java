@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @AllArgsConstructor
@@ -29,10 +30,10 @@ public class ChallengeCreateRequest {
     private LocalDate endDate;
 
     @NotNull(message = "시작 시간은 필수입니다.")
-    private LocalTime  startTime;
+    private LocalTime  uploadStartTime;
 
     @NotNull(message = "종료 시간은 필수입니다.")
-    private LocalTime  endTime;
+    private LocalTime  uploadEndTime;
 
     @NotNull(message = "참가 인원 제한은 필수입니다.")
     private long participantsLimit;
@@ -51,23 +52,6 @@ public class ChallengeCreateRequest {
 
     @NotNull(message = "실패 인증 이미지는 필수입니다.")
     private MultipartFile failImage;
-
-    public Challenge toEntity(User user, String mainImageUrl, String successImageUrl, String failImageUrl) {
-        return Challenge.builder()
-                .title(this.title)
-                .category(this.category)
-                .startDate(this.startDate)
-                .endDate(this.endDate)
-                .startTime(this.startTime)
-                .endTime(this.endTime)
-                .participantsLimit(this.participantsLimit)
-                .description(this.description)
-                .authMethod(this.authMethod)
-                .mainImage(mainImageUrl)
-                .successImage(successImageUrl)
-                .failImage(failImageUrl)
-                .user(user)
-                .build();
-    }
+    
 }
 
