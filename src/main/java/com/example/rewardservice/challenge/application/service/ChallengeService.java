@@ -4,6 +4,8 @@ import com.example.rewardservice.challenge.application.request.ChallengeCreateRe
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengeRepository;
+import com.example.rewardservice.challenge.domain.vo.ChallengeImages;
+import com.example.rewardservice.challenge.domain.vo.ChallengePeriod;
 import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.user.domain.User;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,14 +33,28 @@ public class ChallengeService extends BaseEntity {
     public UUID createChallenge(String email, ChallengeCreateRequest request) {
         User user = findByUserEmail(email);
 
-        // 이미지 업로드 후 URL 반환
+        ChallengePeriod challengePeriod = new ChallengePeriod(request.getStartDate(),
+                request.getEndDate(), request.getUploadStartTime(), request.getUploadEndTime());
+
         String mainImageUrl = s3ImageService.upload(request.getMainImage());
         String successImageUrl = s3ImageService.upload(request.getSuccessImage());
         String failImageUrl = s3ImageService.upload(request.getFailImage());
 
-        // 엔터티 생성
-        Challenge challenge = request.toEntity(user, mainImageUrl, successImageUrl, failImageUrl);
-        challenge.checkStatus(LocalDateTime.now());
+        ChallengeImages challengeImages = new ChallengeImages(mainImageUrl, successImageUrl, failImageUrl);
+
+        Challenge challenge = Challenge.builder()
+                                .title(request.getTitle())
+                                .category(request.getCategory())
+                                .participantsLimit(request.getParticipantsLimit())
+                                .description(request.getDescription())
+                                .authMethod(request.getAuthMethod())
+                                .state("최초 등록")
+                                .challengePeriod(challengePeriod)
+                                .challengeImages(challengeImages)
+                                .user(user)
+                                .build();
+
+        challenge.checkStatus(LocalDate.now());
         challengeRepository.save(challenge);
 
         return challenge.getId();
@@ -53,26 +70,18 @@ public class ChallengeService extends BaseEntity {
 
     public Page<ChallengeInfoResponse> getChallengesByCategoryAndStatus(int page, int size, String category, String status) {
         Pageable pageable = PageRequest.of(page, size);
+        Page<Challenge> challenges = challengeRepository.findByCategoryAndState(category, status, pageable);
 
-        // 카테고리와 상태에 맞는 챌린지들을 조회
-        Page<Challenge> challenges = challengeRepository.findByCategoryAndStatus(category, status, pageable);
-
-        // 각 챌린지를 ChallengeInfoResponse로 변환하여 반환
         return challenges.map(ChallengeInfoResponse::from);
     }
 
-    public ChallengeInfoResponse getChallengeDetail(UUID challengeId){
-        // 해당 ID의 챌린지를 찾음
+    public ChallengeInfoResponse viewDetail(UUID challengeId){
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new IllegalArgumentException("챌린지를 찾을 수 없습니다. ID: " + challengeId));
 
-        // 현재 시간을 기준으로 상태 자동 업데이트
-        challenge.checkStatus(LocalDateTime.now());
-
-        // 업데이트된 상태를 저장 (필요시)
+        challenge.checkStatus(LocalDate.now());
         challengeRepository.save(challenge);
 
-        // Challenge를 ChallengeInfoResponse로 변환하여 반환
         return ChallengeInfoResponse.from(challenge);
     }
 
