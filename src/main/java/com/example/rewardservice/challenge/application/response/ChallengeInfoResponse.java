@@ -1,7 +1,6 @@
 package com.example.rewardservice.challenge.application.response;
 
 import com.example.rewardservice.challenge.domain.Challenge;
-import com.example.rewardservice.user.domain.User;
 
 import java.util.UUID;
 
@@ -12,22 +11,28 @@ public record ChallengeInfoResponse(
         String category,
         String startDate,
         String endDate,
-        int participantsLimit,
+        long participantsLimit,
         String description,
         String authMethod,
-        User user
+        String mainImage,
+        String successImage,
+        String failImage,
+        String userNickname
 ) {
     public static ChallengeInfoResponse from(Challenge challenge) {
         return new ChallengeInfoResponse(
                 challenge.getId(),
-                challenge.getTitle().getValue(),
-                challenge.getCategory().getValue(),
-                challenge.getSpan().getStartDate().toString(),
-                challenge.getSpan().getEndDate().toString(),
-                challenge.getParticipantsLimit().getValue(),
-                challenge.getDescription().getValue(),
-                challenge.getAuthMethod().getValue(),
-                challenge.getUser()
+                challenge.getTitle(),
+                challenge.getCategory(),
+                challenge.getStartDate().toString(),
+                challenge.getEndDate().toString(),
+                challenge.getParticipantsLimit(),
+                challenge.getDescription(),
+                challenge.getAuthMethod(),
+                challenge.getMainImage(),
+                challenge.getSuccessImage(),
+                challenge.getFailImage(),
+                challenge.getUser().getNickname()
         );
     }
 }
