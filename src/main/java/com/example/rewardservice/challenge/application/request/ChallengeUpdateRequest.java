@@ -1,30 +1,22 @@
 package com.example.rewardservice.challenge.application.request;
 
-import com.example.rewardservice.challenge.domain.Challenge;
-import com.example.rewardservice.challenge.domain.vo.*;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
-public record ChallengeUpdateRequest(
-        Title title,
-        Category category,
-        Span span,
-        ParticipantsLimit participantsLimit,
-        MultipartFile mainImage,
-        MultipartFile successImage,
-        MultipartFile failImage,
-        Description description,
-        AuthMethod authMethod
-) {
-    public void updateEntity(Challenge challenge, Images updatedImages) {
-        challenge.update(
-                title,
-                category,
-                span,
-                participantsLimit,
-                updatedImages,
-                description,
-                authMethod
-        );
-    }
+import java.time.LocalDate;
 
+@Builder
+@Getter
+public class ChallengeUpdateRequest {
+    private String title;
+    private String category;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private long participantsLimit;
+    private String description;
+    private String authMethod;
+    private MultipartFile mainImage;
+    private MultipartFile successImage;
+    private MultipartFile failImage;
 }
