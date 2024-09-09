@@ -1,6 +1,5 @@
 package com.example.rewardservice.challenge.domain.repsoitory;
 
-import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.UserChallenge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
