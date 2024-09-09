@@ -3,7 +3,7 @@ package com.example.rewardservice.challenge.application.service;
 import com.example.rewardservice.challenge.application.request.ChallengeCreateRequest;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
-import com.example.rewardservice.challenge.domain.ChallengeRepository;
+import com.example.rewardservice.challenge.domain.repsoitory.ChallengeRepository;
 import com.example.rewardservice.challenge.domain.vo.ChallengeImages;
 import com.example.rewardservice.challenge.domain.vo.ChallengePeriod;
 import com.example.rewardservice.common.BaseEntity;
@@ -15,10 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 

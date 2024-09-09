@@ -1,5 +1,6 @@
-package com.example.rewardservice.challenge.domain;
+package com.example.rewardservice.challenge.domain.repsoitory;
 
+import com.example.rewardservice.challenge.domain.Challenge;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

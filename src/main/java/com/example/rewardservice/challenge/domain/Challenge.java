@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -51,6 +52,12 @@ public class Challenge extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<UserChallenge> userChallenges;
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<PostChallenge> postChallenges;
 
     public void updateChallenge(String title, String category,
                                 long participantsLimit,

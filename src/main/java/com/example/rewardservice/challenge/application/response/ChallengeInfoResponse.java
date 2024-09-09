@@ -1,6 +1,7 @@
 package com.example.rewardservice.challenge.application.response;
 
 import com.example.rewardservice.challenge.domain.Challenge;
+import com.example.rewardservice.user.domain.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -24,6 +25,25 @@ public record ChallengeInfoResponse(
         String userNickname
 ) {
     public static ChallengeInfoResponse from(Challenge challenge) {
+        return new ChallengeInfoResponse(
+                challenge.getId(),
+                challenge.getTitle(),
+                challenge.getCategory(),
+                challenge.getChallengePeriod().getStartDate(),
+                challenge.getChallengePeriod().getEndDate(),
+                challenge.getChallengePeriod().getUploadStartTime(),
+                challenge.getChallengePeriod().getUploadEndTime(),
+                challenge.getParticipantsLimit(),
+                challenge.getDescription(),
+                challenge.getAuthMethod(),
+                challenge.getChallengeImages().getMainImage(),
+                challenge.getChallengeImages().getSuccessImage(),
+                challenge.getChallengeImages().getFailImage(),
+                challenge.getUser().getNickname()
+        );
+    }
+
+    public static ChallengeInfoResponse from2(Challenge challenge, User user) {
         return new ChallengeInfoResponse(
                 challenge.getId(),
                 challenge.getTitle(),
