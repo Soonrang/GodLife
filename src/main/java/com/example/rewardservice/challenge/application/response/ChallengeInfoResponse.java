@@ -24,7 +24,8 @@ public record ChallengeInfoResponse(
         String failImage,
         String userNickname,
         long participants,
-        String isJoined
+        String isJoined,
+        String state
 ) {
     public static ChallengeInfoResponse from(Challenge challenge, String isJoined) {
         return new ChallengeInfoResponse(
@@ -42,8 +43,9 @@ public record ChallengeInfoResponse(
                 challenge.getChallengeImages().getSuccessImage(),
                 challenge.getChallengeImages().getFailImage(),
                 challenge.getUser().getNickname(),
-                challenge.getParticipantsLimit(),
-                isJoined
+                challenge.getParticipants(),
+                isJoined,
+                challenge.getState()
         );
     }
 
@@ -63,8 +65,9 @@ public record ChallengeInfoResponse(
                 challenge.getChallengeImages().getSuccessImage(),
                 challenge.getChallengeImages().getFailImage(),
                 challenge.getUser().getNickname(),
-                challenge.getParticipantsLimit(),
-                isJoined
+                challenge.getParticipants(),
+                isJoined,
+                challenge.getState()
         );
     }
 }
