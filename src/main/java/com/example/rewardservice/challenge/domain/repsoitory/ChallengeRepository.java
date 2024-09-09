@@ -13,14 +13,8 @@ public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
     Page<Challenge> findByCategory(String category, Pageable pageable);
     //Page<Challenge> findByCategoryAndState(String category, String state, Pageable pageable);
 
-
-    @Query("SELECT c FROM Challenge c " +
-            "WHERE c.category = :category " +
-            "AND (:state = 'PENDING' AND c.challengePeriod.startDate > CURRENT_DATE) " +
-            "OR (:state = 'ONGOING' AND c.challengePeriod.startDate <= CURRENT_DATE AND c.challengePeriod.endDate >= CURRENT_DATE) " +
-            "OR (:state = 'COMPLETED' AND c.challengePeriod.endDate < CURRENT_DATE)")
-    Page<Challenge> findByCategoryAndState(@Param("category") String category,
-                                            @Param("state") String state,
+    Page<Challenge> findByCategoryAndState(String category,
+                                            String state,
                                             Pageable pageable);
 }
 

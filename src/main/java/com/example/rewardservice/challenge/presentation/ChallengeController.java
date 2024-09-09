@@ -41,25 +41,26 @@ public class ChallengeController {
     public ResponseEntity<Page<ChallengeInfoResponse>> getChallenges(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-
-        Page<ChallengeInfoResponse> challenges = challengeService.getChallenges(page, size);
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        Page<ChallengeInfoResponse> challenges = challengeService.getChallenges(email,page, size);
         return ResponseEntity.ok(challenges);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Page<ChallengeInfoResponse>> getChallengesByCategoryAndStatus(
             @RequestParam String category,
-            @RequestParam String status,
+            @RequestParam String state,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-
-        Page<ChallengeInfoResponse> challenges = challengeService.getChallengesByCategoryAndStatus(page, size, category, status);
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        Page<ChallengeInfoResponse> challenges = challengeService.getChallengesByCategoryAndStatus(email, page, size, category, state);
         return ResponseEntity.ok(challenges);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ChallengeInfoResponse> getChallengeDetail(@PathVariable UUID id) {
-        ChallengeInfoResponse challengeInfo = challengeService.viewDetail(id);
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        ChallengeInfoResponse challengeInfo = challengeService.viewDetail(email,id);
 
         return ResponseEntity.ok(challengeInfo);
     }

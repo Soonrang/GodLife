@@ -34,6 +34,9 @@ public class Challenge extends BaseEntity {
     @Column(name = "participants_limit", nullable = false)
     private long participantsLimit;
 
+    @Column(name = "participants_amount", nullable = false)
+    private long participants;
+
     @Column(name = "description", nullable = false)
     private String description;
 
@@ -78,11 +81,19 @@ public class Challenge extends BaseEntity {
 
     public void checkStatus(LocalDate now) {
         if (now.isBefore(this.challengePeriod.getStartDate())) {
-            this.state = "PENDING";
+            this.state = "모집전";
         } else if (now.isAfter(this.challengePeriod.getEndDate())) {
-            this.state = "COMPLETED";
+            this.state = "모집마감";
         } else {
-            this.state = "ONGOING";
+            this.state = "진행중";
         }
+    }
+
+    public void participantsChallenge() {
+        this.participants++;
+    }
+
+    public void leaveChallenge() {
+        this.participants--;
     }
 }

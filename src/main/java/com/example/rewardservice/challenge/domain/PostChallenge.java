@@ -18,7 +18,6 @@ public class PostChallenge extends BaseEntity {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "challenge_id", nullable = false)
     private Challenge challenge;
 
     private String image;

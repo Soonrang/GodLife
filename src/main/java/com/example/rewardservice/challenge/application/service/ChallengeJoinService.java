@@ -54,6 +54,8 @@ public class ChallengeJoinService {
         challengeJoinRepository.save(newParticipation);
         challengeHistoryRepository.save(challengeHistory);
 
+        challenge.participantsChallenge();
+
         return newParticipation.getId();
     }
 
@@ -70,6 +72,7 @@ public class ChallengeJoinService {
         }
 
         currentChallenge.changeStatus(CANCELED);
+        challenge.leaveChallenge();
         ChallengeHistory challengeHistory = new ChallengeHistory(user,challengeId,CANCELED,"사유");
         return challengeHistoryRepository.save(challengeHistory).getId();
     }
@@ -79,7 +82,7 @@ public class ChallengeJoinService {
         List<UserChallenge> joinedChallenges = challengeJoinRepository.findJoinedChallengesByUserEmail(email);
 
         return joinedChallenges.stream()
-                .map(uc -> ChallengeInfoResponse.from2(uc.getChallenge(), uc.getUser()))
+                .map(uc -> ChallengeInfoResponse.from2(uc.getChallenge(), uc.getUser(),JOINED))
                 .collect(Collectors.toList());
     }
 

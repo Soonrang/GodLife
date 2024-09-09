@@ -19,7 +19,7 @@ public class ChallengeJoinController {
     private final JwtTokenExtractor jwtTokenExtractor;
 
     // 유저가 특정 챌린지에 참가하는 요청 처리
-    @PostMapping("/join")
+    @PostMapping("/api/challenge/join")
     public ResponseEntity<UUID> joinChallenge(@RequestParam UUID challengeId) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         UUID participationId = challengeJoinService.joinChallenge(challengeId, email);

@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.example.rewardservice.user.domain.QUser.user;
+
 @Service
 @RequiredArgsConstructor
 public class ChallengeService extends BaseEntity {
@@ -47,6 +49,7 @@ public class ChallengeService extends BaseEntity {
                                 .description(request.getDescription())
                                 .authMethod(request.getAuthMethod())
                                 .state("최초 등록")
+                                .participants(0)
                                 .challengePeriod(challengePeriod)
                                 .challengeImages(challengeImages)
                                 .user(user)
@@ -59,28 +62,38 @@ public class ChallengeService extends BaseEntity {
     }
 
     // 챌린지 목록 조회 로직
-    public Page<ChallengeInfoResponse> getChallenges(int page, int size) {
+    public Page<ChallengeInfoResponse> getChallenges(String email, int page, int size) {
+        User user = findByUserEmail(email);
         Pageable pageable = PageRequest.of(page, size);
         Page<Challenge> challenges = challengeRepository.findAll(pageable);
 
-        return challenges.map(ChallengeInfoResponse::from);
+        return challenges.map(challenge -> {
+            String isJoined = checkIfUserJoinedChallenge(user, challenge);
+            return ChallengeInfoResponse.from(challenge, isJoined);
+        });
     }
 
-    public Page<ChallengeInfoResponse> getChallengesByCategoryAndStatus(int page, int size, String category, String status) {
+    public Page<ChallengeInfoResponse> getChallengesByCategoryAndStatus(String email, int page, int size, String category, String status) {
+        User user = findByUserEmail(email);
         Pageable pageable = PageRequest.of(page, size);
         Page<Challenge> challenges = challengeRepository.findByCategoryAndState(category, status, pageable);
 
-        return challenges.map(ChallengeInfoResponse::from);
+        return challenges.map(challenge -> {
+            String isJoined = checkIfUserJoinedChallenge(user, challenge);
+            return ChallengeInfoResponse.from(challenge, isJoined);
+        });
     }
 
-    public ChallengeInfoResponse viewDetail(UUID challengeId){
+    public ChallengeInfoResponse viewDetail(String email, UUID challengeId){
+        User user = findByUserEmail(email);
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new IllegalArgumentException("챌린지를 찾을 수 없습니다. ID: " + challengeId));
 
         challenge.checkStatus(LocalDate.now());
         challengeRepository.save(challenge);
+        String isJoined = checkIfUserJoinedChallenge(user, challenge);
 
-        return ChallengeInfoResponse.from(challenge);
+        return ChallengeInfoResponse.from(challenge, isJoined);
     }
 
     // 챌린지 수정 로직
@@ -145,6 +158,11 @@ public class ChallengeService extends BaseEntity {
         if (!Objects.equals(challenge.getUser().getEmail(), user.getEmail())) {
             throw new IllegalArgumentException("해당 챌린지를 수정할 권한이 없습니다.");
         }
+    }
+
+    private String checkIfUserJoinedChallenge(User user, Challenge challenge) {
+        return challenge.getUserChallenges().stream()
+                .anyMatch(userChallenge -> userChallenge.getUser().getId().equals(user.getId())) ? "참가중" : "미참가";
     }
 
 
