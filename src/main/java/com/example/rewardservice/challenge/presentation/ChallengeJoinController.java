@@ -35,7 +35,7 @@ public class ChallengeJoinController {
     }
 
     // 유저가 참가한 챌린지 목록 조회
-    @GetMapping("/api/user/{userId}/challenge/participating")
+    @GetMapping("/api/user/challenge/participating")
     public ResponseEntity<List<ChallengeInfoResponse>> getJoinedChallenges() {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         List<ChallengeInfoResponse> joinedChallenges = challengeJoinService.getJoinedChallenges(email);
