@@ -27,7 +27,7 @@ public class ChallengeJoinController {
     }
 
     // 유저가 챌린지 참가를 취소하는 요청 처리
-    @PostMapping("/api/challenge/leave")
+    @PostMapping("/leave")
     public ResponseEntity<UUID> cancelChallenge(@RequestParam UUID challengeId) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         UUID participationId = challengeJoinService.cancelChallenge(challengeId, email);
@@ -35,7 +35,7 @@ public class ChallengeJoinController {
     }
 
     // 유저가 참가한 챌린지 목록 조회
-    @GetMapping("/api/user/challenge/participating")
+    @GetMapping("/applied")
     public ResponseEntity<List<ChallengeInfoResponse>> getJoinedChallenges() {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         List<ChallengeInfoResponse> joinedChallenges = challengeJoinService.getJoinedChallenges(email);
