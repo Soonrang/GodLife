@@ -1,6 +1,9 @@
 package com.example.rewardservice.user.domain;
 
 import com.example.rewardservice.challenge.domain.Challenge;
+import com.example.rewardservice.challenge.domain.ChallengeHistory;
+import com.example.rewardservice.challenge.domain.PostChallenge;
+import com.example.rewardservice.challenge.domain.UserChallenge;
 import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.point.domain.Point;
 import com.example.rewardservice.shop.domain.Product;
@@ -60,6 +63,15 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Challenge> challenges;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserChallenge> userChallenges;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ChallengeHistory> challengeHistories;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PostChallenge> postChallenges;
 
 //    @Enumerated(EnumType.STRING)
 //    @Column(nullable = false)
