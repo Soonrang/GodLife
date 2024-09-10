@@ -68,7 +68,7 @@ public class ChallengeService extends BaseEntity {
         Page<Challenge> challenges = challengeRepository.findAll(pageable);
 
         return challenges.map(challenge -> {
-            String isJoined = checkIfUserJoinedChallenge(user, challenge);
+            boolean isJoined = checkIfUserJoinedChallenge(user, challenge);
             return ChallengeInfoResponse.from(challenge, isJoined);
         });
     }
@@ -79,7 +79,7 @@ public class ChallengeService extends BaseEntity {
         Page<Challenge> challenges = challengeRepository.findByCategoryAndState(category, status, pageable);
 
         return challenges.map(challenge -> {
-            String isJoined = checkIfUserJoinedChallenge(user, challenge);
+            boolean isJoined = checkIfUserJoinedChallenge(user, challenge);
             return ChallengeInfoResponse.from(challenge, isJoined);
         });
     }
@@ -91,7 +91,7 @@ public class ChallengeService extends BaseEntity {
 
         challenge.checkStatus(LocalDate.now());
         challengeRepository.save(challenge);
-        String isJoined = checkIfUserJoinedChallenge(user, challenge);
+        boolean isJoined = checkIfUserJoinedChallenge(user, challenge);
 
         return ChallengeInfoResponse.from(challenge, isJoined);
     }
@@ -160,9 +160,9 @@ public class ChallengeService extends BaseEntity {
         }
     }
 
-    private String checkIfUserJoinedChallenge(User user, Challenge challenge) {
+    private boolean checkIfUserJoinedChallenge(User user, Challenge challenge) {
         return challenge.getUserChallenges().stream()
-                .anyMatch(userChallenge -> userChallenge.getUser().getId().equals(user.getId())) ? "참가중" : "미참가";
+                .anyMatch(userChallenge -> userChallenge.getUser().getId().equals(user.getId()));
     }
 
 

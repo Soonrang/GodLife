@@ -51,10 +51,10 @@ public class ChallengeJoinService {
 
         UserChallenge newParticipation = new UserChallenge(user, challenge, JOINED);
         ChallengeHistory challengeHistory = new ChallengeHistory(user,challengeId,JOINED,"참가");
+        challenge.participantsChallenge();
         challengeJoinRepository.save(newParticipation);
         challengeHistoryRepository.save(challengeHistory);
 
-        challenge.participantsChallenge();
 
         return newParticipation.getId();
     }
@@ -82,7 +82,7 @@ public class ChallengeJoinService {
         List<UserChallenge> joinedChallenges = challengeJoinRepository.findJoinedChallengesByUserEmail(email);
 
         return joinedChallenges.stream()
-                .map(uc -> ChallengeInfoResponse.from2(uc.getChallenge(), uc.getUser(),JOINED))
+                .map(uc -> ChallengeInfoResponse.from2(uc.getChallenge(), uc.getUser(),true))
                 .collect(Collectors.toList());
     }
 

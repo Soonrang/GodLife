@@ -24,10 +24,10 @@ public record ChallengeInfoResponse(
         String failImage,
         String userNickname,
         long participants,
-        String isJoined,
+        Boolean isJoined,
         String state
 ) {
-    public static ChallengeInfoResponse from(Challenge challenge, String isJoined) {
+    public static ChallengeInfoResponse from(Challenge challenge, Boolean isJoined) {
         return new ChallengeInfoResponse(
                 challenge.getId(),
                 challenge.getTitle(),
@@ -49,7 +49,7 @@ public record ChallengeInfoResponse(
         );
     }
 
-    public static ChallengeInfoResponse from2(Challenge challenge, User user, String isJoined) {
+    public static ChallengeInfoResponse from2(Challenge challenge, User user, Boolean isJoined) {
         return new ChallengeInfoResponse(
                 challenge.getId(),
                 challenge.getTitle(),
