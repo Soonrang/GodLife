@@ -18,7 +18,7 @@ public interface ChallengeJoinRepository extends JpaRepository<UserChallenge, UU
     @Query("SELECT uc FROM UserChallenge uc WHERE uc.user.email = :email AND uc.challenge.id = :challengeId ORDER BY uc.createdAt DESC")
     Optional<UserChallenge> findLatestByUserEmailAndChallengeId(String email, UUID challengeId);
 
-    @Query("SELECT uc FROM UserChallenge uc WHERE uc.user.email = :email AND uc.status = 'JOINED'")
+    @Query("SELECT uc FROM UserChallenge uc WHERE uc.user.email = :email AND uc.isJoined = true")
     List<UserChallenge> findJoinedChallengesByUserEmail(@Param("email") String email);
 }
 

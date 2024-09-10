@@ -30,6 +30,9 @@ public class UserChallenge extends BaseEntity {
     @ManyToOne
     private Challenge challenge;
 
+    private boolean isJoined;
+
+    //참가중, 성공, 실패
     private String status;
 
     private double progress;
@@ -38,14 +41,15 @@ public class UserChallenge extends BaseEntity {
         this.status = status;
     }
 
-    public UserChallenge(User user, Challenge challenge, String status) {
+    public UserChallenge(User user, Challenge challenge, String status, boolean isJoined) {
         this.user = user;
         this.challenge = challenge;
         this.status = status;
         this.progress = 0.0;
+        this.isJoined = isJoined;
     }
 
-    public void calculateProgress() {
+    public void calculateProgress(Challenge challenge) {
         long totalDays = ChronoUnit.DAYS.between(challenge.getChallengePeriod().getStartDate(), challenge.getChallengePeriod().getEndDate());
 
         long elapsedDays = ChronoUnit.DAYS.between(challenge.getChallengePeriod().getStartDate(), LocalDate.now());
@@ -56,7 +60,9 @@ public class UserChallenge extends BaseEntity {
             this.progress = ((double) elapsedDays / totalDays) * 100;
         }
     }
-    public void calculateProgress(User user, Challenge challenge) {
 
+    public void leaveChallenge() {
+        this.isJoined = false;
     }
+
 }
