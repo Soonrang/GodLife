@@ -49,7 +49,11 @@ public class ChallengeJoinService {
             }
         }
 
-        UserChallenge newParticipation = new UserChallenge(user, challenge, JOINED);
+        if(challenge.getParticipants() == challenge.getParticipantsLimit()) {
+            throw new IllegalArgumentException("모집 인원수를 초과할 수 없습니다.");
+        }
+
+        UserChallenge newParticipation = new UserChallenge(user, challenge, JOINED, true);
         ChallengeHistory challengeHistory = new ChallengeHistory(user,challengeId,JOINED,"참가");
         challenge.participantsChallenge();
         challengeJoinRepository.save(newParticipation);
@@ -72,7 +76,12 @@ public class ChallengeJoinService {
         }
 
         currentChallenge.changeStatus(CANCELED);
+        // 챌린지 상태 false로 전환
+        currentChallenge.leaveChallenge();
+
+        // 챌린지 참가인원 마이너스
         challenge.leaveChallenge();
+
         ChallengeHistory challengeHistory = new ChallengeHistory(user,challengeId,CANCELED,"사유");
         return challengeHistoryRepository.save(challengeHistory).getId();
     }
