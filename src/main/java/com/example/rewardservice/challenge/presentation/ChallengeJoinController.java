@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -18,10 +19,10 @@ public class ChallengeJoinController {
     private final ChallengeJoinService challengeJoinService;
     private final JwtTokenExtractor jwtTokenExtractor;
 
-    // 유저가 특정 챌린지에 참가하는 요청 처리
     @PostMapping("/api/challenge/join")
-    public ResponseEntity<UUID> joinChallenge(@RequestParam UUID challengeId) {
+    public ResponseEntity<UUID> joinChallenge(@RequestBody Map<String, Object> requestBody) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
+        UUID challengeId = UUID.fromString((String) requestBody.get("challengeId"));
         UUID participationId = challengeJoinService.joinChallenge(challengeId, email);
         return ResponseEntity.ok(participationId);
     }
