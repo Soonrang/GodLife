@@ -46,6 +46,10 @@ public class Challenge extends BaseEntity {
     @Column(name = "state")
     private String state;
 
+    private long prize;
+
+    private boolean isDeleted;
+
     @Embedded
     private ChallengePeriod challengePeriod;
 
@@ -60,7 +64,10 @@ public class Challenge extends BaseEntity {
     private List<UserChallenge> userChallenges;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
-    private List<PostChallenge> postChallenges;
+    private List<ChallengePost> challengePosts;
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<ChallengeHistory> challengeHistories;
 
     public void updateChallenge(String title, String category,
                                 long participantsLimit,
@@ -83,17 +90,38 @@ public class Challenge extends BaseEntity {
         if (now.isBefore(this.challengePeriod.getStartDate())) {
             this.state = "모집전";
         } else if (now.isAfter(this.challengePeriod.getEndDate())) {
-            this.state = "모집마감";
+            this.state = "종료";
         } else {
             this.state = "진행중";
         }
     }
 
-    public void participantsChallenge() {
+    public void participantsAmountPlus() {
         this.participants++;
     }
 
-    public void leaveChallenge() {
+    public void participantsAmountMinus() {
         this.participants--;
     }
+
+    public void plusPrize(long point){
+        this.prize += point;
+    }
+
+    public void minusPrize(long point) {
+        this.prize -= point;
+    }
+
+    public void changeState() {
+        this.state = "모집마감";
+    }
+
+    public void changeStateByCancel(){
+        this.state = "모집중";
+    }
+
+    public void changeIsDelete(boolean isDelete) {
+        this.isDeleted = isDelete;
+    }
+
 }

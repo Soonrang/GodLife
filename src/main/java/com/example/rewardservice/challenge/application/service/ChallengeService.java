@@ -3,6 +3,8 @@ package com.example.rewardservice.challenge.application.service;
 import com.example.rewardservice.challenge.application.request.ChallengeCreateRequest;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
+import com.example.rewardservice.challenge.domain.ChallengeHistory;
+import com.example.rewardservice.challenge.domain.UserChallenge;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeRepository;
 import com.example.rewardservice.challenge.domain.vo.ChallengeImages;
 import com.example.rewardservice.challenge.domain.vo.ChallengePeriod;
@@ -14,13 +16,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.example.rewardservice.user.domain.QUser.user;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +60,7 @@ public class ChallengeService extends BaseEntity {
                                 .challengePeriod(challengePeriod)
                                 .challengeImages(challengeImages)
                                 .user(user)
+                                .isDeleted(false)
                                 .build();
 
         challenge.checkStatus(LocalDate.now());
@@ -65,7 +73,7 @@ public class ChallengeService extends BaseEntity {
     public Page<ChallengeInfoResponse> getChallenges(String email, int page, int size) {
         User user = findByUserEmail(email);
         Pageable pageable = PageRequest.of(page, size);
-        Page<Challenge> challenges = challengeRepository.findAll(pageable);
+        Page<Challenge> challenges = challengeRepository.findChallenge(pageable);
 
         return challenges.map(challenge -> {
             boolean isJoined = checkIfUserJoinedChallenge(user, challenge);
@@ -143,6 +151,48 @@ public class ChallengeService extends BaseEntity {
 //        return new Images(mainImageUrl, successImageUrl, failImageUrl);
 //    }
 
+    public void deleteChallenge(String email, UUID challengeId){
+        User user = findByUserEmail(email);
+        Challenge challenge = getChallengeById(challengeId);
+
+        // 관리자 권한 확인
+        if (isAdmin()) {
+            // 관리자는 언제든지 삭제 가능
+            refundPointsToParticipants(challenge);
+            challenge.changeIsDelete(true);
+            challengeRepository.save(challenge);
+            return;
+        }
+
+        // 일반 유저는 챌린지가 시작되기 전에만 삭제 가능
+        LocalDate today = LocalDate.now();
+        if (challenge.getChallengePeriod().getStartDate().isBefore(today)) {
+            throw new IllegalStateException("챌린지가 이미 시작되어 삭제할 수 없습니다.");
+        }
+
+        validateUser(challenge, user);
+        refundPointsToParticipants(challenge);
+        challenge.changeIsDelete(true);
+        challengeRepository.save(challenge);
+    }
+
+    private void refundPointsToParticipants(Challenge challenge){
+        List<UserChallenge> userChallenges = challenge.getUserChallenges();
+
+        for (UserChallenge userChallenge : userChallenges) {
+            User participant = userChallenge.getUser();
+            long stakedPoints = userChallenge.getDeposit();
+
+            participant.earnPoints(stakedPoints);
+
+            userRepository.save(participant);
+
+            ChallengeHistory challengeHistory = new ChallengeHistory(
+                    participant,challenge,"삭제","사용자가 삭제한 챌린지입니다.",stakedPoints
+            );
+        }
+    }
+
     private User findByUserEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + email));
@@ -163,6 +213,17 @@ public class ChallengeService extends BaseEntity {
     private boolean checkIfUserJoinedChallenge(User user, Challenge challenge) {
         return challenge.getUserChallenges().stream()
                 .anyMatch(userChallenge -> userChallenge.getUser().getId().equals(user.getId()));
+    }
+
+    public static boolean isAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getAuthorities() == null) {
+            return false;
+        }
+
+        return authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(authority -> authority.equals("ROLE_ADMIN"));
     }
 
 

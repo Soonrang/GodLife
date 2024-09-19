@@ -25,7 +25,8 @@ public record ChallengeInfoResponse(
         String userNickname,
         long participants,
         Boolean isJoined,
-        String state
+        String state,
+        long prize
 ) {
     public static ChallengeInfoResponse from(Challenge challenge, Boolean isJoined) {
         return new ChallengeInfoResponse(
@@ -45,7 +46,8 @@ public record ChallengeInfoResponse(
                 challenge.getUser().getNickname(),
                 challenge.getParticipants(),
                 isJoined,
-                challenge.getState()
+                challenge.getState(),
+                challenge.getPrize()
         );
     }
 
@@ -67,7 +69,8 @@ public record ChallengeInfoResponse(
                 challenge.getUser().getNickname(),
                 challenge.getParticipants(),
                 isJoined,
-                challenge.getState()
+                challenge.getState(),
+                challenge.getPrize()
         );
     }
 }

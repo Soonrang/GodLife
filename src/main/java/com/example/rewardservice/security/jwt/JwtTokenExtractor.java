@@ -1,6 +1,7 @@
 package com.example.rewardservice.security.jwt;
 
 import com.example.rewardservice.security.jwt.util.JWTUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,8 @@ public class JwtTokenExtractor {
         final String logMessage = "인증실패 - 리프레시 토큰 추출 실패: " + refreshToken;
         throw new RuntimeException(logMessage);
     }
+
+
 
 
 }

@@ -51,7 +51,7 @@ public class ChallengeController {
             @RequestParam String category,
             @RequestParam String state,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "12") int size) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         Page<ChallengeInfoResponse> challenges = challengeService.getChallengesByCategoryAndStatus(email, page, size, category, state);
         return ResponseEntity.ok(challenges);
@@ -64,6 +64,15 @@ public class ChallengeController {
 
         return ResponseEntity.ok(challengeInfo);
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteChallenge(@RequestParam UUID challengeId) {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        challengeService.deleteChallenge(email,challengeId);
+        return ResponseEntity.ok("Challenge deleted");
+    }
+
+
 
 
 
