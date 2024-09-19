@@ -82,14 +82,18 @@ public class UserService {
     public void updateUserInfo(String email, MyPageRequest myPageRequest) {
         Optional<User> userOptional = userRepository.findByEmail(email);
         User user = userOptional.orElseThrow(() -> new RuntimeException("아이디 없음"));
-        String newNickname = myPageRequest.getNickname();
 
+        String newNickname = myPageRequest.getNickname();
         String nowProfileImage = user.getProfileImage();
 
         if(myPageRequest.getProfileImage()!=null) {
-            nowProfileImage = s3ImageService.upload(myPageRequest.getProfileImage());
-            s3ImageService.deleteImageFromS3(user.getProfileImage());
-            user.updateUserInfo(newNickname, nowProfileImage);
+            String newProfileImageUrl = s3ImageService.upload(myPageRequest.getProfileImage());
+
+//            if (nowProfileImage != null && !nowProfileImage.isEmpty()) {
+//                s3ImageService.deleteImageFromS3(nowProfileImage);
+//            }
+
+            nowProfileImage = newProfileImageUrl;
         }
 
         user.updateUserInfo(newNickname,nowProfileImage);
@@ -104,7 +108,8 @@ public class UserService {
         }
 
         User user = optionalUser.get();
-        user.changeMemberState(MemberState.DELETED); // 회원 상태를 비활성화로 변경
+        userRepository.delete(user);
+        //user.changeMemberState(MemberState.DELETED); // 회원 상태를 비활성화로 변경
         userRepository.save(user);
     }
 

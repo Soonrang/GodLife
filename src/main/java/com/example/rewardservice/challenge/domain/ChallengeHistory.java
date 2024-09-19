@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Builder
-public class ChallengeHistory extends BaseEntity {
+public class ChallengeHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,17 +26,26 @@ public class ChallengeHistory extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private UUID challengeId;
+    @ManyToOne
+    private Challenge challenge;
 
     private String status;
 
     private String reason;
 
-    public ChallengeHistory(User user, UUID challengeId, String status, String reason) {
+    private LocalDate createAt;
+
+    private long point;
+
+    public ChallengeHistory(User user, Challenge challenge, String status, String reason, long point) {
         this.user = user;
-        this.challengeId = challengeId;
+        this.challenge = challenge;
         this.status = status;
         this.reason = reason;
+        this.createAt = LocalDate.now();
+        this.point = point;
     }
+
+
 
 }
