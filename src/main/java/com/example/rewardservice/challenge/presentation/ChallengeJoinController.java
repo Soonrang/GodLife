@@ -29,7 +29,7 @@ public class ChallengeJoinController {
     }
 
     // 유저가 챌린지 참가를 취소하는 요청 처리
-    @PostMapping("/leave")
+    @PostMapping("/api/challenge/leave")
     public ResponseEntity<UUID> cancelChallenge(@RequestParam UUID challengeId) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         UUID participationId = challengeJoinService.cancelChallenge(challengeId, email);

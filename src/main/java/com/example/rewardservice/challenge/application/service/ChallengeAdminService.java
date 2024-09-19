@@ -31,7 +31,7 @@ public class ChallengeAdminService {
         return participants.stream()
                 .map(userChallenge -> new ParticipantResponse(
                         userChallenge.getUser().getId(),
-                        userChallenge.getChallenge().getId(),
+                        userChallenge.getId(),
                         userChallenge.getUser().getEmail(),
                         userChallenge.getUser().getName(),
                         userChallenge.getUser().getNickname(),
