@@ -26,4 +26,16 @@ public class ChallengeImages {
         this.successImage = successImage;
         this.failImage = failImage;
     }
+
+    public void changeMainImage(String mainImage) {
+        this.mainImage = mainImage;
+    }
+
+    public void changeSuccessImage(String successImage) {
+        this.successImage = successImage;
+    }
+
+    public void changeFailImage(String failImage) {
+        this.failImage = failImage;
+    }
 }

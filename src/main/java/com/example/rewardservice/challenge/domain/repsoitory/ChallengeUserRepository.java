@@ -33,5 +33,14 @@ public interface ChallengeUserRepository extends JpaRepository<UserChallenge, UU
                                                         Pageable pageable);
 
     List<UserChallenge> findByChallengeId(UUID challengeId);
+
+
+    // 진행중, 진행전, 종료 상태의 챌린지 모두 조회
+    @Query("SELECT uc FROM UserChallenge uc JOIN uc.challenge c WHERE uc.user.email = :email " +
+            "AND uc.isJoined = true " +
+            "AND uc.challenge.isDeleted = false")
+    Page<UserChallenge> findJoinedChallengesByAllStates(@Param("email") String email, Pageable pageable);
+
+
 }
 

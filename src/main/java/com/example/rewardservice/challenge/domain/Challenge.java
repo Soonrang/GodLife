@@ -73,7 +73,6 @@ public class Challenge extends BaseEntity {
                                 long participantsLimit,
                                 String description,
                                 String authMethod,
-                                String state,
                                 ChallengePeriod challengePeriod,
                                 ChallengeImages challengeImages) {
         this.title = title;
@@ -81,14 +80,13 @@ public class Challenge extends BaseEntity {
         this.participantsLimit = participantsLimit;
         this.description = description;
         this.authMethod = authMethod;
-        this.state = state;
         this.challengePeriod = challengePeriod;
         this.challengeImages = challengeImages;
     }
 
     public void checkStatus(LocalDate now) {
         if (now.isBefore(this.challengePeriod.getStartDate())) {
-            this.state = "모집전";
+            this.state = "진행전";
         } else if (now.isAfter(this.challengePeriod.getEndDate())) {
             this.state = "종료";
         } else {
@@ -118,6 +116,10 @@ public class Challenge extends BaseEntity {
 
     public void changeStateByCancel(){
         this.state = "모집중";
+    }
+
+    public void updateStatus(String state){
+        this.state = state;
     }
 
     public void changeIsDelete(boolean isDelete) {

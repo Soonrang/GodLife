@@ -30,12 +30,12 @@ public class ChallengeController {
         return ResponseEntity.ok(challengeId);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Void> updateChallenge(@PathVariable UUID id, @ModelAttribute ChallengeUpdateRequest request) {
-//        String email = jwtTokenExtractor.getCurrentUserEmail();
-//        challengeService.updateChallenge(email, id,request);
-//        return ResponseEntity.noContent().build();
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateChallenge(@PathVariable UUID id, @ModelAttribute ChallengeUpdateRequest request) {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        challengeService.updateChallenge(email, id,request);
+        return ResponseEntity.noContent().build();
+    }
 
     @GetMapping
     public ResponseEntity<Page<ChallengeInfoResponse>> getChallenges(

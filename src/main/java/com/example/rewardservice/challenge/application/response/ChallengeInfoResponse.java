@@ -26,7 +26,9 @@ public record ChallengeInfoResponse(
         long participants,
         Boolean isJoined,
         String state,
-        long prize
+        long prize,
+        boolean hasCheckedInToday,
+        UUID userChallengeId
 ) {
     public static ChallengeInfoResponse from(Challenge challenge, Boolean isJoined) {
         return new ChallengeInfoResponse(
@@ -47,7 +49,9 @@ public record ChallengeInfoResponse(
                 challenge.getParticipants(),
                 isJoined,
                 challenge.getState(),
-                challenge.getPrize()
+                challenge.getPrize(),
+                false,
+                null
         );
     }
 
@@ -70,7 +74,35 @@ public record ChallengeInfoResponse(
                 challenge.getParticipants(),
                 isJoined,
                 challenge.getState(),
-                challenge.getPrize()
+                challenge.getPrize(),
+                false,
+                null
+        );
+    }
+
+    public static ChallengeInfoResponse from3(Challenge challenge, User user, Boolean isJoined, boolean hasCheckedInToday,UUID userChallengeId) {
+        return new ChallengeInfoResponse(
+                challenge.getId(),
+                challenge.getTitle(),
+                challenge.getCategory(),
+                challenge.getChallengePeriod().getStartDate(),
+                challenge.getChallengePeriod().getEndDate(),
+                challenge.getChallengePeriod().getUploadStartTime(),
+                challenge.getChallengePeriod().getUploadEndTime(),
+                challenge.getParticipantsLimit(),
+                challenge.getDescription(),
+                challenge.getAuthMethod(),
+                challenge.getChallengeImages().getMainImage(),
+                challenge.getChallengeImages().getSuccessImage(),
+                challenge.getChallengeImages().getFailImage(),
+                challenge.getUser().getNickname(),
+                challenge.getParticipants(),
+                isJoined,
+                challenge.getState(),
+                challenge.getPrize(),
+                hasCheckedInToday,
+                userChallengeId
+
         );
     }
 }
