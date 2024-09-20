@@ -6,6 +6,7 @@ import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengeHistory;
 import com.example.rewardservice.challenge.domain.UserChallenge;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeHistoryRepository;
+import com.example.rewardservice.challenge.domain.repsoitory.ChallengePostRepository;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeUserRepository;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeRepository;
 import com.example.rewardservice.user.domain.User;
@@ -29,6 +30,7 @@ public class ChallengeJoinService {
     private final ChallengeRepository challengeRepository;
     private final ChallengeUserRepository challengeUserRepository;
     private final ChallengeHistoryRepository challengeHistoryRepository;
+    private final ChallengePostRepository challengePostRepository;
 
     public static final String JOINED = "참가중";
     public static final String CANCELED = "참가취소";
@@ -122,12 +124,40 @@ public class ChallengeJoinService {
     }
 
 
-    public Page<ChallengeInfoResponse> getJoinedChallenges(String email, int page, int size, String status) {
+    public Page<ChallengeInfoResponse> getJoinedChallenges(String email, int page, int size, String state) {
         Pageable pageable = PageRequest.of(page,size);
-        Page<UserChallenge> joinedChallenges = challengeUserRepository.findJoinedChallengesByUserEmail(email, status, pageable);
-
-        return joinedChallenges.map(uc -> ChallengeInfoResponse.from2(uc.getChallenge(), uc.getUser(),true));
+        if (state == null) {
+            // state가 null이면 진행전, 진행중, 종료 상태 모두 조회
+            return getJoinedChallengesByAllStates(email, pageable);
+        } else {
+            // 특정 상태만 조회
+            return getJoinedChallengesBySpecificState(email, pageable, state);
+        }
     }
+
+
+    public Page<ChallengeInfoResponse> getJoinedChallengesByAllStates(String email, Pageable pageable) {
+        Page<UserChallenge> joinedChallenges = challengeUserRepository.findJoinedChallengesByAllStates(email, pageable);
+        return joinedChallenges.map(uc -> {
+            boolean hasCheckedInToday = hasCheckedInToday(email, uc.getChallenge().getId());
+            return ChallengeInfoResponse.from3(uc.getChallenge(), uc.getUser(), true, hasCheckedInToday, uc.getId());
+        });
+    }
+
+    public Page<ChallengeInfoResponse> getJoinedChallengesBySpecificState(String email, Pageable pageable, String state) {
+        Page<UserChallenge> joinedChallenges = challengeUserRepository.findJoinedChallengesByUserEmail(email, state, pageable);
+        return joinedChallenges.map(uc -> {
+            boolean hasCheckedInToday = hasCheckedInToday(email, uc.getChallenge().getId());
+            return ChallengeInfoResponse.from3(uc.getChallenge(), uc.getUser(), true, hasCheckedInToday, uc.getId());
+        });
+    }
+
+    // 오늘 인증 여부를 확인하는 메서드
+    private boolean hasCheckedInToday(String email, UUID challengeId) {
+        LocalDate today = LocalDate.now();
+        return challengePostRepository.findTodayPostByUserAndChallenge(email, challengeId, today).isPresent();
+    }
+
 
     private User findByUserEmail(String email) {
         return userRepository.findByEmail(email)

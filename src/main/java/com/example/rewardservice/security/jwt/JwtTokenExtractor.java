@@ -40,18 +40,18 @@ public class JwtTokenExtractor {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    public String getCurrentEmail() {
-        String token = request.getHeader("Authorization");
-
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-//            if (jwtUtil.validateToken(token)) {
+//    public String getCurrentEmail() {
+//        String token = request.getHeader("Authorization");
 //
-//            }
-        }
-
-        return jwtUtil.extractEmail(token);
-    }
+//        if (token != null && token.startsWith("Bearer ")) {
+//            token = token.substring(7);
+////            if (jwtUtil.validateToken(token)) {
+////
+////            }
+//        }
+//
+//        return jwtUtil.extractEmail(token);
+//    }
 
     public String getTokenRes(String headerKey, HttpServletResponse response) {
         final String accessToken = response.getHeader(headerKey);

@@ -1,6 +1,7 @@
 package com.example.rewardservice.challenge.application.service;
 
 import com.example.rewardservice.challenge.application.request.ChallengeCreateRequest;
+import com.example.rewardservice.challenge.application.request.ChallengeUpdateRequest;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengeHistory;
@@ -12,6 +13,7 @@ import com.example.rewardservice.common.BaseEntity;
 import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -97,59 +100,50 @@ public class ChallengeService extends BaseEntity {
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new IllegalArgumentException("챌린지를 찾을 수 없습니다. ID: " + challengeId));
 
-        challenge.checkStatus(LocalDate.now());
+        //challenge.checkStatus(LocalDate.now());
         challengeRepository.save(challenge);
         boolean isJoined = checkIfUserJoinedChallenge(user, challenge);
 
         return ChallengeInfoResponse.from(challenge, isJoined);
     }
 
-    // 챌린지 수정 로직
-//    @Transactional
-//    public void updateChallenge(String email, UUID challengeId, ChallengeUpdateRequest request) {
-//        User user = getUserByEmail(email);
-//        Challenge challenge = getChallengeById(challengeId);
-//
-//        validateUser(challenge, user);
-//
-//        Images updatedImages = updateImages(challenge.getMainImage(), request);
-//
-//        request.updateEntity(challenge, updatedImages);
-//        challengeRepository.save(challenge);  // 변경 사항을 저장
-//    }
+     //챌린지 수정 로직
+    @Transactional
+    public void updateChallenge(String email, UUID challengeId, ChallengeUpdateRequest request) {
+        User user = findByUserEmail(email);
+        Challenge challenge = getChallengeById(challengeId);
 
-//    // 기존 이미지를 업데이트하고 필요 시 S3에서 삭제 후 업로드
-//    private Images updateImages(Images currentImages, ChallengeUpdateRequest request) {
-//        String mainImageUrl = currentImages.getMainImage();
-//        String successImageUrl = currentImages.getSuccessImage();
-//        String failImageUrl = currentImages.getFailImage();
-//
-//        if (isNotEmpty(request.getMainImage())) {
-//            s3ImageService.deleteImageFromS3(mainImageUrl);
-//            mainImageUrl = s3ImageService.upload(request.getMainImage());
-//        }
-//
-//        if (isNotEmpty(request.getSuccessImage())) {
-//            s3ImageService.deleteImageFromS3(successImageUrl);
-//            successImageUrl = s3ImageService.upload(request.getSuccessImage());
-//        }
-//
-//        if (isNotEmpty(request.getFailImage())) {
-//            s3ImageService.deleteImageFromS3(failImageUrl);
-//            failImageUrl = s3ImageService.upload(request.getFailImage());
-//        }
-//
-//        return new Images(mainImageUrl, successImageUrl, failImageUrl);
-//    }
-//
-//    // 이미지 업로드 메서드
-//    private Images uploadImages(MultipartFile mainImage, MultipartFile successImage, MultipartFile failImage) {
-//        String mainImageUrl = s3ImageService.upload(mainImage);
-//        String successImageUrl = s3ImageService.upload(successImage);
-//        String failImageUrl = s3ImageService.upload(failImage);
-//
-//        return new Images(mainImageUrl, successImageUrl, failImageUrl);
-//    }
+        validateUser(challenge, user);
+
+        String mainImageUrl = challenge.getChallengeImages().getMainImage();
+        String successImageUrl = challenge.getChallengeImages().getSuccessImage();
+        String failImageUrl = challenge.getChallengeImages().getFailImage();
+
+        if(request.getMainImage() != null) {
+            mainImageUrl = s3ImageService.upload(request.getMainImage());
+            challenge.getChallengeImages().changeMainImage(mainImageUrl);
+        }
+
+        if(request.getSuccessImage() != null) {
+            successImageUrl = s3ImageService.upload(request.getSuccessImage());
+            challenge.getChallengeImages().changeSuccessImage(successImageUrl);
+        }
+
+        if(request.getFailImage() != null) {
+            failImageUrl = s3ImageService.upload(request.getFailImage());
+            challenge.getChallengeImages().changeFailImage(failImageUrl);
+        }
+
+        ChallengePeriod challengePeriod = new ChallengePeriod(request.getStartDate(),request.getEndDate(),request.getUploadStartTime(),request.getUploadEndTime());
+        ChallengeImages challengeImages = new ChallengeImages(mainImageUrl, successImageUrl, failImageUrl);
+
+        challenge.updateChallenge(request.getTitle(), request.getCategory(), request.getParticipantsLimit()
+        ,request.getDescription(),request.getAuthMethod(), challengePeriod,
+                challengeImages);
+
+        challengeRepository.save(challenge);  // 변경 사항을 저장
+    }
+
 
     public void deleteChallenge(String email, UUID challengeId){
         User user = findByUserEmail(email);

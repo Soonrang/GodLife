@@ -41,7 +41,7 @@ public class ChallengeJoinController {
     public ResponseEntity<Page<ChallengeInfoResponse>> getJoinedChallenges(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam String state
+            @RequestParam(required = false) String state
     ) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         Page<ChallengeInfoResponse> joinedChallenges = challengeJoinService.getJoinedChallenges(email,page,size,state);
@@ -58,6 +58,16 @@ public class ChallengeJoinController {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         Page<ChallengeHistoryResponse> historyResponses = challengeHistoryService.getChallengeHistory(email, page, size);
         return ResponseEntity.ok(historyResponses);
+    }
+
+    @GetMapping("/api/challenge/ongoing-challenge")
+    public ResponseEntity<Page<ChallengeInfoResponse>> getOngoingChallenges(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        Page<ChallengeInfoResponse> joinedChallenges = challengeJoinService.getJoinedChallenges(email,page,size,"진행중");
+        return ResponseEntity.ok(joinedChallenges);
     }
 
 
