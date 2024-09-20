@@ -2,8 +2,10 @@ package com.example.rewardservice.challenge.application.service;
 
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.application.response.ParticipantResponse;
+import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengePost;
 import com.example.rewardservice.challenge.domain.UserChallenge;
+import com.example.rewardservice.challenge.domain.repsoitory.ChallengeAdminRepository;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeUserRepository;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengePostRepository;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeRepository;
@@ -24,25 +26,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChallengeAdminService {
 
-    private final ChallengeRepository challengeRepository;
     private final ChallengeUserRepository challengeUserRepository;
     private final ChallengePostRepository challengePostRepository;
-    private final UserRepository userRepository;
+    private final ChallengeAdminRepository challengeAdminRepository;
 
 
-    public Page<ChallengeInfoResponse> getAdminChallenges(String email, int page, int size, String state) {
+    public Page<ChallengeInfoResponse> getAdminChallengesByUserEmail(String email, int page, int size, String state) {
         Pageable pageable = PageRequest.of(page, size);
+        Page<Challenge> challenges;
 
-
-        // state 검증 코드 필요
         if (state == null) {
-            return getAdminChallengesByAllStates(email, pageable);
+            challenges = challengeAdminRepository.findAdminChallengesByAllStates(email, pageable);
         } else {
-            return getJoinedChallengesBySpecificState(email, pageable, state);
+            challenges = challengeAdminRepository.findAdminChallengesByUserEmail(email, state, pageable);
         }
+
+        return challenges.map(c -> ChallengeInfoResponse.from(c, true));  // 필요한 값으로 매핑
     }
-
-
 
 
     public List<ParticipantResponse> getParticipants(UUID challengeId) {
@@ -87,33 +87,9 @@ public class ChallengeAdminService {
         challengePostRepository.save(post);
     }
 
-
     private ChallengePost findByPostId(UUID id) {
         return challengePostRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 id의 post가 없습니다: " + id));
     }
-
-    public Page<ChallengeInfoResponse> getAdminChallengesByAllStates(String email, Pageable pageable) {
-        Page<UserChallenge> joinedChallenges = challengeUserRepository.findAdminChallengesByAllStates(email, pageable);
-        return joinedChallenges.map(uc -> {
-            boolean hasCheckedInToday = hasCheckedInToday(email, uc.getChallenge().getId());
-            return ChallengeInfoResponse.from3(uc.getChallenge(), uc.getUser(), true, hasCheckedInToday, uc.getId());
-        });
-    }
-
-    public Page<ChallengeInfoResponse> getJoinedChallengesBySpecificState(String email, Pageable pageable, String state) {
-        Page<UserChallenge> joinedChallenges = challengeUserRepository.findAdminChallengesByUserEmail(email, state, pageable);
-        return joinedChallenges.map(uc -> {
-            boolean hasCheckedInToday = hasCheckedInToday(email, uc.getChallenge().getId());
-            return ChallengeInfoResponse.from3(uc.getChallenge(), uc.getUser(), true, hasCheckedInToday, uc.getId());
-        });
-    }
-
-    // 오늘 인증 여부를 확인하는 메서드
-    private boolean hasCheckedInToday(String email, UUID challengeId) {
-        LocalDate today = LocalDate.now();
-        return challengePostRepository.findTodayPostByUserAndChallenge(email, challengeId, today).isPresent();
-    }
-
 
 }

@@ -1,5 +1,6 @@
 package com.example.rewardservice.challenge.domain.repsoitory;
 
+import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.UserChallenge;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,23 +44,19 @@ public interface ChallengeUserRepository extends JpaRepository<UserChallenge, UU
 
 
 
-    // 내가 개설한 챌린지
-    @Query("SELECT uc FROM UserChallenge uc JOIN uc.challenge c WHERE c.user.email = :adminEmail " +
-            "AND uc.isJoined = true " +
-            "AND c.isDeleted = false " +
-            "AND (CASE " +
-            "         WHEN CURRENT_DATE < c.challengePeriod.startDate THEN '진행전' " +
-            "         WHEN CURRENT_DATE > c.challengePeriod.endDate THEN '종료' " +
-            "         ELSE '진행중' " +
-            "     END) = :state")
-    Page<UserChallenge> findAdminChallengesByUserEmail(@Param("adminEmail") String adminEmail,
-                                                       @Param("state") String state,
-                                                       Pageable pageable);
-
-    @Query("SELECT uc FROM UserChallenge uc JOIN uc.challenge c WHERE c.user.email = :adminEmail " +
-            "AND uc.isJoined = true " +
-            "AND c.isDeleted = false")
-    Page<UserChallenge> findAdminChallengesByAllStates(@Param("adminEmail") String adminEmail, Pageable pageable);
+//    // 내가 개설한 챌린지
+//    @Query("SELECT DISTINCT c FROM Challenge c JOIN c.userChallenges uc WHERE uc.user.email = :email AND c.isDeleted = false AND uc.isJoined = true AND (CASE " +
+//            " WHEN CURRENT_DATE < c.challengePeriod.startDate THEN '진행전' " +
+//            " WHEN CURRENT_DATE > c.challengePeriod.endDate THEN '종료' " +
+//            " ELSE '진행중' " +
+//            " END) = :state")
+//    Page<Challenge> findAdminChallengesByUserEmail(@Param("email") String email,
+//                                                   @Param("state") String state,
+//                                                   Pageable pageable);
+//    @Query("SELECT DISTINCT uc FROM UserChallenge uc JOIN uc.challenge c WHERE c.user.email = :adminEmail " +
+//            "AND uc.isJoined = true " +
+//            "AND c.isDeleted = false")
+//    Page<UserChallenge> findAdminChallengesByAllStates(@Param("adminEmail") String adminEmail, Pageable pageable);
 
 }
 

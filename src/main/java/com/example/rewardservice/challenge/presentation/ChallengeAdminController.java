@@ -38,7 +38,7 @@ public class ChallengeAdminController {
             @RequestParam(required = false) String state
     ) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-        Page<ChallengeInfoResponse> joinedChallenges = challengeAdminService.getAdminChallenges(email,page,size,state);
+        Page<ChallengeInfoResponse> joinedChallenges = challengeAdminService.getAdminChallengesByUserEmail(email,page,size,state);
         return ResponseEntity.ok(joinedChallenges);
     }
 
