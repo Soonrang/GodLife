@@ -64,6 +64,7 @@ public class ChallengeService extends BaseEntity {
                                 .challengeImages(challengeImages)
                                 .user(user)
                                 .isDeleted(false)
+                                .isClosed(false)
                                 .build();
 
         challenge.checkStatus(LocalDate.now());
@@ -107,7 +108,7 @@ public class ChallengeService extends BaseEntity {
         return ChallengeInfoResponse.from(challenge, isJoined);
     }
 
-     //챌린지 수정 로직
+     //챌린지 수정 로직 > admin서비스로 이동
     @Transactional
     public void updateChallenge(String email, UUID challengeId, ChallengeUpdateRequest request) {
         User user = findByUserEmail(email);

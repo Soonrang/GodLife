@@ -77,4 +77,12 @@ public class UserChallenge extends BaseEntity {
         this.authCount--;
     }
 
+    public void challengeStatusToFail(String failStatus) {
+        this.status = failStatus;
+    }
+
+    public void challengeStatusToSuccess(String successStatus) {
+        this.status = successStatus;
+    }
+
 }

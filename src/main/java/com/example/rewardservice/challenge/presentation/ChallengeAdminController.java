@@ -19,6 +19,13 @@ public class ChallengeAdminController {
     private final ChallengeAdminService challengeAdminService;
     private final JwtTokenExtractor jwtTokenExtractor;
 
+    @PostMapping("/api/user/challenge/admin/{challengeId}/close")
+    public ResponseEntity<String> closeChallenge(@PathVariable UUID challengeId) {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        challengeAdminService.closeChallenge(email, challengeId);
+        return ResponseEntity.ok("챌린지가 종료되었습니다.");
+    }
+
 
     @GetMapping("/api/challenge/{challengeId}/participants")
     public ResponseEntity<List<ParticipantResponse>> getParticipants(@PathVariable UUID challengeId) {

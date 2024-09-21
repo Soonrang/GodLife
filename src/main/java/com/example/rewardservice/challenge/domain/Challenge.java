@@ -50,6 +50,8 @@ public class Challenge extends BaseEntity {
 
     private boolean isDeleted;
 
+    private boolean isClosed;
+
     @Embedded
     private ChallengePeriod challengePeriod;
 
@@ -124,6 +126,12 @@ public class Challenge extends BaseEntity {
 
     public void changeIsDelete(boolean isDelete) {
         this.isDeleted = isDelete;
+    }
+
+    public void changeIsClosed() { this.isClosed = true; }
+
+    public long calcPrizeByUser(long peopleAmount) {
+        return this.prize/peopleAmount;
     }
 
 }
