@@ -8,5 +8,5 @@ import java.util.UUID;
 public class ChallengeJoinRequest {
 
     private UUID challengeId;
-    private long participationPoints;
+    private long deposit;
 }

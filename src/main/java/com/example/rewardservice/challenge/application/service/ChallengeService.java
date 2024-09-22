@@ -65,6 +65,7 @@ public class ChallengeService extends BaseEntity {
                                 .user(user)
                                 .isDeleted(false)
                                 .isClosed(false)
+                                .isLimited(false)
                                 .build();
 
         challenge.checkStatus(LocalDate.now());

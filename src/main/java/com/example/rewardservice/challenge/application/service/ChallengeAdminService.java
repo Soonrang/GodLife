@@ -1,5 +1,6 @@
 package com.example.rewardservice.challenge.application.service;
 
+import com.example.rewardservice.challenge.application.response.ChallengeAdminPostResponse;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.application.response.ParticipantResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
@@ -113,6 +114,18 @@ public class ChallengeAdminService {
         }
 
         challengePostRepository.save(post);
+    }
+
+    public Page<ChallengeAdminPostResponse> getParticipatingUserPost(String email,UUID challengeId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        // 관리자 권한이 있는지 확인
+
+        Challenge challenge = findByChallengeId(challengeId);
+
+        Page<ChallengePost> posts = challengePostRepository.findByChallengeId(challengeId, pageable);
+
+        return posts.map(post -> ChallengeAdminPostResponse.from(challenge, post));
     }
 
     private void successUser(UserChallenge userChallenge, Challenge challenge, long prizePerUser){

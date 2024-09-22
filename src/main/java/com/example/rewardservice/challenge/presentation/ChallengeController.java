@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -37,21 +34,21 @@ public class ChallengeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<Page<ChallengeInfoResponse>> getChallenges(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        String email = jwtTokenExtractor.getCurrentUserEmail();
-        Page<ChallengeInfoResponse> challenges = challengeService.getChallenges(email,page, size);
-        return ResponseEntity.ok(challenges);
-    }
+//    @GetMapping
+//    public ResponseEntity<Page<ChallengeInfoResponse>> getChallenges(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "50") int size) {
+//        String email = jwtTokenExtractor.getCurrentUserEmail();
+//        Page<ChallengeInfoResponse> challenges = challengeService.getChallenges(email,page, size);
+//        return ResponseEntity.ok(challenges);
+//    }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<Page<ChallengeInfoResponse>> getChallengesByCategoryAndStatus(
-            @RequestParam String category,
-            @RequestParam String state,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String state,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int size) {
+            @RequestParam(defaultValue = "50") int size) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         Page<ChallengeInfoResponse> challenges = challengeService.getChallengesByCategoryAndStatus(email, page, size, category, state);
         return ResponseEntity.ok(challenges);
