@@ -52,6 +52,8 @@ public class Challenge extends BaseEntity {
 
     private boolean isClosed;
 
+    private boolean isLimited;
+
     @Embedded
     private ChallengePeriod challengePeriod;
 
@@ -113,11 +115,11 @@ public class Challenge extends BaseEntity {
     }
 
     public void changeState() {
-        this.state = "모집마감";
+        this.isLimited = true;
     }
 
     public void changeStateByCancel(){
-        this.state = "모집중";
+        this.isLimited = false;
     }
 
     public void updateStatus(String state){

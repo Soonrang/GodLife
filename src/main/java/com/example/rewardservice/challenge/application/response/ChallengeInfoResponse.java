@@ -28,7 +28,8 @@ public record ChallengeInfoResponse(
         String state,
         long prize,
         boolean hasCheckedInToday,
-        UUID userChallengeId
+        UUID userChallengeId,
+        boolean isLimited
 ) {
     public static ChallengeInfoResponse from(Challenge challenge, Boolean isJoined) {
         return new ChallengeInfoResponse(
@@ -51,7 +52,8 @@ public record ChallengeInfoResponse(
                 challenge.getState(),
                 challenge.getPrize(),
                 false,
-                null
+                null,
+                challenge.isLimited()
         );
     }
 
@@ -76,7 +78,8 @@ public record ChallengeInfoResponse(
                 challenge.getState(),
                 challenge.getPrize(),
                 false,
-                null
+                null,
+                challenge.isLimited()
         );
     }
 
@@ -101,8 +104,8 @@ public record ChallengeInfoResponse(
                 challenge.getState(),
                 challenge.getPrize(),
                 hasCheckedInToday,
-                userChallengeId
-
+                userChallengeId,
+                challenge.isLimited()
         );
     }
 }

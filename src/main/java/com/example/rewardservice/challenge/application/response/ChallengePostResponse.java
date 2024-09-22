@@ -20,7 +20,7 @@ public record ChallengePostResponse(
                 challengePost.getId(),
                 challengePost.getChallenge().getTitle(),
                 challengePost.getDescription(),
-                challengePost.getChallenge().getChallengeImages().getMainImage(),
+                challengePost.getImage(),
                 challengePost.getCreatedAt(),
                 challengePost.getUser().getNickname(),
                 challengePost.getStatus()

@@ -59,21 +59,21 @@ public class ChallengeJoinService {
         }
 
         // 참가 목록에 등록
-        UserChallenge newParticipation = new UserChallenge(user, challenge, JOINED, true, request.getParticipationPoints());
+        UserChallenge newParticipation = new UserChallenge(user, challenge, JOINED, true, request.getDeposit());
         challengeUserRepository.save(newParticipation);
 
         // 참가 로그 기록
-        ChallengeHistory challengeHistory = new ChallengeHistory(user,challenge,JOINED,"참가",request.getParticipationPoints());
+        ChallengeHistory challengeHistory = new ChallengeHistory(user,challenge,JOINED,"참가",-request.getDeposit());
         challengeHistoryRepository.save(challengeHistory);
 
         // 상금더하기
-        challenge.plusPrize(request.getParticipationPoints());
+        challenge.plusPrize(request.getDeposit());
 
         // 참가자 인원 증가
         challenge.participantsAmountPlus();
 
         // 유저 포인트 감소
-        user.minusPoints(request.getParticipationPoints());
+        user.minusPoints(request.getDeposit());
 
         if(challenge.getParticipantsLimit()-1 == challenge.getParticipants()) {
             challenge.changeState();
@@ -111,7 +111,7 @@ public class ChallengeJoinService {
         // 챌린지 전체 상금 마이너스
         challenge.minusPrize(currentChallenge.getDeposit());
 
-        ChallengeHistory challengeHistory = new ChallengeHistory(user,challenge,CANCELED,"유저 요청으로 취소",currentChallenge.getDeposit());
+        ChallengeHistory challengeHistory = new ChallengeHistory(user,challenge,CANCELED,"취소",currentChallenge.getDeposit());
 
         challenge.changeStateByCancel();
 

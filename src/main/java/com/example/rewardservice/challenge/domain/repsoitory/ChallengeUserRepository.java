@@ -24,11 +24,7 @@ public interface ChallengeUserRepository extends JpaRepository<UserChallenge, UU
     @Query("SELECT uc FROM UserChallenge uc JOIN uc.challenge c WHERE uc.user.email = :email " +
             "AND uc.isJoined = true " +                      // 공백 추가
             "AND uc.challenge.isDeleted = false " +           // 공백 추가
-            "AND (CASE " +
-            "         WHEN CURRENT_DATE < c.challengePeriod.startDate THEN '진행전' " +
-            "         WHEN CURRENT_DATE > c.challengePeriod.endDate THEN '종료' " +
-            "         ELSE '진행중' " +
-            "     END) = :state")
+            "AND uc.challenge.state = :state")
     Page<UserChallenge> findJoinedChallengesByUserEmail(@Param("email") String email,
                                                         @Param("state") String state,
                                                         Pageable pageable);

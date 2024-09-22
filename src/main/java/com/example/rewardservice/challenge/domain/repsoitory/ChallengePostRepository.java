@@ -38,6 +38,9 @@ public interface ChallengePostRepository extends JpaRepository<ChallengePost, UU
     @Query("SELECT cp FROM ChallengePost cp WHERE cp.userChallenge.id = :userChallengeId")
     Page<ChallengePost> findByUserChallengeId(@Param("userChallengeId") UUID userChallengeId, Pageable pageable);
 
+    @Query("SELECT cp FROM ChallengePost cp WHERE cp.challenge.id = :challengeId")
+    Page<ChallengePost> findByChallengeId(@Param("challengeId") UUID challengeId, Pageable pageable);
+
 
 
 }

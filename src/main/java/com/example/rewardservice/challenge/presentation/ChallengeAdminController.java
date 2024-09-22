@@ -1,5 +1,6 @@
 package com.example.rewardservice.challenge.presentation;
 
+import com.example.rewardservice.challenge.application.response.ChallengeAdminPostResponse;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.application.response.ParticipantResponse;
 import com.example.rewardservice.challenge.application.service.ChallengeAdminService;
@@ -47,6 +48,17 @@ public class ChallengeAdminController {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         Page<ChallengeInfoResponse> joinedChallenges = challengeAdminService.getAdminChallengesByUserEmail(email,page,size,state);
         return ResponseEntity.ok(joinedChallenges);
+    }
+
+    @GetMapping("/api/challenge/{challengeId}/check-status")
+    public ResponseEntity<Page<ChallengeAdminPostResponse>> getUserPosts(
+            @PathVariable UUID challengeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size)
+    {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        Page<ChallengeAdminPostResponse> response = challengeAdminService.getParticipatingUserPost(email,challengeId,page,size);
+        return ResponseEntity.ok(response);
     }
 
 }

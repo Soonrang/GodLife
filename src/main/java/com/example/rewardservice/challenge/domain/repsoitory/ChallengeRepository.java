@@ -14,16 +14,38 @@ import java.util.UUID;
 public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
     Page<Challenge> findByCategory(String category, Pageable pageable);
 
-    
-    @Query("SELECT c FROM Challenge c " +
-            "WHERE c.category = :category AND c.state = :state AND c.isDeleted = false " +
-            "ORDER BY (CASE WHEN c.participantsLimit = c.participants THEN 1 ELSE 0 END) ASC, c.challengePeriod.startDate ASC")
-    Page<Challenge> findByCategoryAndState(@Param("category") String category,
-                                           @Param("state") String state,
-                                           Pageable pageable);
 
     @Query("SELECT c FROM Challenge c " +
-            "WHERE c.isDeleted = false ")
+            "WHERE c.isDeleted = false " +
+            "AND (:category IS NULL OR c.category = :category) " +  // 카테고리가 null이면 모든 카테고리 포함
+            "AND (:state IS NULL OR c.state = :state) " +  // 상태가 null이면 모든 상태 포함
+            "ORDER BY " +
+            "(CASE " +
+            "    WHEN c.state = '진행전' THEN 1 " +  // 진행전 챌린지를 먼저 보여줌
+            "    WHEN c.state = '진행중' THEN 2 " +  // 그 다음 진행중 챌린지
+            "    WHEN c.state = '종료' THEN 4 " +    // 종료된 챌린지를 마지막에
+            "    ELSE 3 " +                          // 기타 상태 (예: 모집마감)
+            "END), " +
+            "(CASE WHEN c.isLimited = true THEN 1 ELSE 0 END) ASC, " +  // 모집마감 챌린지를 처리
+            "c.challengePeriod.startDate ASC")  // 시작 날짜를 기준으로 정렬
+    Page<Challenge> findByCategoryAndState(
+            @Param("category") String category,
+            @Param("state") String state,
+            Pageable pageable);
+
+
+
+    @Query("SELECT c FROM Challenge c " +
+            "WHERE c.isDeleted = false " +
+            "ORDER BY " +
+            "(CASE " +
+            "    WHEN c.state = '진행전' THEN 1 " +  // 진행전 챌린지 우선
+            "    WHEN c.state = '진행중' THEN 2 " +  // 그다음 진행중 챌린지
+            "    WHEN c.state = '종료' THEN 4 " +    // 종료된 챌린지 마지막
+            "    ELSE 3 " +                          // 기타 상태 (예: 모집마감)
+            "END), " +
+            "(CASE WHEN c.isLimited = true THEN 1 ELSE 0 END) ASC, " +  // 모집마감인 챌린지 처리
+            "c.challengePeriod.startDate ASC")  // 시작 날짜 순으로 정렬
     Page<Challenge> findChallenge(Pageable pageable);
 
     @Query("select c from Challenge c where c.challengePeriod.startDate <= :today and c.challengePeriod.endDate >= :today and c.state <> '종료' and c.state <> '모집마감'")
