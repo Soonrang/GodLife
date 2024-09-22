@@ -6,6 +6,7 @@ import com.example.rewardservice.challenge.application.response.ChallengeInfoRes
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengeHistory;
 import com.example.rewardservice.challenge.domain.UserChallenge;
+import com.example.rewardservice.challenge.domain.repsoitory.ChallengeHistoryRepository;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeRepository;
 import com.example.rewardservice.challenge.domain.vo.ChallengeImages;
 import com.example.rewardservice.challenge.domain.vo.ChallengePeriod;
@@ -37,6 +38,7 @@ import java.util.UUID;
 public class ChallengeService extends BaseEntity {
 
     private final ChallengeRepository challengeRepository;
+    private final ChallengeHistoryRepository challengeHistoryRepository;
     private final UserRepository userRepository;
     private final S3ImageService s3ImageService;
 
@@ -147,6 +149,7 @@ public class ChallengeService extends BaseEntity {
     }
 
 
+    @Transactional
     public void deleteChallenge(String email, UUID challengeId){
         User user = findByUserEmail(email);
         Challenge challenge = getChallengeById(challengeId);
@@ -186,6 +189,8 @@ public class ChallengeService extends BaseEntity {
             ChallengeHistory challengeHistory = new ChallengeHistory(
                     participant,challenge,"삭제","사용자가 삭제한 챌린지입니다.",stakedPoints
             );
+
+            challengeHistoryRepository.save(challengeHistory);
         }
     }
 

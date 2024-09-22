@@ -12,6 +12,7 @@ import com.example.rewardservice.challenge.domain.repsoitory.ChallengeUserReposi
 import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.user.domain.User;
 import com.example.rewardservice.user.domain.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,7 @@ public class ChallengePostService {
     private final ChallengeUserRepository challengeUserRepository;
     private final S3ImageService s3ImageService;
 
+    @Transactional
     public UUID createChallengePost(String email, UUID challengeId, ChallengePostRequest request) {
         User user = findByUserEmail(email);
         Challenge challenge = findByChallengeId(challengeId);

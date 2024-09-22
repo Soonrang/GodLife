@@ -51,13 +51,14 @@ public class ChallengeAdminController {
     }
 
     @GetMapping("/api/challenge/{challengeId}/check-status")
-    public ResponseEntity<Page<ChallengeAdminPostResponse>> getUserPosts(
-            @PathVariable UUID challengeId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size)
+    public ResponseEntity <ChallengeAdminPostResponse> getUserPosts(
+            @PathVariable UUID challengeId
+//           , @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size
+             )
     {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-        Page<ChallengeAdminPostResponse> response = challengeAdminService.getParticipatingUserPost(email,challengeId,page,size);
+        ChallengeAdminPostResponse response = challengeAdminService.getParticipatingUserPost(email,challengeId);
         return ResponseEntity.ok(response);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +40,7 @@ public interface ChallengePostRepository extends JpaRepository<ChallengePost, UU
     Page<ChallengePost> findByUserChallengeId(@Param("userChallengeId") UUID userChallengeId, Pageable pageable);
 
     @Query("SELECT cp FROM ChallengePost cp WHERE cp.challenge.id = :challengeId")
-    Page<ChallengePost> findByChallengeId(@Param("challengeId") UUID challengeId, Pageable pageable);
+    List<ChallengePost> findByChallengeId(@Param("challengeId") UUID challengeId);
 
 
 
