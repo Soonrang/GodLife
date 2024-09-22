@@ -13,6 +13,7 @@ public record ChallengePostResponse(
         String imageUrl,
         LocalDate checkDate,
         String userNickname,
+        String userName,
         String status
 ) {
     public static ChallengePostResponse from(ChallengePost challengePost) {
@@ -23,6 +24,7 @@ public record ChallengePostResponse(
                 challengePost.getImage(),
                 challengePost.getCreatedAt(),
                 challengePost.getUser().getNickname(),
+                challengePost.getUser().getName(),
                 challengePost.getStatus()
         );
     }

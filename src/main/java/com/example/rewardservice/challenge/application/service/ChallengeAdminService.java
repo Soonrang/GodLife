@@ -116,16 +116,16 @@ public class ChallengeAdminService {
         challengePostRepository.save(post);
     }
 
-    public Page<ChallengeAdminPostResponse> getParticipatingUserPost(String email,UUID challengeId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public ChallengeAdminPostResponse getParticipatingUserPost(String email,UUID challengeId) {
+        //Pageable pageable = PageRequest.of(page, size);
 
         // 관리자 권한이 있는지 확인
 
         Challenge challenge = findByChallengeId(challengeId);
 
-        Page<ChallengePost> posts = challengePostRepository.findByChallengeId(challengeId, pageable);
+        List<ChallengePost> posts = challengePostRepository.findByChallengeId(challengeId);
 
-        return posts.map(post -> ChallengeAdminPostResponse.from(challenge, post));
+        return ChallengeAdminPostResponse.from(challenge, posts);
     }
 
     private void successUser(UserChallenge userChallenge, Challenge challenge, long prizePerUser){
