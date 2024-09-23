@@ -12,6 +12,6 @@ public interface PurchaseRecordRepository extends JpaRepository<PurchaseRecord, 
 
 
     //@Query("select pr from PurchaseRecord pr order by pr.createdAt desc")
-    List<PurchaseRecord> findByUser(User user);
+    List<PurchaseRecord> findByUserOrderByCreatedAtDesc(User user);
 
 }
