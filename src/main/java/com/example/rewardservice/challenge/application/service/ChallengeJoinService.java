@@ -76,7 +76,7 @@ public class ChallengeJoinService {
         user.minusPoints(request.getDeposit());
 
         if(challenge.getParticipantsLimit() == challenge.getParticipants()) {
-            challenge.changeState();
+            challenge.changeStateClosed();
         }
 
         challengeRepository.save(challenge);

@@ -37,24 +37,64 @@ public class ChallengeAdminService {
     public static final long FAIL_CHALLENGE_POINTS = 0;
     public static final String FAIL_CHALLENGE_MESSAGE = "실패";
     public static final String SUCCESS_CHALLENGE_MESSAGE = "성공";
+    public static final String ALL_USER_FAIL_CHALLENGE_MESSAGE = "회수";
+    public static final String ALL_USER_FAIL_CHALLENGE_INFORM = "모든유저가 실패했습니다.";
     public static final long SUCCESS_CHALLENGE_CRITERIA = 85;
 
     @Transactional
     public void closeChallenge(String email, UUID challengeId) {
         // 유저 validate
-
         Challenge challenge = findByChallengeId(challengeId);
         validateIsClosed(challenge);
 
         List<UserChallenge> participants = challengeUserRepository.findByChallengeId(challengeId);
-        long prizePerUser = calcPerPrize(challenge,participants);
 
-        for(UserChallenge userChallenge : participants) {
-            if(userChallenge.getProgress() >= SUCCESS_CHALLENGE_CRITERIA) {
-                successUser(userChallenge,challenge,prizePerUser);
+        long successCount = participants.stream()
+                .filter(userChallenge -> userChallenge.getProgress() >= SUCCESS_CHALLENGE_CRITERIA)
+                .count();
+
+        if(participants.isEmpty() || successCount == 0) {
+           handleNoSuccessParticipants(challenge);
+        } else {
+           handleSuccessParticipants(participants, challenge, successCount);
+        }
+        changeStateToClose(challenge);
+    }
+
+    private void failureUser(UserChallenge userChallenge, Challenge challenge){
+        User user = userChallenge.getUser();
+        ChallengeHistory failHistory = new ChallengeHistory(user,challenge,FAIL_CHALLENGE_MESSAGE," ", FAIL_CHALLENGE_POINTS);
+        challengeHistoryRepository.save(failHistory);
+    }
+
+    private long calcPerPrize (Challenge challenge, long successCount) {
+        long totalPrize = challenge.getPrize();
+
+        return totalPrize/successCount;
+    }
+
+    private void handleNoSuccessParticipants(Challenge challenge) {
+        User admin = findAdmin();
+        admin.transToAdmin(challenge.getPrize());
+        ChallengeHistory challengeHistory = new ChallengeHistory(admin,challenge,ALL_USER_FAIL_CHALLENGE_MESSAGE,ALL_USER_FAIL_CHALLENGE_INFORM, challenge.getPrize());
+        challengeHistoryRepository.save(challengeHistory);
+    }
+
+    private void handleSuccessParticipants(List<UserChallenge> participants, Challenge challenge, long successCount) {
+        long prizePerUser = calcPerPrize(challenge, successCount);
+
+        for (UserChallenge userChallenge : participants) {
+            if (userChallenge.getProgress() >= SUCCESS_CHALLENGE_CRITERIA) {
+                successUser(userChallenge, challenge, prizePerUser);  // 성공한 사용자 처리
             } else {
-                failureUser(userChallenge,challenge);
+                failureUser(userChallenge, challenge);  // 실패한 사용자 처리
             }
+        }
+    }
+
+    private void changeStateToClose(Challenge challenge) {
+        if(!challenge.getState().equals("종료")){
+            challenge.changeState();
         }
         challenge.changeIsClosed();
         challengeRepository.save(challenge);
@@ -92,6 +132,10 @@ public class ChallengeAdminService {
 
     public void updateChallengePostStatus(UUID challengeId, UUID postId, String status) {
         // 챌린지 업로드 유저인지 확인 , 기간 검증
+
+        // 개설한 유저가 최종적으로 종료한 챌린지인 경우 예외처리
+        Challenge challenge = findByChallengeId(challengeId);
+        validateIsClosed(challenge);
 
         ChallengePost post = findByPostId(postId);
 
@@ -137,20 +181,7 @@ public class ChallengeAdminService {
         userRepository.save(user);
     }
 
-    private void failureUser(UserChallenge userChallenge, Challenge challenge){
-        User user = userChallenge.getUser();
-        ChallengeHistory failHistory = new ChallengeHistory(user,challenge,FAIL_CHALLENGE_MESSAGE," ", FAIL_CHALLENGE_POINTS);
-        challengeHistoryRepository.save(failHistory);
-    }
 
-    private long calcPerPrize (Challenge challenge, List<UserChallenge> participants) {
-        long totalPrize = challenge.getPrize();
-        long successfulUsers = participants.stream()
-                .filter(uc -> uc.getProgress() >= SUCCESS_CHALLENGE_CRITERIA)
-                .count();
-
-        return totalPrize/successfulUsers;
-    }
 
     private ChallengePost findByPostId(UUID id) {
         return challengePostRepository.findById(id)
@@ -161,6 +192,12 @@ public class ChallengeAdminService {
         return challengeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 id의 챌린지가 존재하지 않습니다."));
     }
+
+    private User findAdmin() {
+        return userRepository.findByEmail("admin@gmail.com")
+                .orElseThrow(() -> new RuntimeException("어드민 계정이 올바르지 않습니다."));
+    }
+
 
     private void validateIsClosed(Challenge challenge){
         if(challenge.isClosed()) {

@@ -118,4 +118,8 @@ public class User extends BaseEntity {
         this.totalPoint -= points;
     }
 
+    public void transToAdmin(long points) {
+        this.totalPoint += points;
+    }
+
 }

@@ -132,6 +132,8 @@ public class Challenge extends BaseEntity {
 
     public void changeIsClosed() { this.isClosed = true; }
 
+    public void changeStateClosed() { this.state = "종료";}
+
     public long calcPrizeByUser(long peopleAmount) {
         return this.prize/peopleAmount;
     }
