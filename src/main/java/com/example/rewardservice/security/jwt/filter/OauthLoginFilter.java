@@ -44,7 +44,6 @@ public class OauthLoginFilter extends AbstractAuthenticationProcessingFilter {
         Map<String, String> jsonData = parseRequestJSON(request);
         log.info(jsonData);
 
-        // user 객체를 JSON에서 추출
         String idStr = String.valueOf(jsonData.get("id"));
         String name = (String) jsonData.get("name");
         String email = idStr;
@@ -76,7 +75,6 @@ public class OauthLoginFilter extends AbstractAuthenticationProcessingFilter {
         log.info("User found or created: " + user);
         log.info("Authentication token created: " + authenticationToken);
 
-        // 여기서 인증을 시도하고 로그를 추가합니다.
         Authentication authentication;
         try {
             authentication = getAuthenticationManager().authenticate(authenticationToken);
@@ -86,7 +84,6 @@ public class OauthLoginFilter extends AbstractAuthenticationProcessingFilter {
             throw e;
         }
 
-        // 인증 성공 시 SecurityContextHolder에 인증 정보 설정
         if (authentication != null && authentication.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("SecurityContextHolder set with: " + authentication);

@@ -3,6 +3,7 @@ package com.example.rewardservice.challenge.application.response;
 import com.example.rewardservice.challenge.domain.ChallengeHistory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ChallengeHistoryResponse (
@@ -15,7 +16,7 @@ public record ChallengeHistoryResponse (
         String status,
 
         // 발생 날짜
-        LocalDate changeDate,
+        LocalDateTime changeDate,
 
         // 사유 (현재 단계에서는 필요x)
         String reason,

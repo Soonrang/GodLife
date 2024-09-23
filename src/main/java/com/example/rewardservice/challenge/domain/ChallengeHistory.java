@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -33,7 +34,7 @@ public class ChallengeHistory {
 
     private String reason;
 
-    private LocalDate createAt;
+    private LocalDateTime createAt;
 
     private long point;
 
@@ -42,7 +43,7 @@ public class ChallengeHistory {
         this.challenge = challenge;
         this.status = status;
         this.reason = reason;
-        this.createAt = LocalDate.now();
+        this.createAt = LocalDateTime.now();
         this.point = point;
     }
 

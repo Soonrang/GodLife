@@ -48,7 +48,7 @@ public class ChallengeController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String state,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "50") int size) {
+            @RequestParam(defaultValue = "12") int size) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         Page<ChallengeInfoResponse> challenges = challengeService.getChallengesByCategoryAndStatus(email, page, size, category, state);
         return ResponseEntity.ok(challenges);
