@@ -41,6 +41,7 @@ public class UserChallengeStateResponse {
     private String participantName;
     private String participantUuid;
     private String participantEmail;
+    private long deposit;
 
     //참가유저인증정보
     private List<ChallengePostResponse> checkRecords;
@@ -73,6 +74,7 @@ public class UserChallengeStateResponse {
         response.participantName = userChallenge.getUser().getName();
         response.participantUuid = userChallenge.getUser().getId().toString();
         response.participantEmail = userChallenge.getUser().getEmail();
+        response.deposit = userChallenge.getDeposit();
 
         // 진행률 매핑
         response.progress = userChallenge.getProgress();

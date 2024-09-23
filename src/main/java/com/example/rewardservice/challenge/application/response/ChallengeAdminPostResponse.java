@@ -12,7 +12,8 @@ public record ChallengeAdminPostResponse(
         LocalDate startDate,
         LocalDate endDate,
 
-        List<ChallengePostResponse> checkRecord
+
+        List<ChallengePostResponse> checkRecords
 ) {
 
     public static ChallengeAdminPostResponse from(Challenge challenge, List<ChallengePost> challengePosts) {

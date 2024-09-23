@@ -14,8 +14,7 @@ public record ChallengePostResponse(
         LocalDate checkDate,
         String userNickname,
         String userName,
-        String status,
-        long deposit
+        String status
 ) {
     public static ChallengePostResponse from(ChallengePost challengePost) {
         return new ChallengePostResponse(
@@ -26,8 +25,7 @@ public record ChallengePostResponse(
                 challengePost.getCreatedAt(),
                 challengePost.getUser().getNickname(),
                 challengePost.getUser().getName(),
-                challengePost.getStatus(),
-                challengePost.getUserChallenge().getDeposit()
+                challengePost.getStatus()
         );
     }
 }
