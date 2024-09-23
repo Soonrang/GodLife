@@ -62,6 +62,7 @@ public class UserChallenge extends BaseEntity {
 
     public void calculateProgress() {
         long totalDays = ChronoUnit.DAYS.between(challenge.getChallengePeriod().getStartDate(), challenge.getChallengePeriod().getEndDate());
+        totalDays = Math.max(totalDays, 1);
         this.progress = Math.round((authCount / (double) totalDays * 100) * 10.0) / 10.0;
     }
 

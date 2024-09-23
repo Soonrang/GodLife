@@ -42,6 +42,7 @@ public class UserChallengeStateResponse {
     private String participantUuid;
     private String participantEmail;
     private long deposit;
+    //private long earnedPrize;
 
     //참가유저인증정보
     private List<ChallengePostResponse> checkRecords;
@@ -67,7 +68,10 @@ public class UserChallengeStateResponse {
         response.uploadUserNickname = challenge.getUser().getNickname();
         response.participants = challenge.getParticipants();
         response.state = challenge.getState();
-        response.prize = challenge.getPrize();
+        //response.prize = challenge.getPrize();
+
+        //프론트 요청으로 유저가 획득한 상금을 보여줌
+        response.prize = userChallenge.getEarnedPrize();
 
         // 유저 정보 매핑
         response.participantNickname = userChallenge.getUser().getNickname();
@@ -78,6 +82,9 @@ public class UserChallengeStateResponse {
 
         // 진행률 매핑
         response.progress = userChallenge.getProgress();
+
+        // 챌린지가 끝난경우
+        //response.earnedPrize = userChallenge.getEarnedPrize();
 
         // 인증 정보 매핑
         response.checkRecords = challengePosts.stream()

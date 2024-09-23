@@ -32,7 +32,7 @@ public class ChallengeJoinService {
     private final ChallengeHistoryRepository challengeHistoryRepository;
     private final ChallengePostRepository challengePostRepository;
 
-    public static final String JOINED = "참가중";
+    public static final String JOINED = "참가";
     public static final String CANCELED = "참가취소";
     public static final String COMPLETED = "완료";
 
