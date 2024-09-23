@@ -75,7 +75,7 @@ public class ChallengeJoinService {
         // 유저 포인트 감소
         user.minusPoints(request.getDeposit());
 
-        if(challenge.getParticipantsLimit()-1 == challenge.getParticipants()) {
+        if(challenge.getParticipantsLimit() == challenge.getParticipants()) {
             challenge.changeState();
         }
 

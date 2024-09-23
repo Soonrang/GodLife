@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,13 +53,14 @@ public class ChallengeAdminController {
 
     @GetMapping("/api/challenge/{challengeId}/check-status")
     public ResponseEntity <ChallengeAdminPostResponse> getUserPosts(
-            @PathVariable UUID challengeId
+            @PathVariable UUID challengeId,
+            @RequestParam(required = false) LocalDate createdAt
 //           , @RequestParam(defaultValue = "0") int page,
 //            @RequestParam(defaultValue = "10") int size
              )
     {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-        ChallengeAdminPostResponse response = challengeAdminService.getParticipatingUserPost(email,challengeId);
+        ChallengeAdminPostResponse response = challengeAdminService.getParticipatingUserPost(email,createdAt,challengeId);
         return ResponseEntity.ok(response);
     }
 

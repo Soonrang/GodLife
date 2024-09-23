@@ -39,8 +39,9 @@ public interface ChallengePostRepository extends JpaRepository<ChallengePost, UU
     @Query("SELECT cp FROM ChallengePost cp WHERE cp.userChallenge.id = :userChallengeId")
     Page<ChallengePost> findByUserChallengeId(@Param("userChallengeId") UUID userChallengeId, Pageable pageable);
 
-    @Query("SELECT cp FROM ChallengePost cp WHERE cp.challenge.id = :challengeId")
-    List<ChallengePost> findByChallengeId(@Param("challengeId") UUID challengeId);
+    @Query("SELECT cp FROM ChallengePost cp WHERE cp.challenge.id = :challengeId AND (:createdAt IS NULL OR cp.createdAt = :createdAt)")
+    List<ChallengePost> findByChallengeId(@Param("challengeId") UUID challengeId,
+                                          @Param("createdAt") LocalDate createdAt);
 
 
 

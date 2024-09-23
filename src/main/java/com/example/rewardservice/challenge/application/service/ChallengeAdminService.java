@@ -116,14 +116,14 @@ public class ChallengeAdminService {
         challengePostRepository.save(post);
     }
 
-    public ChallengeAdminPostResponse getParticipatingUserPost(String email,UUID challengeId) {
+    public ChallengeAdminPostResponse getParticipatingUserPost(String email,LocalDate filterDate, UUID challengeId) {
         //Pageable pageable = PageRequest.of(page, size);
 
         // 관리자 권한이 있는지 확인
 
         Challenge challenge = findByChallengeId(challengeId);
 
-        List<ChallengePost> posts = challengePostRepository.findByChallengeId(challengeId);
+        List<ChallengePost> posts = challengePostRepository.findByChallengeId(challengeId,filterDate);
 
         return ChallengeAdminPostResponse.from(challenge, posts);
     }

@@ -3,12 +3,14 @@ package com.example.rewardservice.challenge.application.response;
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengePost;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 public record ChallengeAdminPostResponse(
         String title,
         String mainImage,
+        LocalDate startDate,
+        LocalDate endDate,
 
         List<ChallengePostResponse> checkRecord
 ) {
@@ -22,6 +24,8 @@ public record ChallengeAdminPostResponse(
         return new ChallengeAdminPostResponse(
                 challenge.getTitle(),
                 challenge.getChallengeImages().getMainImage(),
+                challenge.getChallengePeriod().getStartDate(),
+                challenge.getChallengePeriod().getEndDate(),
                 postResponses
         );
     }
