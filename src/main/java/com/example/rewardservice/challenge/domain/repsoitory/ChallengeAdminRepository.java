@@ -19,9 +19,9 @@ public interface ChallengeAdminRepository extends JpaRepository<Challenge, UUID>
             "(CASE " +
             "   WHEN c.state = '진행전' THEN 1 " +
             "   WHEN c.state = '진행중' THEN 2 " +
-            "   ELSE 3 " +  // 기타 상태를 처리하기 위해 else 추가
+            "   ELSE 3 " +
             "END), " +
-            "c.challengePeriod.startDate ASC")  // 상태가 같으면 시작일 기준으로 정렬
+            "c.challengePeriod.startDate ASC")
     Page<Challenge> findAdminChallengesByUserEmail(@Param("email") String email,
                                                    @Param("state") String state,
                                                    Pageable pageable);

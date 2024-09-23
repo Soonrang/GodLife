@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 @AllArgsConstructor
 public class OAuthController {
 
-
     private final OauthService oauthService;
 
 
