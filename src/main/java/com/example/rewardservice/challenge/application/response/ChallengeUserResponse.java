@@ -56,6 +56,7 @@ public class ChallengeUserResponse {
     private String participantName;
     private String participantUuid;
     private String participantEmail;
+    private long deposit;
 
     public static ChallengeUserResponse from(Challenge challenge, UserChallenge userChallenge) {
         ChallengeUserResponse response = new ChallengeUserResponse();
@@ -89,6 +90,7 @@ public class ChallengeUserResponse {
 
         // 진행률 매핑
         response.progress = userChallenge.getProgress();
+        response.deposit = userChallenge.getDeposit();
 
         // 상금 정보 매핑
         return response;
