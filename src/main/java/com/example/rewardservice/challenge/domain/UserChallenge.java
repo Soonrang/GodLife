@@ -23,17 +23,6 @@ public class UserChallenge extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
-    private Challenge challenge;
-
-    @OneToMany(mappedBy = "userChallenge", cascade = CascadeType.ALL)
-    private List<ChallengePost> challengePosts;
-
     // 취소한 경우 false
     private boolean isJoined;
 
@@ -46,10 +35,21 @@ public class UserChallenge extends BaseEntity {
     private long authCount;
 
     // 유저가 건 상금
-    private long deposit ;
+    private long deposit;
 
     // 성공시 획득 포인트
     private long earnedPrize;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    private Challenge challenge;
+
+    @OneToMany(mappedBy = "userChallenge", cascade = CascadeType.ALL)
+    private List<ChallengePost> challengePosts;
+
 
     public UserChallenge(User user, Challenge challenge, String status, boolean isJoined, long points) {
         this.user = user;

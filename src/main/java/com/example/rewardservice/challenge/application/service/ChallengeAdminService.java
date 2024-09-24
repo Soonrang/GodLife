@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -45,6 +47,7 @@ public class ChallengeAdminService {
     public void closeChallenge(String email, UUID challengeId) {
         // 유저 validate
         Challenge challenge = findByChallengeId(challengeId);
+        validateCloseTime(challenge);
         validateIsClosed(challenge);
 
         List<UserChallenge> participants = challengeUserRepository.findByChallengeId(challengeId);
@@ -94,7 +97,7 @@ public class ChallengeAdminService {
 
     private void changeStateToClose(Challenge challenge) {
         if(!challenge.getState().equals("종료")){
-            challenge.changeState();
+            challenge.changeStateClosed();
         }
         challenge.changeIsClosed();
         challengeRepository.save(challenge);
@@ -202,6 +205,18 @@ public class ChallengeAdminService {
     private void validateIsClosed(Challenge challenge){
         if(challenge.isClosed()) {
             throw new IllegalArgumentException("이미 종료된 챌린지입니다.");
+        }
+    }
+
+    private void validateCloseTime(Challenge challenge){
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate endDate = challenge.getChallengePeriod().getEndDate();
+        LocalTime endUploadTime = challenge.getChallengePeriod().getUploadEndTime();
+
+        LocalDateTime challengeEndDateTime = LocalDateTime.of(endDate, endUploadTime);
+
+        if (currentDateTime.isBefore(LocalDateTime.of(endDate, endUploadTime))) {
+            throw new IllegalStateException("챌린지를 종료할 수 없습니다. 챌린지 종료 날짜와 업로드 종료 시간이 지나야 종료할 수 있습니다. 현재시간: "+ currentDateTime + " 챌린지 종료시간: " + challengeEndDateTime);
         }
     }
 

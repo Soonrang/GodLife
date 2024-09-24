@@ -2,6 +2,7 @@ package com.example.rewardservice.challenge.application.service;
 
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +17,11 @@ import java.util.List;
 public class ChallengeStatusService {
 
     private final ChallengeRepository challengeRepository;
+
+    @PostConstruct
+    public void init() {
+        updateChallengeStatus();  // 애플리케이션 시작 시 한번 실행
+    }
 
 //    @Scheduled(cron = "0 0 0 * * *")
     @Scheduled(cron = "0 00 0 * * *")

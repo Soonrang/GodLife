@@ -1,6 +1,5 @@
 package com.example.rewardservice.challenge.domain.repsoitory;
 
-import com.example.rewardservice.challenge.application.response.UserChallengeStateResponse;
 import com.example.rewardservice.challenge.domain.ChallengePost;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

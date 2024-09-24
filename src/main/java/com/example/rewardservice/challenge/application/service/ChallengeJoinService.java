@@ -2,6 +2,8 @@ package com.example.rewardservice.challenge.application.service;
 
 import com.example.rewardservice.challenge.application.request.ChallengeJoinRequest;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
+import com.example.rewardservice.challenge.application.response.ChallengePostResponse;
+import com.example.rewardservice.challenge.application.response.ChallengeUserResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengeHistory;
 import com.example.rewardservice.challenge.domain.UserChallenge;
@@ -124,6 +126,16 @@ public class ChallengeJoinService {
     }
 
 
+    public ChallengeUserResponse getUserChallengeInfo(String email, UUID userChallengeId) {
+        // user검증
+        UserChallenge userChallenge = findByUserChallengeId(userChallengeId);
+        Challenge challenge = userChallenge.getChallenge();
+
+        return ChallengeUserResponse.from(challenge,userChallenge);
+    }
+
+
+
     public Page<ChallengeInfoResponse> getJoinedChallenges(String email, int page, int size, String state) {
         Pageable pageable = PageRequest.of(page,size);
         if (state == null) {
@@ -167,6 +179,11 @@ public class ChallengeJoinService {
     private Challenge findByChallengeId(UUID challengeId) {
         return challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new RuntimeException("해당 챌린지 아이디가 존재하지 않습니다." + challengeId));
+    }
+
+    private UserChallenge findByUserChallengeId(UUID userChallengeId) {
+        return challengeUserRepository.findById(userChallengeId)
+                .orElseThrow(() -> new RuntimeException("해당 챌린지 아이디가 없습니다." + userChallengeId));
     }
 
 }
