@@ -94,7 +94,7 @@ public class ChallengeAdminService {
 
     private void changeStateToClose(Challenge challenge) {
         if(!challenge.getState().equals("종료")){
-            challenge.changeState();
+            challenge.changeStateClosed();
         }
         challenge.changeIsClosed();
         challengeRepository.save(challenge);

@@ -2,7 +2,7 @@ package com.example.rewardservice.challenge.presentation;
 
 import com.example.rewardservice.challenge.application.request.ChallengePostRequest;
 import com.example.rewardservice.challenge.application.response.ChallengePostResponse;
-import com.example.rewardservice.challenge.application.response.UserChallengeStateResponse;
+import com.example.rewardservice.challenge.application.response.ChallengeUserResponse;
 import com.example.rewardservice.challenge.application.service.ChallengePostService;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +32,13 @@ public class ChallengePostController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/api/challenge/{userChallengeId}/details")
-    public ResponseEntity<Page<UserChallengeStateResponse>> getChallengePostDetails(@PathVariable UUID userChallengeId,
-                                                                              @RequestParam(defaultValue = "0") int page,
-                                                                              @RequestParam(defaultValue = "10") int size
+    @GetMapping("/api/challenge/{userChallengeId}/check-records")
+    public ResponseEntity<Page<ChallengePostResponse>> getChallengePostDetails(@PathVariable UUID userChallengeId,
+                                                                               @RequestParam(defaultValue = "0") int page,
+                                                                               @RequestParam(defaultValue = "12") int size
     ) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-
-        Page<UserChallengeStateResponse> challengeInfo = challengePostService.getUserChallengeStates(email, userChallengeId, page, size);
+        Page<ChallengePostResponse> challengeInfo = challengePostService.getUserChallengePosts(email, userChallengeId, page, size);
         return ResponseEntity.ok(challengeInfo);
     }
 }

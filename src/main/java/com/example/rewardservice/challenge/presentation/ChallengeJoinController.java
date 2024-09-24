@@ -3,6 +3,7 @@ package com.example.rewardservice.challenge.presentation;
 import com.example.rewardservice.challenge.application.request.ChallengeJoinRequest;
 import com.example.rewardservice.challenge.application.response.ChallengeHistoryResponse;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
+import com.example.rewardservice.challenge.application.response.ChallengeUserResponse;
 import com.example.rewardservice.challenge.application.service.ChallengeHistoryService;
 import com.example.rewardservice.challenge.application.service.ChallengeJoinService;
 import com.example.rewardservice.security.jwt.JwtTokenExtractor;
@@ -71,6 +72,12 @@ public class ChallengeJoinController {
     }
 
 
-
+    // 유저가 참가중인 챌린지 데이터
+    @GetMapping("/api/challenge/{userChallengeId}/user-info")
+    public ResponseEntity<ChallengeUserResponse> getChallengeUserInfo(@PathVariable UUID userChallengeId) {
+        String email = jwtTokenExtractor.getCurrentUserEmail();
+        ChallengeUserResponse response = challengeJoinService.getUserChallengeInfo(email,userChallengeId);
+        return ResponseEntity.ok(response);
+    }
 
 }

@@ -29,6 +29,7 @@ public record ChallengeInfoResponse(
         long prize,
         boolean hasCheckedInToday,
         UUID userChallengeId,
+        boolean isClosed,
         boolean isLimited
 ) {
     public static ChallengeInfoResponse from(Challenge challenge, Boolean isJoined) {
@@ -53,6 +54,7 @@ public record ChallengeInfoResponse(
                 challenge.getPrize(),
                 false,
                 null,
+                challenge.isClosed(),
                 challenge.isLimited()
         );
     }
@@ -79,6 +81,7 @@ public record ChallengeInfoResponse(
                 challenge.getPrize(),
                 false,
                 null,
+                challenge.isClosed(),
                 challenge.isLimited()
         );
     }
@@ -105,6 +108,7 @@ public record ChallengeInfoResponse(
                 challenge.getPrize(),
                 hasCheckedInToday,
                 userChallengeId,
+                challenge.isClosed(),
                 challenge.isLimited()
         );
     }

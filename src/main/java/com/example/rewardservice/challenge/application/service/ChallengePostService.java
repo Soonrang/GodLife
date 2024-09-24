@@ -2,7 +2,6 @@ package com.example.rewardservice.challenge.application.service;
 
 import com.example.rewardservice.challenge.application.request.ChallengePostRequest;
 import com.example.rewardservice.challenge.application.response.ChallengePostResponse;
-import com.example.rewardservice.challenge.application.response.UserChallengeStateResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengePost;
 import com.example.rewardservice.challenge.domain.UserChallenge;
@@ -17,12 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -62,18 +58,37 @@ public class ChallengePostService {
         return challengePost.getId();
     }
 
-    public Page<UserChallengeStateResponse> getUserChallengeStates(String email, UUID userChallengeId, int page, int size) {
+//    public Page<> getUserChallengeStates(String email, UUID userChallengeId, int page, int size) {
+//
+//        UserChallenge userChallenge = findByUserChallengeId(userChallengeId);
+//
+//        Challenge challenge = userChallenge.getChallenge();
+//        Pageable pageable = PageRequest.of(page, size,Sort.by("createdAt").descending());
+//
+//        Page<ChallengePost> challengePosts = challengePostRepository.findByUserChallengeId(userChallengeId, pageable);
+//
+//        // ChallengePost를 UserChallengeStateResponse로 매핑
+//        return challengePosts.map(post -> UserChallengeStateResponse.from(challenge, userChallenge, List.of(post)));
+//    }
+
+
+    public Page<ChallengePostResponse> getUserChallengePosts(String email, UUID userChallengeId, int page, int size) {
+        // 페이지네이션 설정
+        Pageable pageable = PageRequest.of(page, size);
 
         UserChallenge userChallenge = findByUserChallengeId(userChallengeId);
 
-        Challenge challenge = userChallenge.getChallenge();
-        Pageable pageable = PageRequest.of(page, size,Sort.by("createdAt").descending());
+        if(!userChallenge.getUser().getEmail().equals(email)) {
+            throw new IllegalArgumentException("현재 유저와 userChallengeId가 일치하지 않습니다. 현재 유저" + userChallenge.getUser().getEmail() + " 토큰 email: " + email);
+        }
 
+        // 인증 기록 가져오기
         Page<ChallengePost> challengePosts = challengePostRepository.findByUserChallengeId(userChallengeId, pageable);
 
-        // ChallengePost를 UserChallengeStateResponse로 매핑
-        return challengePosts.map(post -> UserChallengeStateResponse.from(challenge, userChallenge, List.of(post)));
+        return challengePosts.map(ChallengePostResponse::from);
     }
+
+
 
     //현재 로그인한 유저가 인증한 게시글만 반환
     public Page<ChallengePostResponse> getCurrentUserChallengePosts(UUID challengeId, String email, int page, int size) {

@@ -28,7 +28,6 @@ public class ChallengeAdminController {
         return ResponseEntity.ok("챌린지가 종료되었습니다.");
     }
 
-
     @GetMapping("/api/challenge/{challengeId}/participants")
     public ResponseEntity<List<ParticipantResponse>> getParticipants(@PathVariable UUID challengeId) {
         List<ParticipantResponse> participants = challengeAdminService.getParticipants(challengeId);
@@ -54,13 +53,13 @@ public class ChallengeAdminController {
     @GetMapping("/api/challenge/{challengeId}/check-status")
     public ResponseEntity <ChallengeAdminPostResponse> getUserPosts(
             @PathVariable UUID challengeId,
-            @RequestParam(required = false) LocalDate createdAt
+            @RequestParam(required = false) LocalDate authDate
 //           , @RequestParam(defaultValue = "0") int page,
 //            @RequestParam(defaultValue = "10") int size
              )
     {
         String email = jwtTokenExtractor.getCurrentUserEmail();
-        ChallengeAdminPostResponse response = challengeAdminService.getParticipatingUserPost(email,createdAt,challengeId);
+        ChallengeAdminPostResponse response = challengeAdminService.getParticipatingUserPost(email,authDate,challengeId);
         return ResponseEntity.ok(response);
     }
 
