@@ -144,6 +144,10 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
         String jsonStr = gson.toJson(Map.of("accessToken", accessTokenValue, "refreshToken", refreshTokenValue));
 
+        if(accessTokenValue==null){
+            throw new IllegalArgumentException("토큰없음");
+        }
+
         try{
             response.getWriter().println(jsonStr);
         }catch (IOException e){

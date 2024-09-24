@@ -27,6 +27,7 @@ public class ViewCountService {
     private final PointService pointService;
 
     private static final String EVENT_VIEW_DESCRIPTION_MESSAGE = "페이지 열람 보상";
+
     @Transactional
     public void viewPoints(UUID eventId, String email, long earnedPoints) {
         User user = validateService.findByUserEmail(email);

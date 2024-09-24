@@ -34,9 +34,8 @@ public class RouletteService {
         Event event = findByEventId(eventId);
         User user = findByUserEmail(email);
 
-        if (hasParticipatedToday(email, eventId)) {
-            throw new RuntimeException("오늘 룰렛 참여 횟수를 초과했습니다.");
-        }
+        validateCount(email, eventId);
+
         // 이벤트 참여 기록 저장
         EventParticipation participation = new EventParticipation(user, event, earnedPoints, ROULETTE_MESSAGE);
         eventParticipationRepository.save(participation);
@@ -45,7 +44,7 @@ public class RouletteService {
         AddPointRequest addPointRequest = AddPointRequest.builder()
                 .userEmail(email)
                 .points(earnedPoints)
-                .description(event.getName() + "참여")
+                .description(LocalDate.now().getMonthValue()+"월 룰렛이벤트 참여")
                 .activityId(participation.getId())
                 .build();
         pointService.addEarnedPoint(addPointRequest);
@@ -95,6 +94,13 @@ public class RouletteService {
         }
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("해당 ID의 이벤트가 없습니다: " + eventId));
+    }
+
+
+    private void validateCount(String email, UUID eventId){
+        if (hasParticipatedToday(email, eventId)) {
+            throw new RuntimeException("오늘 룰렛 참여 횟수를 초과했습니다.");
+        }
     }
 
 }

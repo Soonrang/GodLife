@@ -1,6 +1,7 @@
 package com.example.rewardservice.security.jwt;
 
 import com.example.rewardservice.security.jwt.util.JWTUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,18 +40,18 @@ public class JwtTokenExtractor {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    public String getCurrentEmail() {
-        String token = request.getHeader("Authorization");
-
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-//            if (jwtUtil.validateToken(token)) {
+//    public String getCurrentEmail() {
+//        String token = request.getHeader("Authorization");
 //
-//            }
-        }
-
-        return jwtUtil.extractEmail(token);
-    }
+//        if (token != null && token.startsWith("Bearer ")) {
+//            token = token.substring(7);
+////            if (jwtUtil.validateToken(token)) {
+////
+////            }
+//        }
+//
+//        return jwtUtil.extractEmail(token);
+//    }
 
     public String getTokenRes(String headerKey, HttpServletResponse response) {
         final String accessToken = response.getHeader(headerKey);
@@ -70,6 +71,8 @@ public class JwtTokenExtractor {
         final String logMessage = "인증실패 - 리프레시 토큰 추출 실패: " + refreshToken;
         throw new RuntimeException(logMessage);
     }
+
+
 
 
 }

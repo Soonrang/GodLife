@@ -66,7 +66,7 @@ public class PurchaseService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("해당 이메일의 유저가 없습니다: " + email));
 
-        List<PurchaseRecord> purchaseRecords = purchaseRecordRepository.findByUser(user);
+        List<PurchaseRecord> purchaseRecords = purchaseRecordRepository.findByUserOrderByCreatedAtDesc(user);
 
         return purchaseRecords.stream()
                 .map(purchaseRecord -> {
