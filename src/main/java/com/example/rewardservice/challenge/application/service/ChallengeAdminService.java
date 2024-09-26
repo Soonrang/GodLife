@@ -88,7 +88,8 @@ public class ChallengeAdminService {
 
         for (UserChallenge userChallenge : participants) {
             if (userChallenge.getProgress() >= SUCCESS_CHALLENGE_CRITERIA) {
-                successUser(userChallenge, challenge, prizePerUser);  // 성공한 사용자 처리
+                successUser(userChallenge, challenge, prizePerUser);
+                userChallenge.updatePrize(prizePerUser);// 성공한 사용자 처리
             } else {
                 failureUser(userChallenge, challenge);  // 실패한 사용자 처리
             }

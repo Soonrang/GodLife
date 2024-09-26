@@ -3,11 +3,13 @@ package com.example.rewardservice.challenge.application.service;
 import com.example.rewardservice.challenge.application.request.ChallengeCreateRequest;
 import com.example.rewardservice.challenge.application.request.ChallengeUpdateRequest;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
+import com.example.rewardservice.challenge.application.response.UserResponse;
 import com.example.rewardservice.challenge.domain.Challenge;
 import com.example.rewardservice.challenge.domain.ChallengeHistory;
 import com.example.rewardservice.challenge.domain.UserChallenge;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeHistoryRepository;
 import com.example.rewardservice.challenge.domain.repsoitory.ChallengeRepository;
+import com.example.rewardservice.challenge.domain.repsoitory.ChallengeUserRepository;
 import com.example.rewardservice.challenge.domain.vo.ChallengeImages;
 import com.example.rewardservice.challenge.domain.vo.ChallengePeriod;
 import com.example.rewardservice.common.BaseEntity;
@@ -22,8 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDate;
@@ -39,6 +39,7 @@ public class ChallengeService extends BaseEntity {
 
     private final ChallengeRepository challengeRepository;
     private final ChallengeHistoryRepository challengeHistoryRepository;
+    private final ChallengeUserRepository challengeUserRepository;
     private final UserRepository userRepository;
     private final S3ImageService s3ImageService;
 
@@ -225,6 +226,18 @@ public class ChallengeService extends BaseEntity {
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(authority -> authority.equals("ROLE_ADMIN"));
+    }
+
+    public UserResponse userResponse(String email){
+
+        User user = findByUserEmail(email);
+
+        long totalPrize = challengeHistoryRepository.findTotalPrizeByUser(email);
+        long ongoingChallenges = challengeUserRepository.countByUserAndState(email,"진행중");
+        long endChallenges = challengeUserRepository.countByUserAndState(email, "종료");
+        long createdChallenges = challengeUserRepository.countByUserCreatedChallenges(email);
+
+        return new UserResponse(totalPrize,ongoingChallenges,endChallenges,createdChallenges);
     }
 
 

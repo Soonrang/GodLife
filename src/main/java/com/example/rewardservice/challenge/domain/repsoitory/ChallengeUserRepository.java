@@ -38,6 +38,15 @@ public interface ChallengeUserRepository extends JpaRepository<UserChallenge, UU
     Page<UserChallenge> findJoinedChallengesByAllStates(@Param("email") String email, Pageable pageable);
 
 
+//    @Query("SELECT SUM(uc.earnedPrize) FROM UserChallenge uc WHERE uc.user.email = :email and uc.challenge.isDeleted = false")
+//    long findTotalPrizeByUser(@Param("email") String email);
+
+    @Query("SELECT COUNT(c) FROM UserChallenge c WHERE c.user.email = :email AND c.challenge.state = :state AND c.challenge.isDeleted = false")
+    long countByUserAndState(@Param("email") String email, @Param("state") String state);
+
+    @Query("SELECT COUNT(c) FROM Challenge c WHERE c.user.email = :email and c.isDeleted = false")
+    long countByUserCreatedChallenges(@Param("email") String email);
+
 
 //    // 내가 개설한 챌린지
 //    @Query("SELECT DISTINCT c FROM Challenge c JOIN c.userChallenges uc WHERE uc.user.email = :email AND c.isDeleted = false AND uc.isJoined = true AND (CASE " +

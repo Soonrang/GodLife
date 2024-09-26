@@ -50,6 +50,8 @@ public class UserChallenge extends BaseEntity {
     @OneToMany(mappedBy = "userChallenge", cascade = CascadeType.ALL)
     private List<ChallengePost> challengePosts;
 
+    @ManyToOne
+    private UserChallenge userChallenge;
 
     public UserChallenge(User user, Challenge challenge, String status, boolean isJoined, long points) {
         this.user = user;
@@ -84,6 +86,10 @@ public class UserChallenge extends BaseEntity {
 
     public void challengeStatusToSuccess(String successStatus) {
         this.status = successStatus;
+    }
+
+    public void updatePrize(long points) {
+        this.earnedPrize = points;
     }
 
 }
