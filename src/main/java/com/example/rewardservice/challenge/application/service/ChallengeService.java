@@ -232,12 +232,19 @@ public class ChallengeService extends BaseEntity {
 
         User user = findByUserEmail(email);
 
-        long totalPrize = challengeHistoryRepository.findTotalPrizeByUser(email);
-        long ongoingChallenges = challengeUserRepository.countByUserAndState(email,"진행중");
-        long endChallenges = challengeUserRepository.countByUserAndState(email, "종료");
-        long createdChallenges = challengeUserRepository.countByUserCreatedChallenges(email);
+        Long totalPrize = challengeHistoryRepository.findTotalPrizeByUser(email);
+        long prize = (totalPrize != null) ? totalPrize : 0L;
 
-        return new UserResponse(totalPrize,ongoingChallenges,endChallenges,createdChallenges);
+        Long ongoingChallenges = challengeUserRepository.countByUserAndState(email,"진행중");
+        long ongoingCount = (ongoingChallenges != null) ? ongoingChallenges : 0L;
+
+        Long endChallenges = challengeUserRepository.countByUserAndState(email, "종료");
+        long endCount = (endChallenges != null) ? endChallenges : 0L;
+
+        Long createdChallenges = challengeUserRepository.countByUserCreatedChallenges(email);
+        long createdCount = (createdChallenges != null) ? createdChallenges : 0L;
+
+        return new UserResponse(prize,ongoingCount,endCount,createdCount);
     }
 
 

@@ -42,10 +42,10 @@ public interface ChallengeUserRepository extends JpaRepository<UserChallenge, UU
 //    long findTotalPrizeByUser(@Param("email") String email);
 
     @Query("SELECT COUNT(c) FROM UserChallenge c WHERE c.user.email = :email AND c.challenge.state = :state AND c.challenge.isDeleted = false")
-    long countByUserAndState(@Param("email") String email, @Param("state") String state);
+    Long countByUserAndState(@Param("email") String email, @Param("state") String state);
 
     @Query("SELECT COUNT(c) FROM Challenge c WHERE c.user.email = :email and c.isDeleted = false")
-    long countByUserCreatedChallenges(@Param("email") String email);
+    Long countByUserCreatedChallenges(@Param("email") String email);
 
 
 //    // 내가 개설한 챌린지

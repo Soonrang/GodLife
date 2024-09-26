@@ -16,5 +16,5 @@ public interface ChallengeHistoryRepository extends JpaRepository<ChallengeHisto
 
 
     @Query("SELECT SUM(ch.point) FROM ChallengeHistory ch WHERE ch.user.email = :email and ch.status = '성공' and ch.challenge.isDeleted = false")
-    long findTotalPrizeByUser(@Param("email") String email);
+    Long findTotalPrizeByUser(@Param("email") String email);
 }
