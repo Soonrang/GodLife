@@ -130,6 +130,7 @@ public class ChallengeJoinService {
         // user검증
         UserChallenge userChallenge = findByUserChallengeId(userChallengeId);
         Challenge challenge = userChallenge.getChallenge();
+        userChallenge.calculateProgress();
 
         return ChallengeUserResponse.from(challenge,userChallenge);
     }
