@@ -1,5 +1,6 @@
 package com.example.rewardservice.user.application.response;
 
+import com.example.rewardservice.challenge.application.response.UserResponse;
 import com.example.rewardservice.user.domain.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,16 @@ public class MyPageResponse {
     private final long totalPoint;
     private final String profileImage;
 
-    public static MyPageResponse from(final User user) {
+    private final UserResponse challengeStats;
+
+    public static MyPageResponse from(final User user,UserResponse challengeStats) {
         return new MyPageResponse(
                 user.getEmail(),
                 user.getNickname(),
                 user.getName(),
                 user.getTotalPoint(),
-                user.getProfileImage());
+                user.getProfileImage(),
+                challengeStats);
     }
 
 }

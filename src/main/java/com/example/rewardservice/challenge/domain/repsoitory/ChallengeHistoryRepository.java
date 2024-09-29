@@ -14,4 +14,7 @@ public interface ChallengeHistoryRepository extends JpaRepository<ChallengeHisto
     @Query("SELECT ch FROM ChallengeHistory ch WHERE ch.user.email = :email ORDER BY ch.createAt DESC")
     Page<ChallengeHistory> findChallengeHistoriesByUserEmail(@Param("email") String email, Pageable pageable);
 
+
+    @Query("SELECT SUM(ch.point) FROM ChallengeHistory ch WHERE ch.user.email = :email and ch.status = '성공' and ch.challenge.isDeleted = false")
+    Long findTotalPrizeByUser(@Param("email") String email);
 }

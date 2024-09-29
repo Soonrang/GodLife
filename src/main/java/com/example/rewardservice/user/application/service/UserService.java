@@ -1,5 +1,9 @@
 package com.example.rewardservice.user.application.service;
 
+import com.example.rewardservice.challenge.application.response.UserResponse;
+import com.example.rewardservice.challenge.application.service.ChallengeService;
+import com.example.rewardservice.challenge.domain.UserChallenge;
+import com.example.rewardservice.challenge.domain.repsoitory.ChallengeUserRepository;
 import com.example.rewardservice.image.s3.S3ImageService;
 import com.example.rewardservice.point.domain.PointRepository;
 import com.example.rewardservice.point.application.PointRecordResponse;
@@ -25,6 +29,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final PointRepository pointRepository;
     private final S3ImageService s3ImageService;
+    private final ChallengeService challengeService;
     private static final long INITIAL_POINT = 0;
 
     //RegisterRequest 수정 필요
@@ -55,7 +60,9 @@ public class UserService {
     public MyPageResponse getUserInfo(final String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("아이디 없음"));
-        return MyPageResponse.from(user);
+
+        UserResponse userResponse = challengeService.userResponse(email);
+        return MyPageResponse.from(user, userResponse);
     }
 
     public List<PointRecordResponse> getAllPointTransactions(String email) {
@@ -113,7 +120,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-
     public boolean emailExists(String email) {
         return userRepository.existsByEmail(email);
     }
@@ -121,5 +127,6 @@ public class UserService {
     public boolean nickNameExists(String nickName) {
         return userRepository.existsByNickname(nickName);
     }
+
 
 }

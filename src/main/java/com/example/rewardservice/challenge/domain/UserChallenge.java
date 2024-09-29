@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Builder
+@Log4j2
 public class UserChallenge extends BaseEntity {
 
     @Id
@@ -50,6 +52,8 @@ public class UserChallenge extends BaseEntity {
     @OneToMany(mappedBy = "userChallenge", cascade = CascadeType.ALL)
     private List<ChallengePost> challengePosts;
 
+    @ManyToOne
+    private UserChallenge userChallenge;
 
     public UserChallenge(User user, Challenge challenge, String status, boolean isJoined, long points) {
         this.user = user;
@@ -61,8 +65,7 @@ public class UserChallenge extends BaseEntity {
     }
 
     public void calculateProgress() {
-        long totalDays = ChronoUnit.DAYS.between(challenge.getChallengePeriod().getStartDate(), challenge.getChallengePeriod().getEndDate());
-        totalDays = Math.max(totalDays, 1);
+        long totalDays = ChronoUnit.DAYS.between(challenge.getChallengePeriod().getStartDate(), challenge.getChallengePeriod().getEndDate())+1;
         this.progress = Math.round((authCount / (double) totalDays * 100) * 10.0) / 10.0;
     }
 
@@ -84,6 +87,10 @@ public class UserChallenge extends BaseEntity {
 
     public void challengeStatusToSuccess(String successStatus) {
         this.status = successStatus;
+    }
+
+    public void updatePrize(long points) {
+        this.earnedPrize = points;
     }
 
 }

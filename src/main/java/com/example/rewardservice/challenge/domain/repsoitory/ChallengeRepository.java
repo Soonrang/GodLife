@@ -48,10 +48,11 @@ public interface ChallengeRepository extends JpaRepository<Challenge, UUID> {
             "c.challengePeriod.startDate ASC")  // 시작 날짜 순으로 정렬
     Page<Challenge> findChallenge(Pageable pageable);
 
-    @Query("select c from Challenge c where c.challengePeriod.startDate <= :today and c.challengePeriod.endDate >= :today and c.state <> '종료' and c.state <> '모집마감'")
+    @Query("select c from Challenge c where c.challengePeriod.startDate <= :today and c.challengePeriod.endDate >= :today and c.state <> '종료'")
     List<Challenge> findChallengesForOngoing(@Param("today") LocalDate today);
 
-    @Query("SELECT c FROM Challenge c WHERE c.challengePeriod.startDate < :today AND c.state <> '종료' AND c.state <> '모집마감'")
+    //진행전
+    @Query("SELECT c FROM Challenge c WHERE c.challengePeriod.startDate > :today AND c.state <> '종료'")
     List<Challenge> findChallengesForUpcoming(@Param("today") LocalDate today);
 
     @Query("SELECT c FROM Challenge c WHERE c.challengePeriod.endDate < :today AND c.state <> '종료'")
