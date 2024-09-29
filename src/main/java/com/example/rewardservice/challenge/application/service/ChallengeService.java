@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.example.rewardservice.challenge.domain.vo.ChallengeStates.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,10 @@ public class ChallengeService extends BaseEntity {
     private final ChallengeUserRepository challengeUserRepository;
     private final UserRepository userRepository;
     private final S3ImageService s3ImageService;
+
+    private static final String CHALLENGE_DELETED_REASON_ADMIN_MESSAGE = "관리자 요청으로 삭제";
+    private static final String CHALLENGE_DELETED_REASON_USER_MESSAGE = "개설한 유저 요청으로 삭제";
+
 
     public UUID createChallenge(String email, ChallengeCreateRequest request) {
         User user = findByUserEmail(email);
@@ -61,7 +67,7 @@ public class ChallengeService extends BaseEntity {
                                 .participantsLimit(request.getParticipantsLimit())
                                 .description(request.getDescription())
                                 .authMethod(request.getAuthMethod())
-                                .state("최초 등록")
+                                .state(" ")
                                 .participants(0)
                                 .challengePeriod(challengePeriod)
                                 .challengeImages(challengeImages)
@@ -158,7 +164,7 @@ public class ChallengeService extends BaseEntity {
         // 관리자 권한 확인
         if (isAdmin()) {
             // 관리자는 언제든지 삭제 가능
-            refundPointsToParticipants(challenge);
+            refundPointsToParticipants(challenge,isAdmin());
             challenge.changeIsDelete(true);
             challengeRepository.save(challenge);
             return;
@@ -171,12 +177,12 @@ public class ChallengeService extends BaseEntity {
         }
 
         validateUser(challenge, user);
-        refundPointsToParticipants(challenge);
+        refundPointsToParticipants(challenge,isAdmin());
         challenge.changeIsDelete(true);
         challengeRepository.save(challenge);
     }
 
-    private void refundPointsToParticipants(Challenge challenge){
+    private void refundPointsToParticipants(Challenge challenge, boolean isAdmin){
         List<UserChallenge> userChallenges = challenge.getUserChallenges();
 
         for (UserChallenge userChallenge : userChallenges) {
@@ -187,9 +193,16 @@ public class ChallengeService extends BaseEntity {
 
             userRepository.save(participant);
 
+            boolean admin = false;
+            String message = CHALLENGE_DELETED_REASON_USER_MESSAGE;
+
+            if(!admin){
+                message = CHALLENGE_DELETED_REASON_ADMIN_MESSAGE;
+            }
+
             ChallengeHistory challengeHistory = new ChallengeHistory(
-                    participant,challenge,"삭제","사용자가 삭제한 챌린지입니다.",stakedPoints
-            );
+                    participant,challenge,CHALLENGE_DELETE_STATUS_MESSAGE,message,stakedPoints);
+
 
             challengeHistoryRepository.save(challengeHistory);
         }
@@ -229,22 +242,23 @@ public class ChallengeService extends BaseEntity {
     }
 
     public UserResponse userResponse(String email){
-
-        User user = findByUserEmail(email);
-
         Long totalPrize = challengeHistoryRepository.findTotalPrizeByUser(email);
-        long prize = (totalPrize != null) ? totalPrize : 0L;
+        long prize = changeNullToZero(totalPrize);
 
-        Long ongoingChallenges = challengeUserRepository.countByUserAndState(email,"진행중");
-        long ongoingCount = (ongoingChallenges != null) ? ongoingChallenges : 0L;
+        Long ongoingChallenges = challengeUserRepository.countByUserAndState(email,ONGOING_STATE);
+        long ongoingCount = changeNullToZero(ongoingChallenges);
 
-        Long endChallenges = challengeUserRepository.countByUserAndState(email, "종료");
-        long endCount = (endChallenges != null) ? endChallenges : 0L;
+        Long endChallenges = challengeUserRepository.countByUserAndState(email, END_STATE);
+        long endCount = changeNullToZero(endChallenges);
 
         Long createdChallenges = challengeUserRepository.countByUserCreatedChallenges(email);
-        long createdCount = (createdChallenges != null) ? createdChallenges : 0L;
+        long createdCount = changeNullToZero(createdChallenges);
 
         return new UserResponse(prize,ongoingCount,endCount,createdCount);
+    }
+
+    private long changeNullToZero(Long value){
+        return value == null ? 0 : value;
     }
 
 
