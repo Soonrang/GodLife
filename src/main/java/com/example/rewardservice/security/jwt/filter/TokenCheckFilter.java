@@ -57,8 +57,8 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (AccessTokenException accessTokenException) {
-//            log.error("AccessTokenException occurred:", accessTokenException);
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 반환
+            log.error("AccessTokenException occurred:", accessTokenException);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 상태 반환
             accessTokenException.sendResponseError(response);
         }
     }
