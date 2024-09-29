@@ -66,7 +66,7 @@ public class ChallengeController {
     public ResponseEntity<String> deleteChallenge(@RequestParam UUID challengeId) {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         challengeService.deleteChallenge(email,challengeId);
-        return ResponseEntity.ok("Challenge deleted");
+        return ResponseEntity.ok("챌린지가 삭제되었습니다.");
     }
 
 
