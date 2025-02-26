@@ -25,7 +25,7 @@ $ npm start
 # 2. Team Members (팀원 및 팀 소개)
 | 정민지 | 채지우 |
 |:------:|:------:|
-| <img src="https://github.com/Soonrang/servlet/blob/main/IMG_2728.jpg?raw=true" alt="정민지" width="150"> | <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="150"> | 
+| <img src="https://github.com/Soonrang/ReadMe/blob/main/%E1%84%8C%E1%85%A6%E1%84%86%E1%85%A9%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AF-%E1%84%8B%E1%85%B5%E1%86%B8%E1%84%85%E1%85%A7%E1%86%A8%E1%84%92%E1%85%A2%E1%84%8C%E1%85%AE%E1%84%89%E1%85%A6%E1%84%8B%E1%85%AD_-001.png?raw=true" alt="정민지" width="200"> | <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="200"> | 
 | [GitHub](https://github.com/Soonrang) | [GitHub](https://github.com/JiwooCoding) |
 
 <br/>
@@ -38,23 +38,24 @@ $ npm start
 - **로그인**:
   - 사용자 인증 정보를 통해 로그인합니다.
 
-- **내 동아리 일정관리**:
-  - 캘린더 UI를 통해 동아리 관련 일정 추가&삭제가 가능합니다.
-  - 체크박스를 통해 종료되거나 이미 수행한 일정을 표시할 수 있습니다.
+- **챌린지 개설하기**:
+  - 원하는 챌린지를 개설합니다.
+  - 인원, 기간, 규칙을 설정하고 관리할 수 있ㅅ브니다.
+  - 
+- **챌린지 참여하기**:
+  - 진행중/종료/진행전 챌린지들을 조회하고 원하는 챌린지에 참여합니다.
+  - 참여한 챌린지는 마이페이지에서 참여 현황 및 달성내역을 볼 수 있습니다.
+  - 
+- **리워드로 상품구입하기**:
+  - 챌린지로 받은 리워드를 통해 상품을 구입할 수 있습니다.
 
-- **동아리 찾기**:
-  - 대학 내 동아리를 검색할 수 있습니다.
-  - 검색 시 해당 동아리가 업로드한 홍보글이 보여집니다.
-
-- **동아리 홍보**:
-  - 홍보글 등록을 통해 동아리를 홍보할 수 있습니다.
-
-- **동아리 만들기**:
-  - 새로운 동아리를 만들어 관리할 수 있습니다.
-
-- **동아리 프로필**:
-  - 동아리 홍보글에서 동아리 이름(링크)를 클릭하면 해당 동아리 프로필로 이동합니다.
-  - 동아리 프로필에서는 동아리 소개, 동아리 활동사진 갤러리, 동아리 홍보글 기록관 등을 볼 수 있습니다.
+- **이벤트참여**:
+  - 룰렛,출석,페이지 열람 보상을 통해 이벤트 참여하고 리워드를 획득할 수 있습니다.
+  - 
+- **챌린지 달성 보상**:
+  - 챌린지 주인은 기간이 종료되면 '종료하기'버튼을 통해 정산을 진행합니다.
+  - 달성한 유저들에게는 상금이 즉시 주어집니다!
+ 
 
 <br/>
 <br/>
@@ -62,67 +63,93 @@ $ npm start
 # 4. Tasks & Responsibilities (작업 및 역할 분담)
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| 정민지    |  <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="정민지" width="200"> | <ul><li>프로젝트 계획 및 관리</li><li>기획, 데이터베이스 설계</li><li>API개발 및 배포</li></ul>     |5| 채지우   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="채지우" width="150">| <ul><li>프로젝트 기획</li><li>UXUI개발</li><li>sns로그인 구현</li></ul> |
+| 정민지   |  <img src="https://github.com/Soonrang/ReadMe/blob/main/%E1%84%8C%E1%85%A6%E1%84%86%E1%85%A9%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AF-%E1%84%8B%E1%85%B5%E1%86%B8%E1%84%85%E1%85%A7%E1%86%A8%E1%84%92%E1%85%A2%E1%84%8C%E1%85%AE%E1%84%89%E1%85%A6%E1%84%8B%E1%85%AD_-001.png?raw=true" alt="정민지" width="100">| <ul><li>프로젝트 계획 및 관리</li><li>기획, 데이터베이스 설계</li><li>API개발 및 배포</li></ul>    
+| 채지우   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="채지우" width="100">| <ul><li>프로젝트 기획</li><li>UXUI개발</li><li>sns로그인 구현</li></ul> |
 
 <br/>
 <br/>
 
 # 5. Technology Stack (기술 스택)
-## 5.1 Language
-|  |  |
-|-----------------|-----------------|
-| HTML5    |<img src="https://github.com/user-attachments/assets/2e122e74-a28b-4ce7-aff6-382959216d31" alt="HTML5" width="100">| 
-| CSS3    |   <img src="https://github.com/user-attachments/assets/c531b03d-55a3-40bf-9195-9ff8c4688f13" alt="CSS3" width="100">|
-| Javascript    |  <img src="https://github.com/user-attachments/assets/4a7d7074-8c71-48b4-8652-7431477669d1" alt="Javascript" width="100"> | 
 
-<br/>
-
-## 5.2 Frotend
+## 5.1 Backend
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| React    |  <img src="https://github.com/user-attachments/assets/e3b49dbb-981b-4804-acf9-012c854a2fd2" alt="React" width="100"> | 18.3.1    |
-| StyledComponents    |  <img src="https://github.com/user-attachments/assets/c9b26078-5d79-40cc-b120-69d9b3882786" alt="StyledComponents" width="100">| 6.1.12   |
-| MaterialUI    |  <img src="https://github.com/user-attachments/assets/75a46fa7-ebc0-4a9d-b648-c589f87c4b55" alt="MUI" width="100">    | 5.0.0  |
-| DayJs    |  <img src="https://github.com/user-attachments/assets/3632d7d6-8d43-4dd5-ba7a-501a2bc3a3e4" alt="DayJs" width="100">    | 1.11.12    |
+| Spring Boot    |  <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Spring_Framework_Logo_2018.svg" alt="Spring Boot" width="100">    | 3.1.0    |
+| Java 17    |  <img src="https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg" alt="Java 17" width="100">    | 17    |
+| JWT    |  <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA3MDNfMjA0%2FMDAxNjg4MzcxNjk5ODA5.SK0SBh1I_XkTabbUVwB6UBR3WGm1XEy7H7hibk9L2k0g.dFBe6VQqk2edHy3lVLy3rtsi64S7Nks9fyY0Wa7BUpwg.PNG.h970303%2Fimage.png&type=sc960_832" alt="JWT" width="100">    | 0.11.5 |
+| MySQL    |  <img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="MySQL" width="100">    | 8.0.x |
+| QueryDSL    |  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Querydsl_Logo.svg" alt="QueryDSL" width="100">    | 5.0.0 |
+| Lombok    |  <img src="https://projectlombok.org/assets/logo.png" alt="Lombok" width="100">    | 1.18.26 |
+| Swagger    |  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Swagger-logo.png" alt="Swagger" width="100">    | 2.0.2 |
+| Spring Security    |  <img src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fvelog.velcdn.com%2Fimages%2Fdrv98%2Fpost%2Fe4f4362f-0d32-4bd0-9963-fc52a44caa9a%2Fimage.png&type=sc960_832" width="100">    | Latest |
+| JPA    |  <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAxMzBfMTQw%2FMDAxNzA2NjE0MjAwMjY2.sTvfCIFgU6GcfxGu0q8x0dkEoG0zfoeIYqMg-6MlFgwg.hueSrOYa2lwBnNXWoQ9CGp8_aZhIuqyuOYMwUhdX88gg.PNG.phandom0311%2Fimage.png&type=sc960_832" alt="JPA" width="100">    | Latest |
+| OAuth2    |  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d2/Oauth_logo.svg" alt="OAuth2" width="100">    | Latest |
 
 <br/>
 
-## 5.3 Backend
+## 5.2 Deployment & Infrastructure
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| Firebase    |  <img src="https://github.com/user-attachments/assets/1694e458-9bb0-4a0b-8fe6-8efc6e675fa1" alt="Firebase" width="100">    | 10.12.5    |
+| AWS EC2    |  <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/AWS_Logo.svg" alt="AWS EC2" width="100">    | - |
+| AWS RDS    |  <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/AWS_Logo.svg" alt="AWS RDS" width="100">    | - |
+| SSL    |  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Let%27s_Encrypt_logo.svg" alt="SSL" width="100">    | - |
+| Ubuntu    |  <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Ubuntu_logo_2022.svg" alt="Ubuntu" width="100">    | 20.04 |
 
 <br/>
 
-## 5.4 Cooperation
+## 5.3 Frontend
+|  |  |  |
+|-----------------|-----------------|-----------------|
+| React    |  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React" width="100"> | 18.3.1    |
+| Vite    |  <img src="https://vitejs.dev/logo.svg" alt="Vite" width="100">    | Latest   |
+
+<br/>
+
+## 5.5 Cooperation
 |  |  |
 |-----------------|-----------------|
-| Git    |  <img src="https://github.com/user-attachments/assets/483abc38-ed4d-487c-b43a-3963b33430e6" alt="git" width="100">    |
-| Git Kraken    |  <img src="https://github.com/user-attachments/assets/32c615cb-7bc0-45cd-91ea-0d1450bfc8a9" alt="git kraken" width="100">    |
-| Notion    |  <img src="https://github.com/user-attachments/assets/34141eb9-deca-416a-a83f-ff9543cc2f9a" alt="Notion" width="100">    |
+| Git    |  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Git-logo.svg" alt="git" width="100">    |
+| Notion    |  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Notion-logo.svg" alt="Notion" width="100">    |
+
+<br/>
+
+
+
+
 
 <br/>
 
 # 6. Project Structure (프로젝트 구조)
 ```plaintext
-project/
-├── public/
-│   ├── index.html           # HTML 템플릿 파일
-│   └── favicon.ico          # 아이콘 파일
+ RewardService/
+├── .github/
+│   └── workflows/           # GitHub Actions 워크플로우 설정 파일
+├── gradle/
+│   └── wrapper/             # Gradle 래퍼 관련 파일
 ├── src/
-│   ├── assets/              # 이미지, 폰트 등 정적 파일
-│   ├── components/          # 재사용 가능한 UI 컴포넌트
-│   ├── hooks/               # 커스텀 훅 모음
-│   ├── pages/               # 각 페이지별 컴포넌트
-│   ├── App.js               # 메인 애플리케이션 컴포넌트
-│   ├── index.js             # 엔트리 포인트 파일
-│   ├── index.css            # 전역 css 파일
-│   ├── firebaseConfig.js    # firebase 인스턴스 초기화 파일
-│   package-lock.json    # 정확한 종속성 버전이 기록된 파일로, 일관된 빌드를 보장
-│   package.json         # 프로젝트 종속성 및 스크립트 정의
-├── .gitignore               # Git 무시 파일 목록
-└── README.md                # 프로젝트 개요 및 사용법
-```
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/rewardservice/
+│   │   │       ├── config/          # 설정 관련 클래스
+│   │   │       ├── controller/      # REST API 컨트롤러
+│   │   │       ├── domain/          # 엔티티 클래스
+│   │   │       ├── dto/             # 데이터 전송 객체
+│   │   │       ├── repository/      # 데이터 접근 레이어
+│   │   │       └── service/         # 비즈니스 로직
+│   │   └── resources/               # 애플리케이션 설정 및 리소스 파일
+│   └── test/
+│       ├── java/
+│       │   └── com/example/rewardservice/
+│       │       └── *                # 테스트 관련 클래스
+│       └── resources/               # 테스트 리소스 파일
+├── .gitignore                       # Git에서 추적하지 않을 파일 및 디렉토리 목록
+├── README.md                        # 프로젝트 개요 및 사용법
+├── appspec.yml                      # AWS CodeDeploy 설정 파일
+├── build.gradle                     # Gradle 빌드 설정 파일
+├── deploy.sh                        # 배포 스크립트
+├── gradlew                          # Unix용 Gradle 래퍼 실행 파일
+├── gradlew.bat                      # Windows용 Gradle 래퍼 실행 파일
+└── settings.gradle                  # Gradle 설정 파일
 
 <br/>
 <br/>
@@ -168,18 +195,6 @@ const [currentUser, setCurrentUser] = useState(null);
 // 배열 - 복수형 이름 사용
 const datas = [];
 
-// 정규표현식: 'r'로 시작
-const = rName = /.*/;
-
-// 이벤트 핸들러: 'on'으로 시작
-const onClick = () => {};
-const onChange = () => {};
-
-// 반환 값이 불린인 경우: 'is'로 시작
-const isLoading = false;
-
-// Fetch함수: method(get, post, put, del)로 시작
-const getEnginList = () => {...}
 ```
 
 <br/>
@@ -198,32 +213,9 @@ if(true) return 'hello'
 
 <br/>
 
-## 함수
-```
-함수는 함수 표현식을 사용하며, 화살표 함수를 사용한다.
-// Good
-const fnName = () => {};
-
-// Bad
-function fnName() {};
-```
-
-<br/>
-
 ## 태그 네이밍
 Styled-component태그 생성 시 아래 네이밍 규칙을 준수하여 의미 전달을 명확하게 한다.<br/>
 태그명이 길어지더라도 의미 전달의 명확성에 목적을 두어 작성한다.<br/>
-전체 영역: Container<br/>
-영역의 묶음: {Name}Area<br/>
-의미없는 태그: <><br/>
-```
-<Container>
-  <ContentsArea>
-    <Contents>...</Contents>
-    <Contents>...</Contents>
-  </ContentsArea>
-</Container>
-```
 
 <br/>
 
