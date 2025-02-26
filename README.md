@@ -62,8 +62,7 @@ $ npm start
 # 4. Tasks & Responsibilities (작업 및 역할 분담)
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| 정민지    |  <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="정민지" width="100"> | <ul><li>프로젝트 계획 및 관리</li><li>기획, 데이터베이스 설계</li><li>API개발 및 배포</li></ul>     |
-| 채지우   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="채지우" width="100">| <ul><li>프로젝트 기획</li><li>UXUI개발</li><li>sns로그인 구현</li></ul> |
+| 정민지    |  <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="정민지" width="200"> | <ul><li>프로젝트 계획 및 관리</li><li>기획, 데이터베이스 설계</li><li>API개발 및 배포</li></ul>     |5| 채지우   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="채지우" width="150">| <ul><li>프로젝트 기획</li><li>UXUI개발</li><li>sns로그인 구현</li></ul> |
 
 <br/>
 <br/>
