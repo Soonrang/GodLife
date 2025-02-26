@@ -25,7 +25,7 @@ $ npm start
 # 2. Team Members (팀원 및 팀 소개)
 | 정민지 | 채지우 |
 |:------:|:------:|:------:|:------:|
-| <img src="https://avatars.githubusercontent.com/u/135775059?v=4" alt="이동규" width="150"> | <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="150"> | 
+| <img src="https://avatars.githubusercontent.com/u/135775059?v=4" alt="정민지" width="150"> | <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="150"> | 
 | [GitHub](https://github.com/Soonrang) | [GitHub](https://github.com/JiwooCoding) |
 
 <br/>
