@@ -18,9 +18,32 @@ $ npm start
 <br/>
 
 # 1. Project Overview (프로젝트 개요)
-- 프로젝트 이름: 갓생챌린지🧗‍♀️
-- 프로젝트 설명: 챌린지를 개설하고 함께 실천해요!
-              피카버스 신규 SNS 어플리케이션 활성화를 위한 서비스입니다.
+- 프로젝트 이름: 갓생챌린지 🌟
+- 프로젝트 설명: 챌린지를 개설하고 함께 실천해요🍀  
+              피카버스 서비스를 활성화하기 위해서 서비스 기획 후 사이드 프로젝트로 진행하였습니다 !!
+  (피카버스 인턴 근무)
+
+<br/>
+  <a href="https://picaverse.io/login">
+  <img src="https://github.com/user-attachments/assets/e6c7580b-3762-4071-847c-b7126c0d51fb" alt="피카버스" width="200">
+  <img src="https://github.com/user-attachments/assets/b870796c-780d-4ebc-b3f9-4b6eadbc247a" alt="피드" width="200">
+  <img src="https://github.com/user-attachments/assets/580e6926-cf6d-41ef-942d-38e4212a958d" alt="피드2" width="200">    
+    
+</a>
+<br/>  
+
+## 🚀 피카버스에 '챌린지'를 더하다!
+
+피카버스는 단순한 일상 공유를 넘어, **아티스트가 업로드한 한정판 콘텐츠를 구매, 소장, 판매할 수 있는 플랫폼**입니다.  
+2024년 4월에 오픈하여, **K-pop 콘텐츠를 중심으로 글로벌 유저들을 모으고 있습니다.** 🎵🌍  
+
+우리 **피카버스팀**은 일회성 참여 게시물이 아닌 **지속적인 게시글**이 필요한 상황이었습니다.  
+이를 위해 **목표 설정, 달성 과정 공유, 꾸준한 사진 및 글 업로드**를 핵심 요소로 고민했고,  
+결과적으로 **‘챌린지’ 서비스**가 최적의 해결책이라는 결론을 내렸습니다. 🏆🔥  
+
+사용자는 목표를 설정하고, **지속적인 게시글 인증을 통해 리워드를 획득**하며,  
+이 리워드를 활용해 **다양한 콘텐츠를 구매**할 수 있는 선순환 구조를 만드는 것이 우리의 목표입니다. 🎯✨  
+
 
 <br/>
 <br/>
@@ -29,6 +52,7 @@ $ npm start
 | 정민지 | 채지우 |
 |:------:|:------:|
 | <img src="https://github.com/user-attachments/assets/1d4a4bc1-bca8-4006-b858-51bb3be9468d" alt="정민지" width="200"> | <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="200"> | 
+| Backend & Infra | Frontend |
 | [GitHub](https://github.com/Soonrang) | [GitHub](https://github.com/JiwooCoding) |
 
 <br/>
@@ -43,18 +67,18 @@ $ npm start
 
 - **챌린지 개설하기**:
   - 원하는 챌린지를 개설합니다.
-  - 인원, 기간, 규칙을 설정하고 관리할 수 있ㅅ브니다.
-  - 
+  - 인원, 기간, 규칙을 설정하고 관리할 수 있습니다.
+    
 - **챌린지 참여하기**:
   - 진행중/종료/진행전 챌린지들을 조회하고 원하는 챌린지에 참여합니다.
   - 참여한 챌린지는 마이페이지에서 참여 현황 및 달성내역을 볼 수 있습니다.
-  - 
+    
 - **리워드로 상품구입하기**:
   - 챌린지로 받은 리워드를 통해 상품을 구입할 수 있습니다.
 
 - **이벤트참여**:
   - 룰렛,출석,페이지 열람 보상을 통해 이벤트 참여하고 리워드를 획득할 수 있습니다.
-  - 
+    
 - **챌린지 달성 보상**:
   - 챌린지 주인은 기간이 종료되면 '종료하기'버튼을 통해 정산을 진행합니다.
   - 달성한 유저들에게는 상금이 즉시 주어집니다!
@@ -67,7 +91,7 @@ $ npm start
 |  |  |  |
 |-----------------|-----------------|-----------------|
 | 정민지   |  <img src="https://github.com/user-attachments/assets/1d4a4bc1-bca8-4006-b858-51bb3be9468d" alt="정민지" width="100">| <ul><li>프로젝트 계획 및 관리</li><li>기획, 데이터베이스 설계</li><li>API개발 및 배포</li></ul>    
-| 채지우   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="채지우" width="100">| <ul><li>프로젝트 기획</li><li>UXUI개발</li><li>sns로그인 구현</li></ul> |
+| 채지우   |  <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="100">| <ul><li>프로젝트 기획</li><li>UXUI개발</li><li>sns로그인 구현</li></ul> |
 
 <br/>
 <br/>
