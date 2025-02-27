@@ -12,27 +12,13 @@ $ npm start
 [서비스 링크](https://www.pointsmilet.store/)
 
 <br/>
-아이디: 1@naver.com
+아이디: 1@naver.com  
+
 비밀번호: 111111
 <br/>
 <br/>
 
-# 1. Project Overview (프로젝트 개요)
-- 프로젝트 이름: 갓생챌린지 🌟
-- 프로젝트 설명: 챌린지를 개설하고 함께 실천해요🍀  
-              피카버스 서비스를 활성화하기 위해서 서비스 기획 후 사이드 프로젝트로 진행하였습니다 !!
-  (피카버스 인턴 근무)
-
-<br/>
-  <a href="https://picaverse.io/login">
-  <img src="https://github.com/user-attachments/assets/e6c7580b-3762-4071-847c-b7126c0d51fb" alt="피카버스" width="200">
-  <img src="https://github.com/user-attachments/assets/b870796c-780d-4ebc-b3f9-4b6eadbc247a" alt="피드" width="200">
-  <img src="https://github.com/user-attachments/assets/580e6926-cf6d-41ef-942d-38e4212a958d" alt="피드2" width="200">    
-    
-</a>
-<br/>  
-
-## 🚀 피카버스에 '챌린지'를 더하다!
+## 1. 🚀 피카버스에 '갓생 챌린지'를 더하다!
 
 피카버스는 단순한 일상 공유를 넘어, **아티스트가 업로드한 한정판 콘텐츠를 구매, 소장, 판매할 수 있는 플랫폼**입니다.  
 2024년 4월에 오픈하여, **K-pop 콘텐츠를 중심으로 글로벌 유저들을 모으고 있습니다.** 🎵🌍  
@@ -44,9 +30,27 @@ $ npm start
 사용자는 목표를 설정하고, **지속적인 게시글 인증을 통해 리워드를 획득**하며,  
 이 리워드를 활용해 **다양한 콘텐츠를 구매**할 수 있는 선순환 구조를 만드는 것이 우리의 목표입니다. 🎯✨  
 
+<br/>
+<br/>
 
+## 🌃 피카버스 서비스
+  <a href="https://picaverse.io/login">
+  <img src="https://github.com/user-attachments/assets/e6c7580b-3762-4071-847c-b7126c0d51fb" alt="피카버스" width="200">
+  <img src="https://github.com/user-attachments/assets/b870796c-780d-4ebc-b3f9-4b6eadbc247a" alt="피드" width="200">
+  <img src="https://github.com/user-attachments/assets/580e6926-cf6d-41ef-942d-38e4212a958d" alt="피드2" width="200">    
+</a>  
+
+<br/>  
+
+## 🚀 갓생챌린지 서비스 
+<img width="500" alt="Image" src="https://github.com/user-attachments/assets/8443cd96-5bb8-42e0-9851-20870ac1f5e1" />
+<img width="500" alt="Image" src="https://github.com/user-attachments/assets/fb3c073b-b689-473b-9af5-420ee1085e4f" />
 <br/>
 <br/>
+<br/>
+
+
+      
 
 # 2. Team Members (팀원 및 팀 소개)
 | 정민지 | 채지우 |
