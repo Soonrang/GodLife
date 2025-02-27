@@ -10,7 +10,8 @@
 $ npm start
 ```
 [서비스 링크](https://www.pointsmilet.store/)
-
+아이디: 1@naver.com
+비밀번호: 111111
 <br/>
 <br/>
 
