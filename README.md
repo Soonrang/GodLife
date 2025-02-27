@@ -1,5 +1,5 @@
-<a href="https://club-project-one.vercel.app/" target="_blank">
-<img src="https://github.com/Soonrang/servlet/blob/main/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202025-02-27%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.37.19.png?raw=true" alt="배너" width="100%"/>
+<a href="https://www.pointsmilet.store/">
+<img src="https://github.com/user-attachments/assets/e93d4b56-b93a-461f-aab0-cc694ce9d90a" alt="배너" width="100%"/>
 </a>
 
 <br/>
@@ -28,7 +28,7 @@ $ npm start
 # 2. Team Members (팀원 및 팀 소개)
 | 정민지 | 채지우 |
 |:------:|:------:|
-| <img src="https://github.com/Soonrang/ReadMe/blob/main/%E1%84%8C%E1%85%A6%E1%84%86%E1%85%A9%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AF-%E1%84%8B%E1%85%B5%E1%86%B8%E1%84%85%E1%85%A7%E1%86%A8%E1%84%92%E1%85%A2%E1%84%8C%E1%85%AE%E1%84%89%E1%85%A6%E1%84%8B%E1%85%AD_-001.png?raw=true" alt="정민지" width="200"> | <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="200"> | 
+| <img src="https://github.com/user-attachments/assets/1d4a4bc1-bca8-4006-b858-51bb3be9468d" alt="정민지" width="200"> | <img src="https://avatars.githubusercontent.com/u/142854656?v=4" alt="채지우" width="200"> | 
 | [GitHub](https://github.com/Soonrang) | [GitHub](https://github.com/JiwooCoding) |
 
 <br/>
@@ -66,7 +66,7 @@ $ npm start
 # 4. Tasks & Responsibilities (작업 및 역할 분담)
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| 정민지   |  <img src="https://github.com/Soonrang/ReadMe/blob/main/%E1%84%8C%E1%85%A6%E1%84%86%E1%85%A9%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AF-%E1%84%8B%E1%85%B5%E1%86%B8%E1%84%85%E1%85%A7%E1%86%A8%E1%84%92%E1%85%A2%E1%84%8C%E1%85%AE%E1%84%89%E1%85%A6%E1%84%8B%E1%85%AD_-001.png?raw=true" alt="정민지" width="100">| <ul><li>프로젝트 계획 및 관리</li><li>기획, 데이터베이스 설계</li><li>API개발 및 배포</li></ul>    
+| 정민지   |  <img src="https://github.com/user-attachments/assets/1d4a4bc1-bca8-4006-b858-51bb3be9468d" alt="정민지" width="100">| <ul><li>프로젝트 계획 및 관리</li><li>기획, 데이터베이스 설계</li><li>API개발 및 배포</li></ul>    
 | 채지우   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="채지우" width="100">| <ul><li>프로젝트 기획</li><li>UXUI개발</li><li>sns로그인 구현</li></ul> |
 
 <br/>
@@ -164,10 +164,6 @@ $ npm start
 - Main Branch
   - 배포 가능한 상태의 코드를 유지합니다.
   - 모든 배포는 이 브랜치에서 이루어집니다.
-  
-- {name} Branch
-  - 팀원 각자의 개발 브랜치입니다.
-  - 모든 기능 개발은 이 브랜치에서 이루어집니다.
 
 <br/>
 <br/>
@@ -306,7 +302,3 @@ UI개발을 위한 라이브러리 styled-components 설치
 
 <br/>
 <br/>
-
-# 10. 컨벤션 수행 결과
-<img width="100%" alt="코드 컨벤션" src="https://github.com/user-attachments/assets/0dc218c0-369f-45d2-8c6d-cdedc81169b4">
-<img width="100%" alt="깃플로우" src="https://github.com/user-attachments/assets/2a4d1332-acc2-4292-9815-d122f5aea77c">
