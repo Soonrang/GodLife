@@ -1,6 +1,5 @@
 package com.example.rewardservice.security.jwt.handler;
 
-import com.example.rewardservice.security.jwt.dto.APIUserDetailDto;
 import com.example.rewardservice.security.jwt.util.JWTUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
@@ -13,7 +12,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class UserLoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info("로그인 성공 핸들러");
 
         String email = authentication.getName();
-        log.info("Authentication Name: " + email);
+        log.info("받아오는 이메일 : " + email);
 
 
         Map<String, Object> claims = Map.of("email", email);
