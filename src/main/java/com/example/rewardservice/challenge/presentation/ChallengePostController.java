@@ -2,9 +2,8 @@ package com.example.rewardservice.challenge.presentation;
 
 import com.example.rewardservice.challenge.application.request.ChallengePostRequest;
 import com.example.rewardservice.challenge.application.response.ChallengePostResponse;
-import com.example.rewardservice.challenge.application.response.ChallengeUserResponse;
 import com.example.rewardservice.challenge.application.service.ChallengePostService;
-import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.security.jwt.util.JwtTokenExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

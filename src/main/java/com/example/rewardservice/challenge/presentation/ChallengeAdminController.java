@@ -4,7 +4,7 @@ import com.example.rewardservice.challenge.application.response.ChallengeAdminPo
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.application.response.ParticipantResponse;
 import com.example.rewardservice.challenge.application.service.ChallengeAdminService;
-import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.security.jwt.util.JwtTokenExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class ChallengeAdminController {
         return ResponseEntity.ok("챌린지가 종료되었습니다.");
     }
 
-    @GetMapping("/api/challenge/{challengeId}/participants")
+    @GetMapping("/guest/challenge/{challengeId}/participants")
     public ResponseEntity<List<ParticipantResponse>> getParticipants(@PathVariable UUID challengeId) {
         List<ParticipantResponse> participants = challengeAdminService.getParticipants(challengeId);
         return ResponseEntity.ok(participants);

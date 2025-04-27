@@ -114,11 +114,12 @@ public class CustomSecurityConfig{
         http.authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/js/**", "/css/**", "/images/**",
                         "/api/**", "/event/**", "/user/**","/shop/**",
-                        "/v3/api-docs/**","/swagger-ui/**","/points/**","/api/challenge/**").permitAll()
+                        "/v3/api-docs/**","/swagger-ui/**","/points/**","/api/challenge/**","/guest/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
         );
+
 
         return http.build();
     }
