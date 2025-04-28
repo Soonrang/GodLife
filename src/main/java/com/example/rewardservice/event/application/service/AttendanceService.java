@@ -42,7 +42,7 @@ public class AttendanceService {
 
         //검증
         if (checkTodayAttendance(event, user)) {
-            throw new RuntimeException("오늘 이미 출석하셨습니다.");
+            throw new RuntimeException("이미출석.");
         }
 
         int monthlyCount = MonthlyAttendanceCount(event, user) + 1;
