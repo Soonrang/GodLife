@@ -4,7 +4,7 @@ import com.example.rewardservice.challenge.application.request.ChallengeCreateRe
 import com.example.rewardservice.challenge.application.request.ChallengeUpdateRequest;
 import com.example.rewardservice.challenge.application.response.ChallengeInfoResponse;
 import com.example.rewardservice.challenge.application.service.ChallengeService;
-import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.security.jwt.util.JwtTokenExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

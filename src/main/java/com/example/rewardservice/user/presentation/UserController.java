@@ -1,7 +1,7 @@
 package com.example.rewardservice.user.presentation;
 
 import com.example.rewardservice.image.s3.S3ImageService;
-import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.security.jwt.util.JwtTokenExtractor;
 import com.example.rewardservice.user.application.request.RegisterRequest;
 import com.example.rewardservice.user.application.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api")
