@@ -6,7 +6,7 @@ import com.example.rewardservice.challenge.application.response.ChallengeInfoRes
 import com.example.rewardservice.challenge.application.response.ChallengeUserResponse;
 import com.example.rewardservice.challenge.application.service.ChallengeHistoryService;
 import com.example.rewardservice.challenge.application.service.ChallengeJoinService;
-import com.example.rewardservice.security.jwt.JwtTokenExtractor;
+import com.example.rewardservice.security.jwt.util.JwtTokenExtractor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

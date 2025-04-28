@@ -1,16 +1,12 @@
-package com.example.rewardservice.security.jwt;
+package com.example.rewardservice.security.jwt.util;
 
-import com.example.rewardservice.security.jwt.util.JWTUtil;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @RequiredArgsConstructor
 @Component
@@ -23,8 +19,14 @@ public class JwtTokenExtractor {
     private static final String REFRESH_TOKEN_HEADER = "Authorization-Refresh";
 
     private final HttpServletRequest request;
-    private final JWTUtil jwtUtil;
 
+    public String getCurrentUserEmail() {
+        String bearerToken = request.getHeader("Authorization");
+        log.info("***************************Received Token: " + bearerToken);
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+/*
     public String extractBearerToken(HttpServletRequest request) {
         final String accessToken = request.getHeader(ACCESS_TOKEN_HEADER);
         if(StringUtils.hasText(accessToken)&&accessToken.startsWith(PREFIX_BEARER)){
@@ -34,24 +36,19 @@ public class JwtTokenExtractor {
         throw new RuntimeException(logMessage);
     }
 
-    public String getCurrentUserEmail() {
-        String bearerToken = request.getHeader("Authorization");
-        log.info("***************************Received Token: " + bearerToken);
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
 
-//    public String getCurrentEmail() {
-//        String token = request.getHeader("Authorization");
+    public String getCurrentEmail() {
+        String token = request.getHeader("Authorization");
+
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+//            if (jwtUtil.validateToken(token)) {
 //
-//        if (token != null && token.startsWith("Bearer ")) {
-//            token = token.substring(7);
-////            if (jwtUtil.validateToken(token)) {
-////
-////            }
-//        }
-//
-//        return jwtUtil.extractEmail(token);
-//    }
+//            }
+        }
+
+        return jwtUtil.extractEmail(token);
+    }
 
     public String getTokenRes(String headerKey, HttpServletResponse response) {
         final String accessToken = response.getHeader(headerKey);
@@ -72,7 +69,6 @@ public class JwtTokenExtractor {
         throw new RuntimeException(logMessage);
     }
 
-
-
+*/
 
 }

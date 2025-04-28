@@ -107,14 +107,16 @@ public class ChallengeService extends BaseEntity {
     }
 
     public ChallengeInfoResponse viewDetail(String email, UUID challengeId){
-        User user = findByUserEmail(email);
         Challenge challenge = challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new IllegalArgumentException("챌린지를 찾을 수 없습니다. ID: " + challengeId));
 
-        //challenge.checkStatus(LocalDate.now());
-        challengeRepository.save(challenge);
-        boolean isJoined = checkIfUserJoinedChallenge(user, challenge);
+        boolean isJoined = false;
 
+        if(!(email == null)) {
+            User user = findByUserEmail(email);
+            isJoined = checkIfUserJoinedChallenge(user, challenge);
+        }
+        //challengeRepository.save(challenge);
         return ChallengeInfoResponse.from(challenge, isJoined);
     }
 
@@ -217,6 +219,19 @@ public class ChallengeService extends BaseEntity {
         return challengeRepository.findById(challengeId)
                 .orElseThrow(() -> new IllegalArgumentException("챌린지를 찾을 수 없습니다. ID: " + challengeId));
     }
+
+    // guest조회
+    public Page<ChallengeInfoResponse> getAllChallengesForGuest(int page, int size, String category, String status) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Challenge> challenges = challengeRepository.findByCategoryAndState(category, status , pageable);
+
+        return challenges.map(challenge -> {
+            boolean isJoined = false;
+            return ChallengeInfoResponse.from(challenge, isJoined);
+        });
+    }
+
+
 
     // 사용자가 챌린지 생성자인지 검증
     private void validateUser(Challenge challenge, User user) {
