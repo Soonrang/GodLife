@@ -28,7 +28,7 @@ public class ChallengeAdminController {
         return ResponseEntity.ok("챌린지가 종료되었습니다.");
     }
 
-    @GetMapping("/guest/challenge/{challengeId}/participants")
+    @GetMapping("/api/guest/challenge/{challengeId}/participants")
     public ResponseEntity<List<ParticipantResponse>> getParticipants(@PathVariable UUID challengeId) {
         List<ParticipantResponse> participants = challengeAdminService.getParticipants(challengeId);
         return ResponseEntity.ok(participants);

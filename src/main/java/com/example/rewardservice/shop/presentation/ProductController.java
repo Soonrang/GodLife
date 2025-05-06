@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/shop")
+@RequestMapping("/api/shop")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -23,7 +23,7 @@ public class ProductController {
     private final JwtTokenExtractor jwtTokenExtractor;
     private final PurchaseService purchaseService;
 
-    @PostMapping("/api/order")
+    @PostMapping("/order")
     public ResponseEntity<Void> purchaseProduct(@RequestBody PurchaseRequest purchaseRequest) {
         String userEmail = jwtTokenExtractor.getCurrentUserEmail();
         purchaseService.purchaseProduct(userEmail,purchaseRequest);
@@ -53,7 +53,7 @@ public class ProductController {
 
 
     //-----------------------구매
-    @GetMapping("/api/purchases")
+    @GetMapping("/purchases")
     public ResponseEntity<List<PurchaseDetailResponse>> getAllPurchases() {
         String email = jwtTokenExtractor.getCurrentUserEmail();
         List<PurchaseDetailResponse> purchases = purchaseService.viewAllPurchases(email);
@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     // 개별 구매 내역 조회
-    @GetMapping("/api/purchases/{id}")
+    @GetMapping("/purchases/{id}")
     public ResponseEntity<PurchaseDetailResponse> getPurchaseDetail(@PathVariable UUID id) {
         PurchaseDetailResponse purchaseDetail = purchaseService.viewPurchaseDetails(id);
         return ResponseEntity.ok(purchaseDetail);

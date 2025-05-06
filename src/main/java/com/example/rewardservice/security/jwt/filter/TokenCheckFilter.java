@@ -67,7 +67,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
                 path.equals("/api/check-email") || path.equals("/api/check-nickname") ||
                 path.equals("/swagger-ui/index.html") || path.equals("/shop") ||
                 path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs/") ||
-                path.startsWith("/guest/") || path.startsWith("/shop/");
+                path.startsWith("/api/guest/") || path.startsWith("/api/shop/");
     }
 
     private Map<String, Object> validateAccessToken(HttpServletRequest request) throws AccessTokenException {

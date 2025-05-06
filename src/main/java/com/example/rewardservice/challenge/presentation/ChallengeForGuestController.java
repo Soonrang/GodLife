@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/guest/challenge")
+@RequestMapping("/api/guest/challenge")
 @RequiredArgsConstructor
 public class ChallengeForGuestController {
 
